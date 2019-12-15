@@ -1,0 +1,5 @@
+#bin and obj directories will be ignored since they get re-created everytime.
+bin
+obj
+.vscode
+*.db
