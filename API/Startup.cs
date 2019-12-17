@@ -27,8 +27,9 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //adding the DataContext defined the Persistence project to make it available in runtime
-            //using the lambda expression for "opt"
+            //Adding the DataContext defined the Persistence project to make it available in runtime
+            //Adding the DataContext will also make sure its available for dependancy injection
+            //Using the lambda expression for "opt"
             //We're using the "Configuration" injected in to this class above to access connection strings
             //The "Configuration" has reference to the "ConnectionStrings" defined in appsetting.json file (part of GetConnectionString)
             //Within the "ConnectionStrings" object in appsetting.json file we define "DefaultConnection"
