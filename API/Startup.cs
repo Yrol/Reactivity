@@ -37,6 +37,16 @@ namespace API
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            //Allowing Cross Origin in out project as a service
+            services.AddCors(opt => 
+            {
+                opt.AddPolicy("CorsPolicy", policy => 
+                {
+                    //http://localhost:3000/ is the frontend React URL
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                });
+            });
+
             services.AddControllers();
         }
 
@@ -48,7 +58,11 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //Enabling Cross Origin added above in ConfigureServices as a Middleware
+            app.UseCors("CorsPolicy");  
+
+            //disable/enable HTTPS. eg: https://localhost:5000/
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

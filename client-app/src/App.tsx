@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import semantic, { Header, Icon, List } from 'semantic-ui-react';
 import './App.css';
+import axios from 'axios';
 
 //We're replaing the below Function Component (FC) to Class Component
 //The class Component requires the "render()" to be implemented
@@ -13,25 +14,34 @@ class App extends Component{
     values: []
   }
 
-  //when the component is mounted to the native UI
+  //when the component is mounted to the native UI, assign values to the "values" param
   componentDidMount(){
-    this.setState({
-      values: [{id:1, name:"Value 1"}, {id:2, name:"Value 2"}]
-    })
+
+    //using Axios to make HTTP request
+    axios.get('http://localhost:5000/api/Values/')
+      .then((response) => {
+        this.setState({
+          values: response.data
+        })
+      })
   }
 
   render(){  
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          {/*Using state to get the values when component is rendered (componentDidMount) to the UI*/}
-          <ul>
+      <div>
+          {/* Using the React Semantic UI */}
+          <Header as='h2'>
+            <Icon name='users' />
+            <Header.Content>Reactivities</Header.Content>
+          </Header>
+          <List>
+            {
+            /*Using state to get the values when component is rendered (componentDidMount) to the UI*/
+            }
             {this.state.values.map((value : any) => (
-              <li>{value.name}</li>
+              <List.Item key={value.id}>{value.name}</List.Item>
             ))}
-          </ul>
-        </header>
+          </List>
       </div>
     );
   }

@@ -4,3 +4,6 @@ obj
 .vscode
 *.db
 .DS_Store
+
+#dependencies
+/node_modules
