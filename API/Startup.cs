@@ -59,7 +59,7 @@ namespace API
             }
 
             //Enabling Cross Origin added above in ConfigureServices as a Middleware
-            app.UseCors("CorsPolicy");  
+            app.UseCors("CorsPolicy");
 
             //disable/enable HTTPS. eg: https://localhost:5000/
             //app.UseHttpsRedirection();
