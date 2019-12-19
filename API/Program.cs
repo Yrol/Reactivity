@@ -28,8 +28,12 @@ namespace API
                 try{
                    var context = services.GetRequiredService<DataContext>(); 
 
-                   //The "Migrate" command will create the DB and tables IF not exists (only the pending ones)
+                   //The "Migrate" command will create the DB and tables IF not exists (only the pending ones) in runtime
+                   ////This will also seed data defined in "OnModelCreating" method of the DataContext class
                    context.Database.Migrate();
+
+                   //Another way of seeding data using the custom class "Seed"
+                   Seed.SeedData(context);
                 }
                 catch(Exception ex){
 

@@ -13,7 +13,8 @@ namespace Persistence
         // DbSet<TEntity> Table Name {get; Set;}
         //Passing the "Value" object/entity defined in the Domain layer
         //In this case "Values" is the table name
-        public DbSet<Value> Values{get; set;}
+        public DbSet<Value> Values {get; set;}
+        public DbSet<Activity> Activities {get; set;}
 
         //seeding data into the DB
         //overriding "OnModelCreating" method of the DbContext
