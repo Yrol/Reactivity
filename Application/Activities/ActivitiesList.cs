@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Persistence;
 
 namespace Application.Activities
@@ -14,23 +13,18 @@ namespace Application.Activities
     public class ActivitiesList
     {
         public class Query : IRequest<List<Activity>>
-        { }
+        {}
 
         public class Handler : IRequestHandler<Query, List<Activity>>
         {
             private readonly DataContext _context;
-            private readonly ILogger<ActivitiesList> _logger;
-
-            //Besides DataContext we're also using the ILogger for logging data
-            public Handler(DataContext context, ILogger<ActivitiesList> logger)
+            public Handler(DataContext context)
             {
-                _logger = logger;
                 _context = context;
             }
             public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
             {
-                _logger.LogInformation($"Activity list executed");
-                var activities = await _context.Activities.ToListAsync(cancellationToken);
+                var activities = await _context.Activities.ToListAsync();
                 return activities;
             }
         }
