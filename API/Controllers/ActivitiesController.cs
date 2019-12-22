@@ -29,15 +29,23 @@ namespace API.Controllers
             return await _mediator.Send(new ActivitiesList.Query(), ct);
         }
 
+        //get a single activity by ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Activity>> Get(Guid id){
             return await _mediator.Send(new SingleActivity.Query{Id = id});
         }
 
-        //Create an Activity
+        //Create a new Activity
         //Since we're using the [ApiController] above, its smart enogh to figure out the objects that the create command needs. Otherwise we've to use "[FromBody]CreateActivity.Command"
         [HttpPost]
         public async Task<ActionResult<Unit>> Create(CreateActivity.Command command){
+            return await _mediator.Send(command);
+        }
+
+        //Editing an activity
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Unit>> Edit(Guid id, EditActivity.Command command){
+            command.Id = id;
             return await _mediator.Send(command);
         }
     }
