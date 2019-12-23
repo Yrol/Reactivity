@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid, List } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
+import ActivityList from "./ActivityList";
 
 interface IProps {
     activities: IActivity[]
@@ -11,12 +12,13 @@ const ActivitiesDashboard: React.FC<IProps> = ({activities}) => {
   return (
     <Grid>
       <Grid.Column width={10}>
-        <List>
-          {/*Using state to get the values when component is rendered (componentDidMount) to the UI*/}
+      {/** Passing the activities to the ActivityList */}
+      <ActivityList activities={activities}/>
+        {/* <List>
           {activities.map(activity => (
             <List.Item key={activity.id}>{activity.title}</List.Item>
           ))}
-        </List>
+        </List> */}
       </Grid.Column>
     </Grid>
   );
