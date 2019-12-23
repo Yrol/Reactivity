@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from "react";
-import semantic, { Header, Icon, List } from "semantic-ui-react";
+import React, { Component, useState, useEffect, Fragment } from "react";
+import semantic, { Header, Icon, List, Container } from "semantic-ui-react";
 import axios from "axios";
 import { IActivity } from "../../models/activity";
 import NavBar from "../../features/nav/NavBar";
@@ -20,16 +20,18 @@ const App = () => {
   }, []); // using empty array [] to make sure useEffect will only run once (since we've other lifecycle methods baked into this). Otherwise this run into an infinite loop.
 
   return (
-    <div>
+    <Fragment>
       {/* Using the React Semantic UI */}
       <NavBar />
-      <List>
-        {/*Using state to get the values when component is rendered (componentDidMount) to the UI*/}
-        {activities.map(activity => (
-          <List.Item key={activity.id}>{activity.title}</List.Item>
-        ))}
-      </List>
-    </div>
+      <Container style={{ marginTop: "7em" }}>
+        <List>
+          {/*Using state to get the values when component is rendered (componentDidMount) to the UI*/}
+          {activities.map(activity => (
+            <List.Item key={activity.id}>{activity.title}</List.Item>
+          ))}
+        </List>
+      </Container>
+    </Fragment>
   );
 };
 
