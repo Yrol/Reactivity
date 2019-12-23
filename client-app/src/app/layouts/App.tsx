@@ -3,6 +3,7 @@ import semantic, { Header, Icon, List, Container } from "semantic-ui-react";
 import axios from "axios";
 import { IActivity } from "../../models/activity";
 import NavBar from "../../features/nav/NavBar";
+import ActivitiesDashboard from "../../features/activities/dashboard/ActivitiesDashboard";
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
@@ -24,12 +25,8 @@ const App = () => {
       {/* Using the React Semantic UI */}
       <NavBar />
       <Container style={{ marginTop: "7em" }}>
-        <List>
-          {/*Using state to get the values when component is rendered (componentDidMount) to the UI*/}
-          {activities.map(activity => (
-            <List.Item key={activity.id}>{activity.title}</List.Item>
-          ))}
-        </List>
+        {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
+        <ActivitiesDashboard activities={activities} />
       </Container>
     </Fragment>
   );
