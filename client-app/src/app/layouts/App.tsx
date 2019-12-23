@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import semantic, { Header, Icon, List } from 'semantic-ui-react';
-import './App.css';
 import axios from 'axios';
 
 //We're replaing the below Function Component (FC) to Class Component
@@ -11,17 +10,18 @@ class App extends Component{
 
   //initiating the state and its prameters
   state = {
-    values: []
+    activities: []
   }
 
   //when the component is mounted to the native UI, assign values to the "values" param
   componentDidMount(){
 
     //using Axios to make HTTP request
-    axios.get('http://localhost:5000/api/Values/')
+    axios.get('http://localhost:5000/api/activities/')
       .then((response) => {
+        console.log(response.data);
         this.setState({
-          values: response.data
+          activities: response.data
         })
       })
   }
@@ -38,8 +38,8 @@ class App extends Component{
             {
             /*Using state to get the values when component is rendered (componentDidMount) to the UI*/
             }
-            {this.state.values.map((value : any) => (
-              <List.Item key={value.id}>{value.name}</List.Item>
+            {this.state.activities.map((activity : any) => (
+              <List.Item key={activity.id}>{activity.title}</List.Item>
             ))}
           </List>
       </div>

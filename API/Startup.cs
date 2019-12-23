@@ -44,8 +44,8 @@ namespace API
             {
                 opt.AddPolicy("CorsPolicy", policy => 
                 {
-                    //http://localhost:3000/ is the frontend React URL
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                    //http://localhost:3000/ and http://localhost:3001 is the frontend React URL
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins(new string[]{"http://localhost:3000","http://localhost:3001"});
                 });
             });
 
