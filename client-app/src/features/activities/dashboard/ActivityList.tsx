@@ -9,7 +9,10 @@ interface IProps {
   currentSelectedActivity: (id: string) => void;
 }
 
-const ActivityList: React.FC<IProps> = ({ activities, currentSelectedActivity }) => {
+const ActivityList: React.FC<IProps> = ({ 
+  activities, 
+  currentSelectedActivity
+ }) => {
   return (
     <Segment clearing>
       <Item.Group divided>

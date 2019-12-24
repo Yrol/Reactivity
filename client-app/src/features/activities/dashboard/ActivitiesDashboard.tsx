@@ -10,12 +10,19 @@ interface IProps {
 
     //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID   
     currentSelectedActivity: (id: string) => void; 
-
     selectedActivity:IActivity;
+
+    editMode: boolean;
+    setEditMode: (emode: boolean) => void;
 }
 
 {/*Getting the "activities" array as a 'prop' from the App.tsx to create the list below*/}
-const ActivitiesDashboard: React.FC<IProps> = ({activities, currentSelectedActivity, selectedActivity}) => {
+const ActivitiesDashboard: React.FC<IProps> = ({
+    activities, 
+    currentSelectedActivity, 
+    selectedActivity,
+    editMode,
+    setEditMode}) => {
   return (
     <Grid>
       {/** The React Grid system supports upto 16 columns */}
@@ -34,8 +41,14 @@ const ActivitiesDashboard: React.FC<IProps> = ({activities, currentSelectedActiv
       </Grid.Column>
       <Grid.Column width={6}>
         {/** using the "selectedActivity &&"  to display "ActivityDetails" if not null (conditional)*/}
-        {selectedActivity && <ActivityDetails activity={selectedActivity!}/>}
-        <ActivityForm/>
+        {/** if edit mode true hide detail view */}
+        {selectedActivity && !editMode && <ActivityDetails 
+            activity={selectedActivity}
+            setEditMode={setEditMode}/>
+        }
+
+        {/** if edit mode true show the form*/}
+        {editMode && <ActivityForm/>}
       </Grid.Column>
     </Grid>
   );

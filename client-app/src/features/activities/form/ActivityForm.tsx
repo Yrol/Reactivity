@@ -1,7 +1,10 @@
 import React from 'react'
 import { Segment, Form } from 'semantic-ui-react';
+import { IActivity } from '../../../models/activity';
 
-const ActivityForm = () => {
+
+const ActivityForm= ({
+}) => {
     return (
         <Segment>
             <Form>

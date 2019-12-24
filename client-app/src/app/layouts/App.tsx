@@ -12,8 +12,15 @@ const App = () => {
 
   //Assigining the activity when user selects an activity. Returns a single activity
   //"selectedActivity" can be either IActivity or null based on an activity has been selected or not
+  //the initial value for this useState is "null" when the page loads
   const [selectedActivity, setSelectedActivity] = useState<IActivity | null>(
     null
+  );
+
+  //Assigining activity when user try to edit an activity
+  //the initial value is set to 'false'
+  const [editMode, setEditMode] = useState(
+    false
   );
 
   //the handler that takes the ID parameter and select the activity from the "actvities" array above when user select an activity from the frontend
@@ -38,9 +45,13 @@ const App = () => {
       <Container style={{ marginTop: "7em" }}>
         {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
         <ActivitiesDashboard 
-          activities={activities} 
-          currentSelectedActivity={handleSelectedActivity} 
-          selectedActivity={selectedActivity!}
+          activities={activities} //pass activity list as a prop
+
+          currentSelectedActivity={handleSelectedActivity} //pass select activity fucntion / handler as a prop
+          selectedActivity={selectedActivity!}//pass selected activity
+
+          editMode={editMode}//pass edit mode value as a prop
+          setEditMode={setEditMode}//passset edit mode function as a prop
         />
       </Container>
     </Fragment>
