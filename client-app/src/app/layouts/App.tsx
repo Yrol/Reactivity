@@ -7,8 +7,19 @@ import ActivitiesDashboard from "../../features/activities/dashboard/ActivitiesD
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
-  //Assigning activities and setActivities for state updates
+  //Assigning activities and setActivities for state updates when the page loads. Return an array
   const [activities, setActivities] = useState<IActivity[]>([]);
+
+  //Assigining the activity when user selects an activity. Returns a single activity
+  //"selectedActivity" can be either IActivity or null based on an activity has been selected or not
+  const [selectedActivity, setSelectedActivity] = useState<IActivity | null>(
+    null
+  );
+
+  //the handler that takes the ID parameter and select the activity from the "actvities" array above when user select an activity from the frontend
+  const handleSelectedActivity = (id: string) => {
+    setSelectedActivity(activities.filter(a => a.id === id)[0])
+  }
 
   //useEffect consist of 3 lifecycle methods componentDidMount, componentDidUpdate and componentWillUnmount
   //In here we're just using componentDidMount
@@ -26,7 +37,11 @@ const App = () => {
       <NavBar />
       <Container style={{ marginTop: "7em" }}>
         {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
-        <ActivitiesDashboard activities={activities} />
+        <ActivitiesDashboard 
+          activities={activities} 
+          currentSelectedActivity={handleSelectedActivity} 
+          selectedActivity={selectedActivity!}
+        />
       </Container>
     </Fragment>
   );

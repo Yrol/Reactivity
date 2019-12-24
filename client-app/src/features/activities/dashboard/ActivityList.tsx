@@ -4,9 +4,12 @@ import { IActivity } from "../../../models/activity";
 
 interface IProps {
   activities: IActivity[];
+
+  //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID 
+  currentSelectedActivity: (id: string) => void;
 }
 
-const ActivityList: React.FC<IProps> = ({ activities }) => {
+const ActivityList: React.FC<IProps> = ({ activities, currentSelectedActivity }) => {
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -20,7 +23,7 @@ const ActivityList: React.FC<IProps> = ({ activities }) => {
                 <div>{activity.city}</div>
               </Item.Description>
               <Item.Extra>
-                <Button floated="right" content="View" color="blue"></Button>
+                <Button onClick={() => currentSelectedActivity(activity.id)} floated="right" content="View" color="blue"></Button>
                 <Label basic content={activity.category} />
               </Item.Extra>
             </Item.Content>
