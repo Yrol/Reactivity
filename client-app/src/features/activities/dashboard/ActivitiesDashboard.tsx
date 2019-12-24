@@ -1,7 +1,8 @@
 import React from "react";
-import { Grid, List } from "semantic-ui-react";
+import { Grid, List, GridColumn } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import ActivityList from "./ActivityList";
+import ActivityDetails from "../details/ActivityDetails"
 
 interface IProps {
     activities: IActivity[]
@@ -11,6 +12,7 @@ interface IProps {
 const ActivitiesDashboard: React.FC<IProps> = ({activities}) => {
   return (
     <Grid>
+      {/** The React Grid system supports upto 16 columns */}
       <Grid.Column width={10}>
       {/** Passing the activities to the ActivityList */}
       <ActivityList activities={activities}/>
@@ -19,6 +21,9 @@ const ActivitiesDashboard: React.FC<IProps> = ({activities}) => {
             <List.Item key={activity.id}>{activity.title}</List.Item>
           ))}
         </List> */}
+      </Grid.Column>
+      <Grid.Column width={6}>
+        <ActivityDetails />
       </Grid.Column>
     </Grid>
   );
