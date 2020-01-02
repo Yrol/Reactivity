@@ -24,6 +24,7 @@ const App = () => {
   );
 
   //the handler that takes the ID parameter and select the activity from the "actvities" array above when user select an activity from the frontend
+  //then assign it to the "selectedActivity"
   const handleSelectedActivity = (id: string) => {
     setSelectedActivity(activities.filter(a => a.id === id)[0])
   }

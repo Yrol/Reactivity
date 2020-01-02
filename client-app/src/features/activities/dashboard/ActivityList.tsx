@@ -7,11 +7,14 @@ interface IProps {
 
   //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID 
   currentSelectedActivity: (id: string) => void;
+
+  setEditMode: (emode: boolean) => void
 }
 
 const ActivityList: React.FC<IProps> = ({ 
   activities, 
-  currentSelectedActivity
+  currentSelectedActivity,
+  setEditMode
  }) => {
   return (
     <Segment clearing>
@@ -26,7 +29,9 @@ const ActivityList: React.FC<IProps> = ({
                 <div>{activity.city}</div>
               </Item.Description>
               <Item.Extra>
-                <Button onClick={() => currentSelectedActivity(activity.id)} floated="right" content="View" color="blue"></Button>
+                {/** currentSelectedActivity is the handleSelectedActivity handler passed/originated in App.tsx */}
+                {/** setEditMode is the handleSelectedActivity handler passed/originated in App.tsx */}
+                <Button onClick={() => {currentSelectedActivity(activity.id); setEditMode(false)}} floated="right" content="View" color="blue"></Button>
                 <Label basic content={activity.category} />
               </Item.Extra>
             </Item.Content>

@@ -32,6 +32,7 @@ const ActivitiesDashboard: React.FC<IProps> = ({
       <ActivityList 
         activities={activities} 
         currentSelectedActivity={currentSelectedActivity}
+        setEditMode={setEditMode}
       />
         {/* <List>
           {activities.map(activity => (

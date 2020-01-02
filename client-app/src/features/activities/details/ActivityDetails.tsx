@@ -24,6 +24,7 @@ const ActivityDetails: React.FC<IProps> = ({
       <Card.Content extra>
         <Button.Group widths={2}>
           <Button
+            /** this will set "editMode" to true in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */
             onClick={() => setEditMode(true)}
             basic
             color="blue"
