@@ -55,7 +55,8 @@ const ActivitiesDashboard: React.FC<IProps> = ({
 
         {/** if edit mode true show the form*/}
         {editMode && <ActivityForm
-          setEditMode={setEditMode}/>        
+          setEditMode={setEditMode}
+          activity={selectedActivity!}/>        
         }
       </Grid.Column>
     </Grid>

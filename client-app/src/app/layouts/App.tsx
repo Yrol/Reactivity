@@ -7,6 +7,8 @@ import ActivitiesDashboard from "../../features/activities/dashboard/ActivitiesD
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
+
+  //This is a State Hook
   //Assigning activities and setActivities for state updates when the page loads. Return an array
   const [activities, setActivities] = useState<IActivity[]>([]);
 
@@ -17,6 +19,7 @@ const App = () => {
     null
   );
 
+  //This is a State Hook
   //Assigining activity when user try to edit an activity
   //the initial value is set to 'false'
   const [editMode, setEditMode] = useState<boolean>(
@@ -57,7 +60,7 @@ const App = () => {
           activities={activities} //pass activity list as a prop
 
           currentSelectedActivity={handleSelectedActivity} //pass select activity fucntion / handler as a prop
-          selectedActivity={selectedActivity!}//pass selected activity
+          selectedActivity={selectedActivity!}//pass the selected activity. The "!" to get around the null since the selected activivity can be null sometimes
 
           editMode={editMode}//pass edit mode value as a prop
           setEditMode={setEditMode}//pass the Edit Mode function as a prop
