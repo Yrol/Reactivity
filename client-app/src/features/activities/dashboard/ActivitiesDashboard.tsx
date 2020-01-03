@@ -14,6 +14,9 @@ interface IProps {
 
     editMode: boolean;
     setEditMode: (emode: boolean) => void;
+
+    //referencing the "setSelectedActivity" state defined in App.tsx - will be passed to ActivityDetails
+    setSelectedActivity: (activity: IActivity | null) => void
 }
 
 {/*Getting the "activities" array as a 'prop' from the App.tsx to create the list below*/}
@@ -22,7 +25,8 @@ const ActivitiesDashboard: React.FC<IProps> = ({
     currentSelectedActivity, 
     selectedActivity,
     editMode,
-    setEditMode}) => {
+    setEditMode,
+    setSelectedActivity}) => {
   return (
     <Grid>
       {/** The React Grid system supports upto 16 columns */}
@@ -45,11 +49,14 @@ const ActivitiesDashboard: React.FC<IProps> = ({
         {/** if edit mode true hide detail view */}
         {selectedActivity && !editMode && <ActivityDetails 
             activity={selectedActivity}
-            setEditMode={setEditMode}/>
+            setEditMode={setEditMode}
+            setSelectedActivity={setSelectedActivity}/>
         }
 
         {/** if edit mode true show the form*/}
-        {editMode && <ActivityForm/>}
+        {editMode && <ActivityForm
+          setEditMode={setEditMode}/>        
+        }
       </Grid.Column>
     </Grid>
   );

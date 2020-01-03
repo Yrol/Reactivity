@@ -19,14 +19,22 @@ const App = () => {
 
   //Assigining activity when user try to edit an activity
   //the initial value is set to 'false'
-  const [editMode, setEditMode] = useState(
+  const [editMode, setEditMode] = useState<boolean>(
     false
   );
 
   //the handler that takes the ID parameter and select the activity from the "actvities" array above when user select an activity from the frontend
-  //then assign it to the "selectedActivity"
+  //then assign it to the "selectedActivity" variable
   const handleSelectedActivity = (id: string) => {
     setSelectedActivity(activities.filter(a => a.id === id)[0])
+  }
+
+  //Handler for creating a new activity (will pass this to the Nav bar)
+  //set the setSelectedActivityto null
+  //set setEditMode to true
+  const handleOpenCreateForm = () => {
+    setSelectedActivity(null);
+    setEditMode(true);
   }
 
   //useEffect consist of 3 lifecycle methods componentDidMount, componentDidUpdate and componentWillUnmount
@@ -42,7 +50,7 @@ const App = () => {
   return (
     <Fragment>
       {/* Using the React Semantic UI */}
-      <NavBar />
+      <NavBar handleOpenCreateForm={handleOpenCreateForm} />
       <Container style={{ marginTop: "7em" }}>
         {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
         <ActivitiesDashboard 
@@ -52,7 +60,9 @@ const App = () => {
           selectedActivity={selectedActivity!}//pass selected activity
 
           editMode={editMode}//pass edit mode value as a prop
-          setEditMode={setEditMode}//passset edit mode function as a prop
+          setEditMode={setEditMode}//pass the Edit Mode function as a prop
+
+          setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
         />
       </Container>
     </Fragment>

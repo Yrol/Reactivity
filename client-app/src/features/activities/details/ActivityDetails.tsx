@@ -4,12 +4,14 @@ import { IActivity } from "../../../models/activity";
 
 interface IProps {
   activity: IActivity;
-  setEditMode: (emode: boolean) => void
+  setEditMode: (emode: boolean) => void;
+  setSelectedActivity: (activity: IActivity | null) => void;
 }
 
 const ActivityDetails: React.FC<IProps> = ({
   activity,
-  setEditMode
+  setEditMode,
+  setSelectedActivity
 }) => {
   return (
     <Card>
@@ -30,7 +32,12 @@ const ActivityDetails: React.FC<IProps> = ({
             color="blue"
             content="Edit"
           />
-          <Button basic color="grey" content="Cancel" />
+          <Button
+            onClick={() => setSelectedActivity(null)}
+            basic
+            color="grey"
+            content="Cancel"
+          />
         </Button.Group>
       </Card.Content>
     </Card>
