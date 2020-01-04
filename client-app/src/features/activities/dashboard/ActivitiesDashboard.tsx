@@ -16,7 +16,11 @@ interface IProps {
     setEditMode: (emode: boolean) => void;
 
     //referencing the "setSelectedActivity" state defined in App.tsx - will be passed to ActivityDetails
-    setSelectedActivity: (activity: IActivity | null) => void
+    setSelectedActivity: (activity: IActivity | null) => void;
+
+    //handler for create and edit activity
+    createActivity: (activity: IActivity) => void;
+    editActivity: (activity: IActivity) => void;
 }
 
 {/*Getting the "activities" array as a 'prop' from the App.tsx to create the list below*/}
@@ -26,6 +30,8 @@ const ActivitiesDashboard: React.FC<IProps> = ({
     selectedActivity,
     editMode,
     setEditMode,
+    createActivity,
+    editActivity,
     setSelectedActivity}) => {
   return (
     <Grid>
@@ -56,7 +62,9 @@ const ActivitiesDashboard: React.FC<IProps> = ({
         {/** if edit mode true show the form*/}
         {editMode && <ActivityForm
           setEditMode={setEditMode}
-          activity={selectedActivity!}/>        
+          activity={selectedActivity!}
+          createActivity={createActivity}
+          editActivity={editActivity}/>        
         }
       </Grid.Column>
     </Grid>

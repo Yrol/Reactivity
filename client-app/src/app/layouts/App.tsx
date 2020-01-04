@@ -40,6 +40,23 @@ const App = () => {
     setEditMode(true);
   }
 
+  //handler for creating a new activity
+  // The 3 dots (...) below is called the Spread Atrribute
+  const handleCreateActivity = (activity: IActivity) => {
+    //The Spread Atrribute (...) will take the  exisiting activities and add the new activity to to the array
+    setActivities([...activities, activity])
+    setSelectedActivity(activity);
+    setEditMode(false);
+  }
+
+  //handler for editing the activity
+  const handleEditActivity = (activity: IActivity) => {
+    //get the activities not equal to the edited activity and inject the edited acitivity to it
+    setActivities([...activities.filter(a => a.id !== activity.id), activity])
+    setSelectedActivity(activity);
+    setEditMode(false);
+  }
+
   //useEffect consist of 3 lifecycle methods componentDidMount, componentDidUpdate and componentWillUnmount
   //In here we're just using componentDidMount
   useEffect(() => {
@@ -66,6 +83,10 @@ const App = () => {
           setEditMode={setEditMode}//pass the Edit Mode function as a prop
 
           setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
+
+          createActivity={handleCreateActivity}
+
+          editActivity={handleEditActivity}
         />
       </Container>
     </Fragment>
