@@ -2,48 +2,51 @@ import React from "react";
 import { Grid, List, GridColumn } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import ActivityList from "./ActivityList";
-import ActivityDetails from "../details/ActivityDetails"
+import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../form/ActivityForm";
 
 interface IProps {
-    activities: IActivity[];
+  activities: IActivity[];
 
-    //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID   
-    currentSelectedActivity: (id: string) => void; 
-    selectedActivity:IActivity;
+  //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID
+  currentSelectedActivity: (id: string) => void;
+  selectedActivity: IActivity;
 
-    editMode: boolean;
-    setEditMode: (emode: boolean) => void;
+  editMode: boolean;
+  setEditMode: (emode: boolean) => void;
 
-    //referencing the "setSelectedActivity" state defined in App.tsx - will be passed to ActivityDetails
-    setSelectedActivity: (activity: IActivity | null) => void;
+  //referencing the "setSelectedActivity" state defined in App.tsx - will be passed to ActivityDetails
+  setSelectedActivity: (activity: IActivity | null) => void;
 
-    //handler for create and edit activity
-    createActivity: (activity: IActivity) => void;
-    editActivity: (activity: IActivity) => void;
+  //handler for create and edit activity
+  createActivity: (activity: IActivity) => void;
+  editActivity: (activity: IActivity) => void;
 }
 
-{/*Getting the "activities" array as a 'prop' from the App.tsx to create the list below*/}
+{
+  /*Getting the "activities" array as a 'prop' from the App.tsx to create the list below*/
+}
 const ActivitiesDashboard: React.FC<IProps> = ({
-    activities, 
-    currentSelectedActivity, 
-    selectedActivity,
-    editMode,
-    setEditMode,
-    createActivity,
-    editActivity,
-    setSelectedActivity}) => {
+  activities,
+  currentSelectedActivity,
+  selectedActivity,
+  editMode,
+  setEditMode,
+  createActivity,
+  editActivity,
+  setSelectedActivity
+}) => {
   return (
     <Grid>
       {/** The React Grid system supports upto 16 columns */}
       <Grid.Column width={10}>
-      {/** Passing the activities to the ActivityList as a Prop */}
-      {/** Passing the currentSelectedActivity to the ActivityList as a Prop*/}
-      <ActivityList 
-        activities={activities} 
-        currentSelectedActivity={currentSelectedActivity}
-        setEditMode={setEditMode}
-      />
+        {/** Passing the activities to the ActivityList as a Prop */}
+        {/** Passing the currentSelectedActivity to the ActivityList as a Prop*/}
+        <ActivityList
+          activities={activities}
+          currentSelectedActivity={currentSelectedActivity}
+          setEditMode={setEditMode}
+        />
         {/* <List>
           {activities.map(activity => (
             <List.Item key={activity.id}>{activity.title}</List.Item>
@@ -53,19 +56,26 @@ const ActivitiesDashboard: React.FC<IProps> = ({
       <Grid.Column width={6}>
         {/** using the "selectedActivity &&"  to display "ActivityDetails" if not null (conditional)*/}
         {/** if edit mode true hide detail view */}
-        {selectedActivity && !editMode && <ActivityDetails 
+        {selectedActivity && !editMode && (
+          <ActivityDetails
             activity={selectedActivity}
             setEditMode={setEditMode}
-            setSelectedActivity={setSelectedActivity}/>
-        }
+            setSelectedActivity={setSelectedActivity}
+          />
+        )}
 
         {/** if edit mode true show the form*/}
-        {editMode && <ActivityForm
-          setEditMode={setEditMode}
-          activity={selectedActivity!}
-          createActivity={createActivity}
-          editActivity={editActivity}/>        
-        }
+        {editMode && (
+          <ActivityForm
+            /** In here we're using "key" to make sure the form will be mounted and unmounted between editing and creating activities. */
+            /** Without a the "key", the form will not be re-rendered when we have an edit item and then attempting a create a new activity */
+            key={selectedActivity && selectedActivity.id || 0}
+            setEditMode={setEditMode}
+            activity={selectedActivity!}
+            createActivity={createActivity}
+            editActivity={editActivity}
+          />
+        )}
       </Grid.Column>
     </Grid>
   );
