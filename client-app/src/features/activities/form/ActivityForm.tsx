@@ -98,7 +98,7 @@ const ActivityForm: React.FC<IProps> = ({
           value={activity.city}
         />
         <Form.Input
-          type="date"
+          type="datetime-local"
           name="date"
           value={activity.date}
         />
