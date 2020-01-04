@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, ChangeEvent, FormEvent} from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react';
 import { IActivity } from '../../../models/activity';
 
@@ -34,15 +34,28 @@ const ActivityForm: React.FC<IProps> = ({
         initializeForm
     )
 
+    //Handling input change without ChangeEvent or strict typing such as HTMLInputElement and HTMLTextAreaElement
+    // const handleInputChange = (event: any) => {
+    //     const {name, value} = event.target
+    //     setActivity({ ...activity, [name]: value})
+    // }
+
+    //Handling input change with FormEvent and strict typing - HTMLInputElement and HTMLTextAreaElement
+    //Without this implementation we won't be able to type inside the form fields since React is based on virtual DOM
+    const handleInputChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const {name, value} = event.currentTarget
+        setActivity({...activity, [name]: value})
+    }
+ 
     return (
         <Segment clearing>
             {/** "clearing" will include the Cancel and the Submit button within the form*/}
             <Form>
-                <Form.Input placeholder="Title" value={activity.title} />
-                <Form.TextArea rows={2} placeholder="Description" value={activity.description} />
-                <Form.Input placeholder="Category" value={activity.category} />
-                <Form.Input placeholder="City" value={activity.city} />
-                <Form.Input type="date" placeholder="Date" value={activity.date} />
+                <Form.Input onChange={handleInputChange} name='title' placeholder="Title" value={activity.title} />
+                <Form.TextArea onChange={handleInputChange} rows={2} placeholder="Description" name='description' value={activity.description} />
+                <Form.Input onChange={handleInputChange} name='category' placeholder="Category" value={activity.category} />
+                <Form.Input onChange={handleInputChange} name='city' placeholder="City" value={activity.city} />
+                <Form.Input type="date" placeholder="Date" name='date' value={activity.date} />
                 <Button floated='right' positive type='submit' content='Submit' />
                 {/** this will set "editMode" to false in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */}
                 <Button onClick={() => setEditMode(false)} floated='right' type='button' content='Cancel' />
