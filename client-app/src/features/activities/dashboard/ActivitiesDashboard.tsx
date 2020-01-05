@@ -18,9 +18,10 @@ interface IProps {
   //referencing the "setSelectedActivity" state defined in App.tsx - will be passed to ActivityDetails
   setSelectedActivity: (activity: IActivity | null) => void;
 
-  //handler for create and edit activity
+  //handler for create, edit and delete activities
   createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
+  deleteActivity: (id: string) => void;
 }
 
 {
@@ -34,6 +35,7 @@ const ActivitiesDashboard: React.FC<IProps> = ({
   setEditMode,
   createActivity,
   editActivity,
+  deleteActivity,
   setSelectedActivity
 }) => {
   return (
@@ -46,6 +48,7 @@ const ActivitiesDashboard: React.FC<IProps> = ({
           activities={activities}
           currentSelectedActivity={currentSelectedActivity}
           setEditMode={setEditMode}
+          deleteActivity={deleteActivity}
         />
         {/* <List>
           {activities.map(activity => (

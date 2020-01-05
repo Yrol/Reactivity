@@ -5,17 +5,21 @@ import { IActivity } from "../../../models/activity";
 interface IProps {
   activities: IActivity[];
 
-  //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID 
+  //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID
   currentSelectedActivity: (id: string) => void;
 
-  setEditMode: (emode: boolean) => void
+  setEditMode: (emode: boolean) => void;
+
+  //handler fot deleting an activity
+  deleteActivity: (id: string) => void;
 }
 
-const ActivityList: React.FC<IProps> = ({ 
-  activities, 
+const ActivityList: React.FC<IProps> = ({
+  activities,
   currentSelectedActivity,
-  setEditMode
- }) => {
+  setEditMode,
+  deleteActivity
+}) => {
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -31,7 +35,24 @@ const ActivityList: React.FC<IProps> = ({
               <Item.Extra>
                 {/** currentSelectedActivity is the handleSelectedActivity handler passed/originated in App.tsx */}
                 {/** setEditMode is the handleSelectedActivity handler passed/originated in App.tsx */}
-                <Button onClick={() => {currentSelectedActivity(activity.id); setEditMode(false)}} floated="right" content="View" color="blue"></Button>
+                <Button
+                  onClick={() => {
+                    currentSelectedActivity(activity.id);
+                    setEditMode(false);
+                  }}
+                  floated="right"
+                  content="View"
+                  color="blue"
+                ></Button>
+                <Button
+                  onClick={() => {
+                    deleteActivity(activity.id);
+                  }}
+                  floated="right"
+                  content="Delete"
+                  color="red"
+                >  
+                </Button>
                 <Label basic content={activity.category} />
               </Item.Extra>
             </Item.Content>

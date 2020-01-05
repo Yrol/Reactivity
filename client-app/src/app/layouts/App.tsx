@@ -57,6 +57,16 @@ const App = () => {
     setEditMode(false);
   }
 
+  //handler for deleting an activity
+  const handleDeleteActivity = (id: string) => {
+    setActivities([...activities.filter(a => a.id !== id)])
+    //if the deleting activity is selected, remove is from seleted and edit mode
+    if(selectedActivity?.id === id){
+      setSelectedActivity(null)
+      setEditMode(false)
+    }
+  }
+
   //This block will receive all the activities from the API
   //useEffect consist of 3 lifecycle methods componentDidMount, componentDidUpdate and componentWillUnmount
   //In here we're just using componentDidMount
@@ -90,9 +100,11 @@ const App = () => {
 
           setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
 
-          createActivity={handleCreateActivity}
+          createActivity={handleCreateActivity}//passing the handler for creating a new activity
 
-          editActivity={handleEditActivity}
+          editActivity={handleEditActivity}//passing the handler for editing an activity
+
+          deleteActivity={handleDeleteActivity}
         />
       </Container>
     </Fragment>
