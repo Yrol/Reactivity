@@ -4,6 +4,7 @@ import axios from "axios";
 import { IActivity } from "../../models/activity";
 import NavBar from "../../features/nav/NavBar";
 import ActivitiesDashboard from "../../features/activities/dashboard/ActivitiesDashboard";
+import agent from "../api/agent";
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
@@ -70,12 +71,26 @@ const App = () => {
   //This block will receive all the activities from the API
   //useEffect consist of 3 lifecycle methods componentDidMount, componentDidUpdate and componentWillUnmount
   //In here we're just using componentDidMount
+  // useEffect(() => {
+  //   axios
+  //     .get<IActivity[]>("http://localhost:5000/api/activities/")
+  //     .then(response => {
+  //       let activities: IActivity[] = []
+  //       response.data.forEach(activity => { //loop through the API response.data
+  //         activity.date = activity.date.split('.')[0];//splitting the time befort the dot(.)
+  //         activities.push(activity)
+  //       })
+  //       setActivities(activities);
+  //     });
+  // }, []); // using empty array [] to make sure useEffect will only run once (since we've other lifecycle methods baked into this). Otherwise this run into an infinite loop.
+
+
+  /*** Using the web helper class - agent.ts to get all the activities from the API*/
   useEffect(() => {
-    axios
-      .get<IActivity[]>("http://localhost:5000/api/activities/")
+    agent.Activities.list()
       .then(response => {
         let activities: IActivity[] = []
-        response.data.forEach(activity => { //loop through the API response.data
+        response.forEach(activity => { //loop through the API response.data
           activity.date = activity.date.split('.')[0];//splitting the time befort the dot(.)
           activities.push(activity)
         })

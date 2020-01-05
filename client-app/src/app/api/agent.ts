@@ -3,8 +3,9 @@ import { url } from 'inspector';
 import { IActivity } from '../../models/activity';
 
 //base URL
-axios.defaults.baseURL = '"http://localhost:5000/api';
+axios.defaults.baseURL = 'http://localhost:5000/api';
 
+//the response we're getting from the request - [response.data]
 const responseBody = (response : AxiosResponse) => response.data;
 
 //contains all the request TYPES - GET, POST, PUT and DELETE
@@ -18,11 +19,11 @@ const requests = {
 
 //object that contains all the requests specific to this app
 const Activities = {
-    list: () => requests.get('/activities'),
-    details: (id: string) => requests.get(`/activities/${id}`),
-    create: (activity: IActivity) => requests.post('/activities', activity),
-    update: (activity: IActivity) => requests.put(`/activities/${activity.id}`, activity),
-    delete: (id: string) => requests.del(`/activities/${id}`)
+    list: (): Promise<IActivity[]> => requests.get('/activities'), // get all activities with the return type of IActivity
+    details: (id: string) => requests.get(`/activities/${id}`), //accepts a string argument
+    create: (activity: IActivity) => requests.post('/activities', activity), //accepts an IActivity as argument
+    update: (activity: IActivity) => requests.put(`/activities/${activity.id}`, activity), //accepts an IActivity as argument
+    delete: (id: string) => requests.del(`/activities/${id}`)  //accepts a string argument
 }
 
 //give access to the Activities object
