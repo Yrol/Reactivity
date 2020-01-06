@@ -22,6 +22,8 @@ interface IProps {
   createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
   deleteActivity: (id: string) => void;
+
+  submitState: boolean;//form submit status 
 }
 
 {
@@ -36,7 +38,8 @@ const ActivitiesDashboard: React.FC<IProps> = ({
   createActivity,
   editActivity,
   deleteActivity,
-  setSelectedActivity
+  setSelectedActivity,
+  submitState
 }) => {
   return (
     <Grid>
@@ -77,6 +80,7 @@ const ActivitiesDashboard: React.FC<IProps> = ({
             activity={selectedActivity!}
             createActivity={createActivity}
             editActivity={editActivity}
+            submitState={submitState}
           />
         )}
       </Grid.Column>

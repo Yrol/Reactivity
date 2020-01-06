@@ -27,7 +27,10 @@ const App = () => {
 
 
   //State hook for the loading state
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  //State hook for creating, updating and deleting the activities
+  const [submitState, setSubmitState] = useState<boolean>(false)
 
   //the handler that takes the ID parameter and select the activity from the "actvities" array above when user select an activity from the frontend
   //then assign it to the "selectedActivity" variable
@@ -46,12 +49,13 @@ const App = () => {
   //handler for creating a new activity
   // The 3 dots (...) below is called the Spread Atrribute
   const handleCreateActivity = (activity: IActivity) => {
+    setSubmitState(true);
     agent.Activities.create(activity).then(() => {
       //The Spread Atrribute (...) will take the  exisiting activities and add the new activity to to the array
       setActivities([...activities, activity]);
       setSelectedActivity(activity);
       setEditMode(false);
-    })
+    }).then(() => setSubmitState(false))
   };
 
   //handler for editing the activity
@@ -119,6 +123,7 @@ const App = () => {
           createActivity={handleCreateActivity} //passing the handler for creating a new activity
           editActivity={handleEditActivity} //passing the handler for editing an activity
           deleteActivity={handleDeleteActivity}
+          submitState={submitState} //submission state
         />
       </Container>
     </Fragment>

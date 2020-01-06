@@ -9,6 +9,8 @@ interface IProps {
 
   createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
+
+  submitState: boolean;
 }
 
 /** Adding an IProps interface and destructure them - such as setEditMode, activities and etc...  */
@@ -16,7 +18,8 @@ const ActivityForm: React.FC<IProps> = ({
   setEditMode,
   activity: initialFormState, //give an alias to the activity variable since another of same name used in "useState" below
   createActivity,
-  editActivity
+  editActivity,
+  submitState
 }) => {
   //if the activity aka - initialFormState is empty, create an empty IActivity defined in "activity.ts" an return
   const initializeForm = () => {
@@ -100,12 +103,13 @@ const ActivityForm: React.FC<IProps> = ({
           value={activity.city}
         />
         <Form.Input
-        onChange={handleInputChange}
-         type="datetime-local"
+          onChange={handleInputChange}
+          type="datetime-local"
           name="date"
           value={activity.date}
         />
-        <Button floated="right" positive type="submit" content="Submit" />
+        <Button loading={submitState} floated="right" positive type="submit" content="Submit" />
+
         {/** this will set "editMode" to false in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */}
         <Button
           onClick={() => setEditMode(false)}
