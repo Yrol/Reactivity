@@ -25,7 +25,7 @@ interface IProps {
 }
 
 {
-  /*Getting the "activities" array as a 'prop' from the App.tsx to create the list below*/
+/** Adding an IProps interface and destructure them - such as activities, currentSelectedActivity and etc...  */
 }
 const ActivitiesDashboard: React.FC<IProps> = ({
   activities,

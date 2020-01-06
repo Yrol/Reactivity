@@ -11,6 +11,7 @@ interface IProps {
   editActivity: (activity: IActivity) => void;
 }
 
+/** Adding an IProps interface and destructure them - such as setEditMode, activities and etc...  */
 const ActivityForm: React.FC<IProps> = ({
   setEditMode,
   activity: initialFormState, //give an alias to the activity variable since another of same name used in "useState" below

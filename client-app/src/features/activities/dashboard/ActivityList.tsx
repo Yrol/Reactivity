@@ -13,7 +13,7 @@ interface IProps {
   //handler fot deleting an activity
   deleteActivity: (id: string) => void;
 }
-
+/** Setting IProps and destructure them - such as activities, currentSelectedActivity and etc...  */
 const ActivityList: React.FC<IProps> = ({
   activities,
   currentSelectedActivity,

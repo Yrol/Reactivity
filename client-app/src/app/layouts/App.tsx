@@ -5,6 +5,7 @@ import { IActivity } from "../../models/activity";
 import NavBar from "../../features/nav/NavBar";
 import ActivitiesDashboard from "../../features/activities/dashboard/ActivitiesDashboard";
 import agent from "../api/agent";
+import { LoadingComponent } from "./LoadingComponent";
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
@@ -23,6 +24,10 @@ const App = () => {
   //Assigining activity when user try to edit an activity
   //the initial value is set to 'false'
   const [editMode, setEditMode] = useState<boolean>(false);
+
+
+  //State hook for the loading state
+  const [loading, setLoading] = useState(true);
 
   //the handler that takes the ID parameter and select the activity from the "actvities" array above when user select an activity from the frontend
   //then assign it to the "selectedActivity" variable
@@ -93,8 +98,10 @@ const App = () => {
         activities.push(activity);
       });
       setActivities(activities);
-    });
+    }).then(() => setLoading(false));
   }, []); // using empty array [] to make sure useEffect will only run once (since we've other lifecycle methods baked into this). Otherwise this run into an infinite loop.
+
+  if (loading) return <LoadingComponent content='Loading activities....' inverted={true} />
 
   return (
     <Fragment>
