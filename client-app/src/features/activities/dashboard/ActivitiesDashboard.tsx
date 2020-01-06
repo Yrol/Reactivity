@@ -52,6 +52,7 @@ const ActivitiesDashboard: React.FC<IProps> = ({
           currentSelectedActivity={currentSelectedActivity}
           setEditMode={setEditMode}
           deleteActivity={deleteActivity}
+          submitState={submitState}
         />
         {/* <List>
           {activities.map(activity => (

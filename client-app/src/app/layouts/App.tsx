@@ -60,20 +60,26 @@ const App = () => {
 
   //handler for editing the activity
   const handleEditActivity = (activity: IActivity) => {
-    //get the activities not equal to the edited activity and inject the edited acitivity to it
-    setActivities([...activities.filter(a => a.id !== activity.id), activity]);
-    setSelectedActivity(activity);
-    setEditMode(false);
+    setSubmitState(true)
+    agent.Activities.update(activity).then(() => {
+      //get the activities not equal to the edited activity and inject the edited acitivity to it
+      setActivities([...activities.filter(a => a.id !== activity.id), activity]);
+      setSelectedActivity(activity);
+      setEditMode(false);
+    }).then(() => setSubmitState(false))
   };
 
   //handler for deleting an activity
   const handleDeleteActivity = (id: string) => {
-    setActivities([...activities.filter(a => a.id !== id)]);
-    //if the deleting activity is selected, remove is from seleted and edit mode
-    if (selectedActivity?.id === id) {
-      setSelectedActivity(null);
-      setEditMode(false);
-    }
+    setSubmitState(true)
+    agent.Activities.delete(id).then(() => {
+      setActivities([...activities.filter(a => a.id !== id)]);
+      //if the deleting activity is selected, remove is from seleted and edit mode
+      if (selectedActivity?.id === id) {
+        setSelectedActivity(null);
+        setEditMode(false);
+      }
+    }).then(() =>setSubmitState(false))
   };
 
   //This block will receive all the activities from the API

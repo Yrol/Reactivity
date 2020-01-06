@@ -12,13 +12,16 @@ interface IProps {
 
   //handler fot deleting an activity
   deleteActivity: (id: string) => void;
+
+  submitState:boolean;
 }
 /** Setting IProps and destructure them - such as activities, currentSelectedActivity and etc...  */
 const ActivityList: React.FC<IProps> = ({
   activities,
   currentSelectedActivity,
   setEditMode,
-  deleteActivity
+  deleteActivity,
+  submitState
 }) => {
   return (
     <Segment clearing>
@@ -48,6 +51,7 @@ const ActivityList: React.FC<IProps> = ({
                   onClick={() => {
                     deleteActivity(activity.id);
                   }}
+                  loading={submitState}
                   floated="right"
                   content="Delete"
                   color="red"
