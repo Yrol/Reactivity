@@ -54,17 +54,18 @@ const ActivityForm: React.FC<IProps> = ({
 
   //handle the form submit activity
   const handleSubmit = () => {
-    console.log(activity);
     if (activity.id.length === 0) {
       //new activity
       let newActivity = {
         ...activity,
         id: uuid() // npm package for generating unique IDs
       };
+      console.log(newActivity);
       createActivity(newActivity);
     } else {
       //existing activity
       editActivity(activity);
+      console.log(activity);
     }
   };
 
@@ -98,7 +99,8 @@ const ActivityForm: React.FC<IProps> = ({
           value={activity.city}
         />
         <Form.Input
-          type="datetime-local"
+        onChange={handleInputChange}
+         type="datetime-local"
           name="date"
           value={activity.date}
         />

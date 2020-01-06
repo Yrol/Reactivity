@@ -8,7 +8,6 @@ import agent from "../api/agent";
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
-
   //This is a State Hook
   //Assigning activities and setActivities for state updates when the page loads. Return an array
   const [activities, setActivities] = useState<IActivity[]>([]);
@@ -23,15 +22,13 @@ const App = () => {
   //This is a State Hook
   //Assigining activity when user try to edit an activity
   //the initial value is set to 'false'
-  const [editMode, setEditMode] = useState<boolean>(
-    false
-  );
+  const [editMode, setEditMode] = useState<boolean>(false);
 
   //the handler that takes the ID parameter and select the activity from the "actvities" array above when user select an activity from the frontend
   //then assign it to the "selectedActivity" variable
   const handleSelectedActivity = (id: string) => {
-    setSelectedActivity(activities.filter(a => a.id === id)[0])
-  }
+    setSelectedActivity(activities.filter(a => a.id === id)[0]);
+  };
 
   //Handler for creating a new activity (will pass this to the Nav bar)
   //set the setSelectedActivityto null
@@ -39,34 +36,36 @@ const App = () => {
   const handleOpenCreateForm = () => {
     setSelectedActivity(null);
     setEditMode(true);
-  }
+  };
 
   //handler for creating a new activity
   // The 3 dots (...) below is called the Spread Atrribute
   const handleCreateActivity = (activity: IActivity) => {
-    //The Spread Atrribute (...) will take the  exisiting activities and add the new activity to to the array
-    setActivities([...activities, activity])
-    setSelectedActivity(activity);
-    setEditMode(false);
-  }
+    agent.Activities.create(activity).then(() => {
+      //The Spread Atrribute (...) will take the  exisiting activities and add the new activity to to the array
+      setActivities([...activities, activity]);
+      setSelectedActivity(activity);
+      setEditMode(false);
+    })
+  };
 
   //handler for editing the activity
   const handleEditActivity = (activity: IActivity) => {
     //get the activities not equal to the edited activity and inject the edited acitivity to it
-    setActivities([...activities.filter(a => a.id !== activity.id), activity])
+    setActivities([...activities.filter(a => a.id !== activity.id), activity]);
     setSelectedActivity(activity);
     setEditMode(false);
-  }
+  };
 
   //handler for deleting an activity
   const handleDeleteActivity = (id: string) => {
-    setActivities([...activities.filter(a => a.id !== id)])
+    setActivities([...activities.filter(a => a.id !== id)]);
     //if the deleting activity is selected, remove is from seleted and edit mode
-    if(selectedActivity?.id === id){
-      setSelectedActivity(null)
-      setEditMode(false)
+    if (selectedActivity?.id === id) {
+      setSelectedActivity(null);
+      setEditMode(false);
     }
-  }
+  };
 
   //This block will receive all the activities from the API
   //useEffect consist of 3 lifecycle methods componentDidMount, componentDidUpdate and componentWillUnmount
@@ -84,18 +83,17 @@ const App = () => {
   //     });
   // }, []); // using empty array [] to make sure useEffect will only run once (since we've other lifecycle methods baked into this). Otherwise this run into an infinite loop.
 
-
   /*** Using the web helper class - agent.ts to get all the activities from the API*/
   useEffect(() => {
-    agent.Activities.list()
-      .then(response => {
-        let activities: IActivity[] = []
-        response.forEach(activity => { //loop through the API response.data
-          activity.date = activity.date.split('.')[0];//splitting the time befort the dot(.)
-          activities.push(activity)
-        })
-        setActivities(activities);
+    agent.Activities.list().then(response => { // returns response.data with Promise
+      let activities: IActivity[] = [];
+      response.forEach(activity => {
+        //loop through the API response.data
+        activity.date = activity.date.split(".")[0]; //splitting the time befort the dot(.)
+        activities.push(activity);
       });
+      setActivities(activities);
+    });
   }, []); // using empty array [] to make sure useEffect will only run once (since we've other lifecycle methods baked into this). Otherwise this run into an infinite loop.
 
   return (
@@ -104,21 +102,15 @@ const App = () => {
       <NavBar handleOpenCreateForm={handleOpenCreateForm} />
       <Container style={{ marginTop: "7em" }}>
         {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
-        <ActivitiesDashboard 
+        <ActivitiesDashboard
           activities={activities} //pass activity list as a prop
-
           currentSelectedActivity={handleSelectedActivity} //pass select activity fucntion / handler as a prop
-          selectedActivity={selectedActivity!}//pass the selected activity. The "!" to get around the null since the selected activivity can be null sometimes
-
-          editMode={editMode}//pass edit mode value as a prop
-          setEditMode={setEditMode}//pass the Edit Mode function as a prop
-
+          selectedActivity={selectedActivity!} //pass the selected activity. The "!" to get around the null since the selected activivity can be null sometimes
+          editMode={editMode} //pass edit mode value as a prop
+          setEditMode={setEditMode} //pass the Edit Mode function as a prop
           setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
-
-          createActivity={handleCreateActivity}//passing the handler for creating a new activity
-
-          editActivity={handleEditActivity}//passing the handler for editing an activity
-
+          createActivity={handleCreateActivity} //passing the handler for creating a new activity
+          editActivity={handleEditActivity} //passing the handler for editing an activity
           deleteActivity={handleDeleteActivity}
         />
       </Container>
