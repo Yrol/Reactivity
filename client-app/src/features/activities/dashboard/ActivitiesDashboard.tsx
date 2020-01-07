@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Grid, List, GridColumn } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import ActivityList from "./ActivityList";
@@ -21,9 +21,13 @@ interface IProps {
   //handler for create, edit and delete activities
   createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
-  deleteActivity: (id: string) => void;
+
+  //handler for deleting an activity. Accepts event of SyntheticEvent type which contains button properties such as the unique button name (unique ID)
+  deleteActivity: (e:SyntheticEvent<HTMLButtonElement>, id:string) => void;
 
   submitState: boolean;//form submit status 
+
+  deleteActivityID: string//contains the unique ID of the clicked button
 }
 
 {
@@ -39,7 +43,8 @@ const ActivitiesDashboard: React.FC<IProps> = ({
   editActivity,
   deleteActivity,
   setSelectedActivity,
-  submitState
+  submitState,
+  deleteActivityID
 }) => {
   return (
     <Grid>
@@ -53,6 +58,7 @@ const ActivitiesDashboard: React.FC<IProps> = ({
           setEditMode={setEditMode}
           deleteActivity={deleteActivity}
           submitState={submitState}
+          deleteActivityID={deleteActivityID}
         />
         {/* <List>
           {activities.map(activity => (

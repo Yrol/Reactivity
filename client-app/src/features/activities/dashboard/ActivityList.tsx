@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, SyntheticEvent } from "react";
 import { Item, Button, Label, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 
@@ -10,10 +10,12 @@ interface IProps {
 
   setEditMode: (emode: boolean) => void;
 
-  //handler fot deleting an activity
-  deleteActivity: (id: string) => void;
+  //handler for deleting an activity. Accepts event of SyntheticEvent type which contains button properties such as the unique button name (unique ID)
+  deleteActivity: (e:SyntheticEvent<HTMLButtonElement> ,id: string) => void;
 
   submitState:boolean;
+
+  deleteActivityID:string;//contains the unique ID of the clicked button
 }
 /** Setting IProps and destructure them - such as activities, currentSelectedActivity and etc...  */
 const ActivityList: React.FC<IProps> = ({
@@ -21,7 +23,8 @@ const ActivityList: React.FC<IProps> = ({
   currentSelectedActivity,
   setEditMode,
   deleteActivity,
-  submitState
+  submitState,
+  deleteActivityID
 }) => {
   return (
     <Segment clearing>
@@ -48,10 +51,13 @@ const ActivityList: React.FC<IProps> = ({
                   color="blue"
                 ></Button>
                 <Button
-                  onClick={() => {
-                    deleteActivity(activity.id);
+                  name={activity.id}
+
+                  //event "e" will be used for passing button propeties in this case the "name" to the deleteActivity method. Event e is a type of SyentheticEvent
+                  onClick={(e) => {
+                    deleteActivity(e, activity.id);
                   }}
-                  loading={submitState}
+                  loading={deleteActivityID === activity.id &&submitState}
                   floated="right"
                   content="Delete"
                   color="red"

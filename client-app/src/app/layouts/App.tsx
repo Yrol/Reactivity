@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, Fragment } from "react";
+import React, { Component, useState, useEffect, Fragment, SyntheticEvent } from "react";
 import semantic, { Header, Icon, List, Container } from "semantic-ui-react";
 import axios from "axios";
 import { IActivity } from "../../models/activity";
@@ -31,6 +31,8 @@ const App = () => {
 
   //State hook for creating, updating and deleting the activities
   const [submitState, setSubmitState] = useState<boolean>(false)
+
+  const [deleteActivityID, setDeleteActivityID] = useState<string>('')
 
   //the handler that takes the ID parameter and select the activity from the "actvities" array above when user select an activity from the frontend
   //then assign it to the "selectedActivity" variable
@@ -70,8 +72,10 @@ const App = () => {
   };
 
   //handler for deleting an activity
-  const handleDeleteActivity = (id: string) => {
+  //Accepts the event of SyntheticEvent type initiated from an HTMLButtonElement which contains button properties such as the unique button name
+  const handleDeleteActivity = (event:SyntheticEvent<HTMLButtonElement> ,id: string) => {
     setSubmitState(true)
+    setDeleteActivityID(event.currentTarget.name);
     agent.Activities.delete(id).then(() => {
       setActivities([...activities.filter(a => a.id !== id)]);
       //if the deleting activity is selected, remove is from seleted and edit mode
@@ -130,6 +134,7 @@ const App = () => {
           editActivity={handleEditActivity} //passing the handler for editing an activity
           deleteActivity={handleDeleteActivity}
           submitState={submitState} //submission state
+          deleteActivityID={deleteActivityID}
         />
       </Container>
     </Fragment>
