@@ -14,7 +14,7 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
     new Promise<AxiosResponse>(resolve => setTimeout(() =>  resolve(response), ms));
 
 //contains all the request TYPES - GET, POST, PUT and DELETE
-//Chaining the "Currying" function defined above to mimic a dealy of 1000ms
+//Chaining the "Currying" function defined above to mimic a delay of 1000ms
 const requests = {
     get: (url: string) => axios.get(url).then(sleep(1000)).then(responseBody),// taking only 1 argument - url
     post: (url: string, body: {}) => axios.post(url, body).then(sleep(1000)).then(responseBody), //taking 2 arguments - url & body

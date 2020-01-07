@@ -17,7 +17,7 @@ interface IProps {
 
   deleteActivityID:string;//contains the unique ID of the clicked button
 }
-/** Setting IProps and destructure them - such as activities, currentSelectedActivity and etc...  */
+/** Setting IProps and destructuring them - such as activities, currentSelectedActivity and etc...  */
 const ActivityList: React.FC<IProps> = ({
   activities,
   currentSelectedActivity,
@@ -53,7 +53,7 @@ const ActivityList: React.FC<IProps> = ({
                 <Button
                   name={activity.id}
 
-                  //event "e" will be used for passing button propeties in this case the "name" to the deleteActivity method. Event e is a type of SyentheticEvent
+                  //event "e" will be used for passing button properties in this case the "name" to the deleteActivity method. Event e is a type of SyentheticEvent
                   onClick={(e) => {
                     deleteActivity(e, activity.id);
                   }}

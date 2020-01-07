@@ -8,7 +8,7 @@ interface IProps {
   setSelectedActivity: (activity: IActivity | null) => void;
 }
 
-/** Adding an IProps interface and destructure them- such as activities, setSelectedActivity and etc...  */
+/** Adding an IProps interface and destructuring them- such as activities, setSelectedActivity and etc...  */
 const ActivityDetails: React.FC<IProps> = ({
   activity,
   setEditMode,
