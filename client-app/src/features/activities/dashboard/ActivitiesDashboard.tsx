@@ -4,6 +4,7 @@ import { IActivity } from "../../../models/activity";
 import ActivityList from "./ActivityList";
 import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../form/ActivityForm";
+import {observer} from 'mobx-react-lite';
 
 interface IProps {
   activities: IActivity[];
@@ -95,4 +96,4 @@ const ActivitiesDashboard: React.FC<IProps> = ({
   );
 };
 
-export default ActivitiesDashboard;
+export default observer(ActivitiesDashboard);

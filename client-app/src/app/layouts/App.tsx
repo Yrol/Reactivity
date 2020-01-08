@@ -1,12 +1,12 @@
-import React, { Component, useState, useEffect, Fragment, SyntheticEvent, useContext } from "react";
-import semantic, { Header, Icon, List, Container } from "semantic-ui-react";
-import axios from "axios";
+import React, { useState, useEffect, Fragment, SyntheticEvent, useContext } from "react";
+import { Container } from "semantic-ui-react";
 import { IActivity } from "../../models/activity";
 import NavBar from "../../features/nav/NavBar";
 import ActivitiesDashboard from "../../features/activities/dashboard/ActivitiesDashboard";
 import agent from "../api/agent";
 import { LoadingComponent } from "./LoadingComponent";
 import ActivityStore from "../stores/activityStore";
+import {observer} from 'mobx-react-lite';
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
@@ -31,7 +31,7 @@ const App = () => {
 
 
   //State hook for the loading state
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   //State hook for creating, updating and deleting the activities
   const [submitState, setSubmitState] = useState<boolean>(false)
@@ -45,7 +45,7 @@ const App = () => {
   };
 
   //Handler for creating a new activity (will pass this to the Nav bar)
-  //set the setSelectedActivityto null
+  //set the setSelectedActivity to null
   //set setEditMode to true
   const handleOpenCreateForm = () => {
     setSelectedActivity(null);
@@ -90,6 +90,7 @@ const App = () => {
     }).then(() =>setSubmitState(false))
   };
 
+  //Version 1: Receiving activity
   //This block will receive all the activities from the API
   //useEffect consist of 3 life cycle methods componentDidMount, componentDidUpdate and componentWillUnmount
   //In here we're just using componentDidMount
@@ -106,20 +107,27 @@ const App = () => {
   //     });
   // }, []); // using empty array [] to make sure useEffect will only run once (since we've other life cycle methods baked into this). Otherwise this run into an infinite loop.
 
+  //version 2: Receiving activity using an agent class (web request class)
   /*** Using the web helper class - agent.ts to get all the activities from the API*/
-  useEffect(() => {
-    agent.Activities.list().then(response => { // returns response.data with Promise
-      let activities: IActivity[] = [];
-      response.forEach(activity => {
-        //loop through the API response.data
-        activity.date = activity.date.split(".")[0]; //splitting the time before the dot(.)
-        activities.push(activity);
-      });
-      setActivities(activities);
-    }).then(() => setLoading(false));
-  }, []); // using empty array [] to make sure useEffect will only run once (since we've other lifecycle methods baked into this). Otherwise this run into an infinite loop.
+  // useEffect(() => {
+  //   setLoading(true)
+  //   agent.Activities.list().then(response => { // returns response.data with Promise
+  //     let activities: IActivity[] = [];
+  //     response.forEach(activity => {
+  //       //loop through the API response.data
+  //       activity.date = activity.date.split(".")[0]; //splitting the time before the dot(.)
+  //       activities.push(activity);
+  //     });
+  //     setActivities(activities);
+  //   }).then(() => setLoading(false));
+  // }, []); // using empty array [] to make sure useEffect will only run once (since we've other lifecycle methods baked into this). Otherwise this run into an infinite loop.
 
-  if (loading) return <LoadingComponent content='Loading activities....' inverted={true} />
+  //Version 3: Receiving activity using MobX store
+  useEffect(() => {
+    activityStore.loadActivities();
+  }, [activityStore])// the array contains the dependencies that needs to run the functions defined in useEffect
+
+  if (activityStore.loadingInitial) return <LoadingComponent content='Loading activities....' inverted={true} />
 
   return (
     <Fragment>
@@ -128,7 +136,7 @@ const App = () => {
       <Container style={{ marginTop: "7em" }}>
         {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
         <ActivitiesDashboard
-          activities={activities} //pass activity list as a prop
+          activities={activityStore.activities} //pass activity list as a prop
           currentSelectedActivity={handleSelectedActivity} //pass select activity function / handler as a prop
           selectedActivity={selectedActivity!} //pass the selected activity. The "!" to get around the null since the selected activity can be null sometimes
           editMode={editMode} //pass edit mode value as a prop
@@ -197,27 +205,28 @@ const App = () => {
 // }
 
 //************The original Function Component (FC)***************
-/*
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-*/
+// const App: React.FC = () => {
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <img src={logo} className="App-logo" alt="logo" />
+//         <p>
+//           Edit <code>src/App.tsx</code> and save to reload.
+//         </p>
+//         <a
+//           className="App-link"
+//           href="https://reactjs.org"
+//           target="_blank"
+//           rel="noopener noreferrer"
+//         >
+//           Learn React
+//         </a>
+//       </header>
+//     </div>
+//   );
+// }
 
-export default App;
+
+//since the App component is watching the observables (ex: in "activityStore.ts"), we need to bind it with an observer
+//Observer is a higher level component which takes a component (in this case App) as an argument and return it with extra features (in this case with observer capabilities)
+export default observer(App);
