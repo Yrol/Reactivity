@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, Fragment, SyntheticEvent } from "react";
+import React, { Component, useState, useEffect, Fragment, SyntheticEvent, useContext } from "react";
 import semantic, { Header, Icon, List, Container } from "semantic-ui-react";
 import axios from "axios";
 import { IActivity } from "../../models/activity";
@@ -6,9 +6,13 @@ import NavBar from "../../features/nav/NavBar";
 import ActivitiesDashboard from "../../features/activities/dashboard/ActivitiesDashboard";
 import agent from "../api/agent";
 import { LoadingComponent } from "./LoadingComponent";
+import ActivityStore from "../stores/activityStore";
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
+
+  const activityStore = useContext(ActivityStore);
+
   //This is a State Hook
   //Assigning activities and setActivities for state updates when the page loads. Return an array
   const [activities, setActivities] = useState<IActivity[]>([]);
