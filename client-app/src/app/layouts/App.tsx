@@ -138,8 +138,6 @@ const App = () => {
         <ActivitiesDashboard
           activities={activityStore.activities} //pass activity list as a prop
           currentSelectedActivity={handleSelectedActivity} //pass select activity function / handler as a prop
-          selectedActivity={selectedActivity!} //pass the selected activity. The "!" to get around the null since the selected activity can be null sometimes
-          editMode={editMode} //pass edit mode value as a prop
           setEditMode={setEditMode} //pass the Edit Mode function as a prop
           setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
           createActivity={handleCreateActivity} //passing the handler for creating a new activity
@@ -151,6 +149,30 @@ const App = () => {
       </Container>
     </Fragment>
   );
+
+  //******** Implementation for passing props manually *******/
+  // return (
+  //   <Fragment>
+  //     {/* Using the React Semantic UI */}
+  //     <NavBar handleOpenCreateForm={handleOpenCreateForm} />
+  //     <Container style={{ marginTop: "7em" }}>
+  //       {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
+  //       <ActivitiesDashboard
+  //         activities={activityStore.activities} //pass activity list as a prop
+  //         currentSelectedActivity={handleSelectedActivity} //pass select activity function / handler as a prop
+  //         selectedActivity={selectedActivity!} //pass the selected activity. The "!" to get around the null since the selected activity can be null sometimes
+  //         editMode={editMode} //pass edit mode value as a prop
+  //         setEditMode={setEditMode} //pass the Edit Mode function as a prop
+  //         setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
+  //         createActivity={handleCreateActivity} //passing the handler for creating a new activity
+  //         editActivity={handleEditActivity} //passing the handler for editing an activity
+  //         deleteActivity={handleDeleteActivity}
+  //         submitState={submitState} //submission state
+  //         deleteActivityID={deleteActivityID}
+  //       />
+  //     </Container>
+  //   </Fragment>
+  // );
 };
 
 /************ Implementation of using classes ****************/

@@ -1,10 +1,11 @@
-import React, { Fragment, SyntheticEvent } from "react";
+import React, { Fragment, SyntheticEvent, useContext } from "react";
 import { Item, Button, Label, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import { observer } from "mobx-react-lite";
+import ActivityStore from '../../../app/stores/activityStore'
 
 interface IProps {
-  activities: IActivity[];
+  //activities: IActivity[];
 
   //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID
   currentSelectedActivity: (id: string) => void;
@@ -20,13 +21,15 @@ interface IProps {
 }
 /** Setting IProps and destructuring them - such as activities, currentSelectedActivity and etc...  */
 const ActivityList: React.FC<IProps> = ({
-  activities,
+  //activities,
   currentSelectedActivity,
   setEditMode,
   deleteActivity,
   submitState,
   deleteActivityID
 }) => {
+  const activityStore = useContext(ActivityStore);
+  const {activities, setSelectActivity} = activityStore
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -44,8 +47,10 @@ const ActivityList: React.FC<IProps> = ({
                 {/** setEditMode is the handleSelectedActivity handler passed/originated in App.tsx */}
                 <Button
                   onClick={() => {
-                    currentSelectedActivity(activity.id);
-                    setEditMode(false);
+                    setSelectActivity(activity.id)
+                    //currentSelectedActivity(activity.id);
+                    //setEditMode(false);
+
                   }}
                   floated="right"
                   content="View"

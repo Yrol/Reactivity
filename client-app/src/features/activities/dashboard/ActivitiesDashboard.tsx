@@ -1,9 +1,10 @@
-import React, { SyntheticEvent } from "react";
+import React, { SyntheticEvent, useContext } from "react";
 import { Grid, List, GridColumn } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import ActivityList from "./ActivityList";
 import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../form/ActivityForm";
+import ActivityStore from "../../../app/stores/activityStore";
 import {observer} from 'mobx-react-lite';
 
 interface IProps {
@@ -11,9 +12,10 @@ interface IProps {
 
   //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID
   currentSelectedActivity: (id: string) => void;
-  selectedActivity: IActivity;
 
-  editMode: boolean;
+  // selectedActivity: IActivity;
+  // editMode: boolean;
+
   setEditMode: (emode: boolean) => void;
 
   //referencing the "setSelectedActivity" state defined in App.tsx - will be passed to ActivityDetails
@@ -32,13 +34,13 @@ interface IProps {
 }
 
 {
-/** Adding an IProps interface and destructure them - such as activities, currentSelectedActivity and etc...  */
+/** Adding an IProps interface and destructuring them - such as activities, currentSelectedActivity and etc...  */
 }
 const ActivitiesDashboard: React.FC<IProps> = ({
   activities,
   currentSelectedActivity,
-  selectedActivity,
-  editMode,
+  // selectedActivity,
+  // editMode,
   setEditMode,
   createActivity,
   editActivity,
@@ -47,14 +49,17 @@ const ActivitiesDashboard: React.FC<IProps> = ({
   submitState,
   deleteActivityID
 }) => {
+  //Using the MobX state in activity.ts
+  const activityStore = useContext(ActivityStore)
+  const {editMode, selectedActivity} = activityStore
   return (
     <Grid>
-      {/** The React Grid system supports upto 16 columns */}
+      {/** The React Grid system supports up to 16 columns */}
       <Grid.Column width={10}>
         {/** Passing the activities to the ActivityList as a Prop */}
         {/** Passing the currentSelectedActivity to the ActivityList as a Prop*/}
         <ActivityList
-          activities={activities}
+          //activities={activities}
           currentSelectedActivity={currentSelectedActivity}
           setEditMode={setEditMode}
           deleteActivity={deleteActivity}
@@ -72,7 +77,7 @@ const ActivitiesDashboard: React.FC<IProps> = ({
         {/** if edit mode true hide detail view */}
         {selectedActivity && !editMode && (
           <ActivityDetails
-            activity={selectedActivity}
+            //activity={selectedActivity}
             setEditMode={setEditMode}
             setSelectedActivity={setSelectedActivity}
           />

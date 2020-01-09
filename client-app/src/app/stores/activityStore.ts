@@ -20,7 +20,7 @@ class ActivityStore {
           }).then(() => this.loadingInitial = false);
     }
 
-    @action selectActivity = (id: string) => {
+    @action setSelectActivity = (id: string) => {
         this.selectedActivity = this.activities.filter(a => a.id === id)[0];
         this.editMode = false;
     }
