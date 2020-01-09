@@ -22,7 +22,7 @@ interface IProps {
   setSelectedActivity: (activity: IActivity | null) => void;
 
   //handler for create, edit and delete activities
-  createActivity: (activity: IActivity) => void;
+  //createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
 
   //handler for deleting an activity. Accepts event of SyntheticEvent type which contains button properties such as the unique button name (unique ID)
@@ -42,7 +42,7 @@ const ActivitiesDashboard: React.FC<IProps> = ({
   // selectedActivity,
   // editMode,
   setEditMode,
-  createActivity,
+  //createActivity,
   editActivity,
   deleteActivity,
   setSelectedActivity,
@@ -91,7 +91,7 @@ const ActivitiesDashboard: React.FC<IProps> = ({
             key={selectedActivity && selectedActivity.id || 0}
             setEditMode={setEditMode}
             activity={selectedActivity!}
-            createActivity={createActivity}
+            //createActivity={createActivity}
             editActivity={editActivity}
             submitState={submitState}
           />

@@ -9,7 +9,7 @@ interface IProps {
   setEditMode: (emode: boolean) => void;
   activity: IActivity;
 
-  createActivity: (activity: IActivity) => void;
+  //createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
 
   submitState: boolean;

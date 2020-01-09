@@ -30,11 +30,11 @@ const ActivityList: React.FC<IProps> = ({
 }) => {
   //Defining the MobX store (ActivityStore) and destructuring the required functions and variables from it
   const activityStore = useContext(ActivityStore);
-  const {activities, setSelectActivity} = activityStore
+  const {activitiesByDate, setSelectActivity} = activityStore
   return (
     <Segment clearing>
       <Item.Group divided>
-        {activities.map(activity => (
+        {activitiesByDate.map(activity => (
           <Item key={activity.id}>
             <Item.Content>
               <Item.Header as="a">{activity.title}</Item.Header>

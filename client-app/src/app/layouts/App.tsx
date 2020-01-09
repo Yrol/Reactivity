@@ -140,7 +140,7 @@ const App = () => {
           currentSelectedActivity={handleSelectedActivity} //pass select activity function / handler as a prop
           setEditMode={setEditMode} //pass the Edit Mode function as a prop
           setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
-          createActivity={handleCreateActivity} //passing the handler for creating a new activity
+          //createActivity={handleCreateActivity} //passing the handler for creating a new activity
           editActivity={handleEditActivity} //passing the handler for editing an activity
           deleteActivity={handleDeleteActivity}
           submitState={submitState} //submission state

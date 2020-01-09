@@ -1,4 +1,4 @@
-import {observable, action} from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { IActivity } from '../../models/activity';
 import agent from '../api/agent';
 import { createContext } from 'react';
@@ -9,6 +9,11 @@ class ActivityStore {
     @observable loadingInitial = false;
     @observable editMode = false;
     @observable submitState = false;
+
+    //get the activities sort by date - using the @computed decorator
+    @computed get activitiesByDate(){
+      return this.activities.sort((a,b) => Date.parse(b.date) - Date.parse(a.date))
+    }
 
     @action loadActivities = async () => {
         this.loadingInitial = true;
@@ -52,6 +57,8 @@ class ActivityStore {
         this.editMode = true;
         this.selectedActivity = null;
     }
+
+
 }
 
 export default createContext(new ActivityStore())
