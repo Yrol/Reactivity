@@ -28,6 +28,7 @@ const ActivityList: React.FC<IProps> = ({
   submitState,
   deleteActivityID
 }) => {
+  //Defining the MobX store (ActivityStore) and destructuring the required functions and variables from it
   const activityStore = useContext(ActivityStore);
   const {activities, setSelectActivity} = activityStore
   return (

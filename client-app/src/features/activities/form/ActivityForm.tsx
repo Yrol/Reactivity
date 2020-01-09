@@ -1,7 +1,9 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useContext } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import { v4 as uuid } from "uuid";
+import ActivityStore from "../../../app/stores/activityStore"
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   setEditMode: (emode: boolean) => void;
@@ -17,10 +19,13 @@ interface IProps {
 const ActivityForm: React.FC<IProps> = ({
   setEditMode,
   activity: initialFormState, //give an alias to the activity variable since another of same name used in "useState" below
-  createActivity,
+  //createActivity,
   editActivity,
   submitState
 }) => {
+  //Defining the MobX store (ActivityStore) and destructuring the required functions and variables from it
+  const activityStore = useContext(ActivityStore)
+  const {createActivity} = activityStore
   //if the activity aka - initialFormState is empty, create an empty IActivity defined in "activity.ts" an return
   const initializeForm = () => {
     if (initialFormState) {
@@ -122,4 +127,4 @@ const ActivityForm: React.FC<IProps> = ({
   );
 };
 
-export default ActivityForm;
+export default observer(ActivityForm);
