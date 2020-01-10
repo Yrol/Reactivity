@@ -81,23 +81,23 @@ const App = () => {
 
   //handler for deleting an activity
   //Accepts the event of SyntheticEvent type initiated from an HTMLButtonElement which contains button properties such as the unique button name
-  const handleDeleteActivity = (
-    event: SyntheticEvent<HTMLButtonElement>,
-    id: string
-  ) => {
-    setSubmitState(true);
-    setDeleteActivityID(event.currentTarget.name);
-    agent.Activities.delete(id)
-      .then(() => {
-        setActivities([...activities.filter(a => a.id !== id)]);
-        //if the deleting activity is selected, remove is from selected and edit mode
-        if (selectedActivity?.id === id) {
-          setSelectedActivity(null);
-          setEditMode(false);
-        }
-      })
-      .then(() => setSubmitState(false));
-  };
+  // const handleDeleteActivity = (
+  //   event: SyntheticEvent<HTMLButtonElement>,
+  //   id: string
+  // ) => {
+  //   setSubmitState(true);
+  //   setDeleteActivityID(event.currentTarget.name);
+  //   agent.Activities.delete(id)
+  //     .then(() => {
+  //       setActivities([...activities.filter(a => a.id !== id)]);
+  //       //if the deleting activity is selected, remove is from selected and edit mode
+  //       if (selectedActivity?.id === id) {
+  //         setSelectedActivity(null);
+  //         setEditMode(false);
+  //       }
+  //     })
+  //     .then(() => setSubmitState(false));
+  // };
 
   //Version 1: Receiving activity
   //This block will receive all the activities from the API
@@ -156,9 +156,9 @@ const App = () => {
           //setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
           //createActivity={handleCreateActivity} //passing the handler for creating a new activity
           //editActivity={handleEditActivity} //passing the handler for editing an activity
-          deleteActivity={handleDeleteActivity}
+          //deleteActivity={handleDeleteActivity}
           //submitState={submitState} //submission state
-          deleteActivityID={deleteActivityID}
+          //deleteActivityID={deleteActivityID}
         />
       </Container>
     </Fragment>

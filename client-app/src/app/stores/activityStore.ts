@@ -1,7 +1,7 @@
 import { observable, action, computed } from "mobx";
 import { IActivity } from "../../models/activity";
 import agent from "../api/agent";
-import { createContext } from "react";
+import { createContext, SyntheticEvent } from "react";
 
 class ActivityStore {
   @observable activityRegistry = new Map();//This activity register will create an observable map using the activities. 
@@ -10,6 +10,7 @@ class ActivityStore {
   @observable loadingInitial = false;
   @observable editMode = false;
   @observable submitState = false;
+  @observable deleteActivityId: string| null = null;
 
   //get the activities sort by date - using the @computed decorator
   //This is referenced by the ActivityList, hence any changes to the activities (change date & etc) will be reflected (changing the list item positions & etc)
@@ -72,6 +73,29 @@ class ActivityStore {
       console.log(error);
     }
   }
+
+  //deleting an activity
+  @action deleteActivity = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
+    this.submitState = true;
+    this.setDeleteActivityID(event.currentTarget.name);
+    try {
+      await agent.Activities.delete(id)
+      this.activityRegistry.delete(id)
+      if(this.selectedActivity?.id === id){
+        this.cancelSelectedActivity();
+        this.cancelFormOpen();
+      }
+      this.submitState = false;
+    } catch (error) {
+      this.submitState = false;
+      this.setDeleteActivityID(null)
+      console.log(error);
+    }
+  }
+
+  @action setDeleteActivityID = (id: string | null) =>{
+    this.deleteActivityId = id;
+  } 
 
   //action for opening the create form
   @action openCreateForm = () => {

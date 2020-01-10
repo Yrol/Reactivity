@@ -26,11 +26,11 @@ interface IProps {
   //editActivity: (activity: IActivity) => void;
 
   //handler for deleting an activity. Accepts event of SyntheticEvent type which contains button properties such as the unique button name (unique ID)
-  deleteActivity: (e:SyntheticEvent<HTMLButtonElement>, id:string) => void;
+  //deleteActivity: (e:SyntheticEvent<HTMLButtonElement>, id:string) => void;
 
   //submitState: boolean;//form submit status 
 
-  deleteActivityID: string//contains the unique ID of the clicked button
+  //deleteActivityID: string//contains the unique ID of the clicked button
 }
 
 {
@@ -44,10 +44,10 @@ const ActivitiesDashboard: React.FC<IProps> = ({
   //setEditMode,
   //createActivity,
   //editActivity,
-  deleteActivity,
+  //deleteActivity,
   //setSelectedActivity,
   //submitState,
-  deleteActivityID
+  //deleteActivityID
 }) => {
   //Using the MobX state in activity.ts
   const activityStore = useContext(ActivityStore)
@@ -62,9 +62,9 @@ const ActivitiesDashboard: React.FC<IProps> = ({
           //activities={activities}
           //currentSelectedActivity={currentSelectedActivity}
           //setEditMode={setEditMode}
-          deleteActivity={deleteActivity}
+          //deleteActivity={deleteActivity}
           //submitState={submitState}
-          deleteActivityID={deleteActivityID}
+          //deleteActivityID={deleteActivityID}
         />
         {/* <List>
           {activities.map(activity => (
