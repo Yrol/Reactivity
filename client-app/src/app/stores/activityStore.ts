@@ -1,7 +1,10 @@
-import { observable, action, computed } from "mobx";
+import { observable, action, computed, configure, runInAction } from "mobx";
 import { IActivity } from "../../models/activity";
 import agent from "../api/agent";
 import { createContext, SyntheticEvent } from "react";
+
+//enforcing the "strict mode" to make sure the state changes are happening only within the context of actions (@actions)
+configure({enforceActions: 'always'})
 
 class ActivityStore {
   @observable activityRegistry = new Map();//This activity register will create an observable map using the activities. 
@@ -26,14 +29,18 @@ class ActivityStore {
     try {
       // await will make sure it'll get the list of activities first and then execute the code below
       const activityList = await agent.Activities.list();
-      activityList.forEach(activity => {
-        //loop through the API response.data
-        activity.date = activity.date.split(".")[0]; //splitting the time before the dot(.)
-        this.activityRegistry.set(activity.id, activity);// adding the activity to the observable map (activityRegister)
-      });
-      this.loadingInitial = false;
+      runInAction(() => { //strict mode to make sure state changes happens within @action is covered after the "await" above
+        activityList.forEach(activity => {
+          //loop through the API response.data
+          activity.date = activity.date.split(".")[0]; //splitting the time before the dot(.)
+          this.activityRegistry.set(activity.id, activity);// adding the activity to the observable map (activityRegister)
+        });
+        this.loadingInitial = false;
+      })
     } catch (error) {
-      this.loadingInitial = false;
+      runInAction(() => {
+        this.loadingInitial = false;
+      });
       console.log(error);
     }
   };
@@ -50,11 +57,15 @@ class ActivityStore {
     this.submitState = true;
     try {
       await agent.Activities.create(activity);
-      this.activityRegistry.set(activity.id, activity);
-      this.editMode = false;
-      this.submitState = false;
+      runInAction(() => {
+        this.activityRegistry.set(activity.id, activity);
+        this.editMode = false;
+        this.submitState = false;
+      });
     } catch (error) {
-      this.submitState = false;
+      runInAction(() => {
+        this.submitState = false;
+      })
       console.log(error);
     }
   };
@@ -64,12 +75,16 @@ class ActivityStore {
     this.submitState = true;
     try {
       await agent.Activities.update(activity);
-      this.activityRegistry.set(activity.id, activity);
-      this.setSelectActivity(activity.id);
-      this.submitState = false;
-      this.editMode = false;
+      runInAction(() => {//strict mode to make sure state changes happens within @action is covered after the "await" above
+        this.activityRegistry.set(activity.id, activity);
+        this.setSelectActivity(activity.id);
+        this.submitState = false;
+        this.editMode = false;
+      });
     } catch (error) {
-      this.submitState = false;
+      runInAction(() => {
+        this.submitState = false;
+      });
       console.log(error);
     }
   }
@@ -80,15 +95,19 @@ class ActivityStore {
     this.setDeleteActivityID(event.currentTarget.name);
     try {
       await agent.Activities.delete(id)
-      this.activityRegistry.delete(id)
-      if(this.selectedActivity?.id === id){
-        this.cancelSelectedActivity();
-        this.cancelFormOpen();
-      }
-      this.submitState = false;
+      runInAction(() => {//strict mode to make sure state changes happens within @action is covered after the "await" above
+        this.activityRegistry.delete(id)
+        if(this.selectedActivity?.id === id){
+          this.cancelSelectedActivity();
+          this.cancelFormOpen();
+        }
+        this.submitState = false;
+      });
     } catch (error) {
-      this.submitState = false;
-      this.setDeleteActivityID(null)
+      runInAction(() => {
+        this.submitState = false;
+        this.setDeleteActivityID(null);
+      })
       console.log(error);
     }
   }
