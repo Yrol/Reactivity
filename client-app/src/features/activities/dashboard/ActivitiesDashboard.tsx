@@ -8,7 +8,7 @@ import ActivityStore from "../../../app/stores/activityStore";
 import {observer} from 'mobx-react-lite';
 
 interface IProps {
-  activities: IActivity[];
+  //activities: IActivity[];
 
   //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID
   currentSelectedActivity: (id: string) => void;
@@ -37,7 +37,7 @@ interface IProps {
 /** Adding an IProps interface and destructuring them - such as activities, currentSelectedActivity and etc...  */
 }
 const ActivitiesDashboard: React.FC<IProps> = ({
-  activities,
+  //activities,
   currentSelectedActivity,
   // selectedActivity,
   // editMode,

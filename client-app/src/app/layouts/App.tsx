@@ -136,7 +136,7 @@ const App = () => {
       <Container style={{ marginTop: "7em" }}>
         {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
         <ActivitiesDashboard
-          activities={activityStore.activities} //pass activity list as a prop
+          //activities={activityStore.activities} //pass activity list as a prop
           currentSelectedActivity={handleSelectedActivity} //pass select activity function / handler as a prop
           setEditMode={setEditMode} //pass the Edit Mode function as a prop
           setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
