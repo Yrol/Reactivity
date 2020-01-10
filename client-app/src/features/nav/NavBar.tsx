@@ -4,11 +4,11 @@ import ActivityStore from "../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 
 interface IProps {
-  handleOpenCreateForm: () => void;
+  //handleOpenCreateForm: () => void;
 }
 
 const NavBar: React.FC<IProps> = ({
-  handleOpenCreateForm
+  //handleOpenCreateForm
 }) => {
   //Defining the MobX store (ActivityStore)
   const activityStore = useContext(ActivityStore)

@@ -11,24 +11,24 @@ interface IProps {
   //activities: IActivity[];
 
   //referencing the function "currentSelectedActivity" defined in App.tsx to get the selected ID
-  currentSelectedActivity: (id: string) => void;
+  //currentSelectedActivity: (id: string) => void;
 
   // selectedActivity: IActivity;
   // editMode: boolean;
 
-  setEditMode: (emode: boolean) => void;
+  //setEditMode: (emode: boolean) => void;
 
   //referencing the "setSelectedActivity" state defined in App.tsx - will be passed to ActivityDetails
-  setSelectedActivity: (activity: IActivity | null) => void;
+  //setSelectedActivity: (activity: IActivity | null) => void;
 
   //handler for create, edit and delete activities
   //createActivity: (activity: IActivity) => void;
-  editActivity: (activity: IActivity) => void;
+  //editActivity: (activity: IActivity) => void;
 
   //handler for deleting an activity. Accepts event of SyntheticEvent type which contains button properties such as the unique button name (unique ID)
   deleteActivity: (e:SyntheticEvent<HTMLButtonElement>, id:string) => void;
 
-  submitState: boolean;//form submit status 
+  //submitState: boolean;//form submit status 
 
   deleteActivityID: string//contains the unique ID of the clicked button
 }
@@ -38,15 +38,15 @@ interface IProps {
 }
 const ActivitiesDashboard: React.FC<IProps> = ({
   //activities,
-  currentSelectedActivity,
-  // selectedActivity,
-  // editMode,
-  setEditMode,
+  //currentSelectedActivity,
+  //selectedActivity,
+  //editMode,
+  //setEditMode,
   //createActivity,
-  editActivity,
+  //editActivity,
   deleteActivity,
-  setSelectedActivity,
-  submitState,
+  //setSelectedActivity,
+  //submitState,
   deleteActivityID
 }) => {
   //Using the MobX state in activity.ts
@@ -60,10 +60,10 @@ const ActivitiesDashboard: React.FC<IProps> = ({
         {/** Passing the currentSelectedActivity to the ActivityList as a Prop*/}
         <ActivityList
           //activities={activities}
-          currentSelectedActivity={currentSelectedActivity}
-          setEditMode={setEditMode}
+          //currentSelectedActivity={currentSelectedActivity}
+          //setEditMode={setEditMode}
           deleteActivity={deleteActivity}
-          submitState={submitState}
+          //submitState={submitState}
           deleteActivityID={deleteActivityID}
         />
         {/* <List>
@@ -78,8 +78,8 @@ const ActivitiesDashboard: React.FC<IProps> = ({
         {selectedActivity && !editMode && (
           <ActivityDetails
             //activity={selectedActivity}
-            setEditMode={setEditMode}
-            setSelectedActivity={setSelectedActivity}
+            //setEditMode={setEditMode}
+            //setSelectedActivity={setSelectedActivity}
           />
         )}
 
@@ -89,11 +89,11 @@ const ActivitiesDashboard: React.FC<IProps> = ({
             /** In here we're using "key" to make sure the form will be mounted and unmounted between editing and creating activities. */
             /** Without a the "key", the form will not be re-rendered when we have an edit item and then attempting a create a new activity */
             key={selectedActivity && selectedActivity.id || 0}
-            setEditMode={setEditMode}
+            //setEditMode={setEditMode}
             activity={selectedActivity!}
             //createActivity={createActivity}
-            editActivity={editActivity}
-            submitState={submitState}
+            //editActivity={editActivity}
+            //submitState={submitState}
           />
         )}
       </Grid.Column>

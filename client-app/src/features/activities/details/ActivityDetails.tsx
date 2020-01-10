@@ -6,18 +6,18 @@ import { observer } from "mobx-react-lite";
 
 interface IProps {
   //activity: IActivity;
-  setEditMode: (emode: boolean) => void;
-  setSelectedActivity: (activity: IActivity | null) => void;
+  //setEditMode: (emode: boolean) => void;
+  //setSelectedActivity: (activity: IActivity | null) => void;
 }
 
 /** Adding an IProps interface and destructuring them- such as activities, setSelectedActivity and etc...  */
 const ActivityDetails: React.FC<IProps> = ({
   // activity,
-  setEditMode,
-  setSelectedActivity
+  //setEditMode,
+  //setSelectedActivity
 }) => {
   const activityStore = useContext(ActivityStore)
-  const {selectedActivity : activity} = activityStore
+  const {selectedActivity : activity, openEditForm, cancelSelectedActivity} = activityStore
   return (
     <Card>
       <Card.Content>
@@ -32,13 +32,15 @@ const ActivityDetails: React.FC<IProps> = ({
         <Button.Group widths={2}>
           <Button
             /** this will set "editMode" to true in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */
-            onClick={() => setEditMode(true)}
+            // onClick={() => setEditMode(true)}
+
+            onClick={() => openEditForm(activity!.id)}
             basic
             color="blue"
             content="Edit"
           />
           <Button
-            onClick={() => setSelectedActivity(null)}
+            onClick={cancelSelectedActivity}
             basic
             color="grey"
             content="Cancel"

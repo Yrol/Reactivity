@@ -4,17 +4,18 @@ import agent from "../api/agent";
 import { createContext } from "react";
 
 class ActivityStore {
-  @observable activityRegister = new Map();//This activity register will create an observable map using the activities. 
-  @observable activities: IActivity[] = [];
+  @observable activityRegistry = new Map();//This activity register will create an observable map using the activities. 
+  //@observable activities: IActivity[] = [];
   @observable selectedActivity: IActivity | null = null;
   @observable loadingInitial = false;
   @observable editMode = false;
   @observable submitState = false;
 
   //get the activities sort by date - using the @computed decorator
+  //This is referenced by the ActivityList, hence any changes to the activities (change date & etc) will be reflected (changing the list item positions & etc)
   @computed get activitiesByDate() {
     //converting observable map (activityRegister) to an arry since it is not an array
-    return Array.from(this.activityRegister.values()).sort(
+    return Array.from(this.activityRegistry.values()).sort(
       (a, b) => Date.parse(b.date) - Date.parse(a.date)
     );
   }
@@ -27,7 +28,7 @@ class ActivityStore {
       activityList.forEach(activity => {
         //loop through the API response.data
         activity.date = activity.date.split(".")[0]; //splitting the time before the dot(.)
-        this.activityRegister.set(activity.id, activity);// adding the activity to the observable map (activityRegister)
+        this.activityRegistry.set(activity.id, activity);// adding the activity to the observable map (activityRegister)
       });
       this.loadingInitial = false;
     } catch (error) {
@@ -39,7 +40,7 @@ class ActivityStore {
   //action for selecting an activity
   @action setSelectActivity = (id: string) => {
     //this.selectedActivity = this.activities.filter(a => a.id === id)[0];
-    this.selectedActivity = this.activityRegister.get(id);
+    this.selectedActivity = this.activityRegistry.get(id);
     this.editMode = false;
   };
 
@@ -48,7 +49,7 @@ class ActivityStore {
     this.submitState = true;
     try {
       await agent.Activities.create(activity);
-      this.activityRegister.set(activity.id, activity);
+      this.activityRegistry.set(activity.id, activity);
       this.editMode = false;
       this.submitState = false;
     } catch (error) {
@@ -57,11 +58,39 @@ class ActivityStore {
     }
   };
 
+  //editing an activity
+  @action editActivity = async (activity: IActivity) => {
+    this.submitState = true;
+    try {
+      await agent.Activities.update(activity);
+      this.activityRegistry.set(activity.id, activity);
+      this.setSelectActivity(activity.id);
+      this.submitState = false;
+      this.editMode = false;
+    } catch (error) {
+      this.submitState = false;
+      console.log(error);
+    }
+  }
+
   //action for opening the create form
   @action openCreateForm = () => {
     this.editMode = true;
     this.selectedActivity = null;
   };
+
+  @action openEditForm = (id: string) => {
+    this.selectedActivity = this.activityRegistry.get(id)
+    this.editMode = true;
+  }
+
+  @action cancelSelectedActivity = () => {
+    this.selectedActivity = null;
+  }
+
+  @action cancelFormOpen = () => {
+    this.editMode = false
+  }
 }
 
 export default createContext(new ActivityStore());

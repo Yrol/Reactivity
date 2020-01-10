@@ -2,30 +2,30 @@ import React, { useState, ChangeEvent, FormEvent, useContext } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import { v4 as uuid } from "uuid";
-import ActivityStore from "../../../app/stores/activityStore"
+import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 
 interface IProps {
-  setEditMode: (emode: boolean) => void;
+  //setEditMode: (emode: boolean) => void;
   activity: IActivity;
 
   //createActivity: (activity: IActivity) => void;
-  editActivity: (activity: IActivity) => void;
+  //editActivity: (activity: IActivity) => void;
 
-  submitState: boolean;
+  //submitState: boolean;
 }
 
 /** Adding an IProps interface and destructure them - such as setEditMode, activities and etc...  */
 const ActivityForm: React.FC<IProps> = ({
-  setEditMode,
-  activity: initialFormState, //give an alias to the activity variable since another of same name used in "useState" below
+  //setEditMode,
+  activity: initialFormState //give an alias to the activity variable since another of same name used in "useState" below
   //createActivity,
-  editActivity,
-  submitState
+  //editActivity,
+  //submitState
 }) => {
   //Defining the MobX store (ActivityStore) and destructuring the required functions and variables from it
-  const activityStore = useContext(ActivityStore)
-  const {createActivity} = activityStore
+  const activityStore = useContext(ActivityStore);
+  const { createActivity, editActivity, submitState, cancelFormOpen } = activityStore;
   //if the activity aka - initialFormState is empty, create an empty IActivity defined in "activity.ts" an return
   const initializeForm = () => {
     if (initialFormState) {
@@ -72,7 +72,7 @@ const ActivityForm: React.FC<IProps> = ({
       console.log(newActivity);
       createActivity(newActivity);
     } else {
-      //existing activity
+      //edit an activity
       editActivity(activity);
       console.log(activity);
     }
@@ -113,11 +113,18 @@ const ActivityForm: React.FC<IProps> = ({
           name="date"
           value={activity.date}
         />
-        <Button loading={submitState} floated="right" positive type="submit" content="Submit" />
+        <Button
+          loading={submitState}
+          floated="right"
+          positive
+          type="submit"
+          content="Submit"
+        />
 
         {/** this will set "editMode" to false in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */}
         <Button
-          onClick={() => setEditMode(false)}
+          //onClick={() => setEditMode(false)}
+          onClick={() => cancelFormOpen()}
           floated="right"
           type="button"
           content="Cancel"

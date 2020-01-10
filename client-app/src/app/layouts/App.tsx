@@ -1,4 +1,10 @@
-import React, { useState, useEffect, Fragment, SyntheticEvent, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  Fragment,
+  SyntheticEvent,
+  useContext
+} from "react";
 import { Container } from "semantic-ui-react";
 import { IActivity } from "../../models/activity";
 import NavBar from "../../features/nav/NavBar";
@@ -6,11 +12,10 @@ import ActivitiesDashboard from "../../features/activities/dashboard/ActivitiesD
 import agent from "../api/agent";
 import { LoadingComponent } from "./LoadingComponent";
 import ActivityStore from "../stores/activityStore";
-import {observer} from 'mobx-react-lite';
+import { observer } from "mobx-react-lite";
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
-
   const activityStore = useContext(ActivityStore);
 
   //This is a State Hook
@@ -29,65 +34,69 @@ const App = () => {
   //the initial value is set to 'false'
   const [editMode, setEditMode] = useState<boolean>(false);
 
-
   //State hook for the loading state
   const [loading, setLoading] = useState<boolean>(false);
 
   //State hook for creating, updating and deleting the activities
-  const [submitState, setSubmitState] = useState<boolean>(false)
+  const [submitState, setSubmitState] = useState<boolean>(false);
 
-  const [deleteActivityID, setDeleteActivityID] = useState<string>('')
+  const [deleteActivityID, setDeleteActivityID] = useState<string>("");
 
   //the handler that takes the ID parameter and select the activity from the "activities" array above when user select an activity from the frontend
   //then assign it to the "selectedActivity" variable
-  const handleSelectedActivity = (id: string) => {
-    setSelectedActivity(activities.filter(a => a.id === id)[0]);
-  };
+  // const handleSelectedActivity = (id: string) => {
+  //   setSelectedActivity(activities.filter(a => a.id === id)[0]);
+  // };
 
   //Handler for creating a new activity (will pass this to the Nav bar)
   //set the setSelectedActivity to null
   //set setEditMode to true
-  const handleOpenCreateForm = () => {
-    setSelectedActivity(null);
-    setEditMode(true);
-  };
+  // const handleOpenCreateForm = () => {
+  //   setSelectedActivity(null);
+  //   setEditMode(true);
+  // };
 
   //handler for creating a new activity
   // The 3 dots (...) below is called the Spread Attribute
-  const handleCreateActivity = (activity: IActivity) => {
-    setSubmitState(true);
-    agent.Activities.create(activity).then(() => {
-      //The Spread Attribute (...) will take the  existing activities and add the new activity to to the array
-      setActivities([...activities, activity]);
-      setSelectedActivity(activity);
-      setEditMode(false);
-    }).then(() => setSubmitState(false))
-  };
+  // const handleCreateActivity = (activity: IActivity) => {
+  //   setSubmitState(true);
+  //   agent.Activities.create(activity).then(() => {
+  //     //The Spread Attribute (...) will take the  existing activities and add the new activity to to the array
+  //     setActivities([...activities, activity]);
+  //     setSelectedActivity(activity);
+  //     setEditMode(false);
+  //   }).then(() => setSubmitState(false))
+  // };
 
   //handler for editing the activity
-  const handleEditActivity = (activity: IActivity) => {
-    setSubmitState(true)
-    agent.Activities.update(activity).then(() => {
-      //get the activities not equal to the edited activity and inject the edited activity to it
-      setActivities([...activities.filter(a => a.id !== activity.id), activity]);
-      setSelectedActivity(activity);
-      setEditMode(false);
-    }).then(() => setSubmitState(false))
-  };
+  // const handleEditActivity = (activity: IActivity) => {
+  //   setSubmitState(true)
+  //   agent.Activities.update(activity).then(() => {
+  //     //get the activities not equal to the edited activity and inject the edited activity to it
+  //     setActivities([...activities.filter(a => a.id !== activity.id), activity]);
+  //     setSelectedActivity(activity);
+  //     setEditMode(false);
+  //   }).then(() => setSubmitState(false))
+  // };
 
   //handler for deleting an activity
   //Accepts the event of SyntheticEvent type initiated from an HTMLButtonElement which contains button properties such as the unique button name
-  const handleDeleteActivity = (event:SyntheticEvent<HTMLButtonElement> ,id: string) => {
-    setSubmitState(true)
+  const handleDeleteActivity = (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    setSubmitState(true);
     setDeleteActivityID(event.currentTarget.name);
-    agent.Activities.delete(id).then(() => {
-      setActivities([...activities.filter(a => a.id !== id)]);
-      //if the deleting activity is selected, remove is from selected and edit mode
-      if (selectedActivity?.id === id) {
-        setSelectedActivity(null);
-        setEditMode(false);
-      }
-    }).then(() =>setSubmitState(false))
+    agent.Activities.delete(id)
+      .then(() => {
+        setActivities([...activities.filter(a => a.id !== id)]);
+        //if the deleting activity is selected, remove is from selected and edit mode
+        if (selectedActivity?.id === id) {
+          setSelectedActivity(null);
+          setEditMode(false);
+        }
+      })
+      .then(() => setSubmitState(false));
   };
 
   //Version 1: Receiving activity
@@ -125,25 +134,30 @@ const App = () => {
   //Version 3: Receiving activity using MobX store
   useEffect(() => {
     activityStore.loadActivities();
-  }, [activityStore])// the array contains the dependencies that needs to run the functions defined in useEffect
+  }, [activityStore]); // the array contains the dependencies that needs to run the functions defined in useEffect
 
-  if (activityStore.loadingInitial) return <LoadingComponent content='Loading activities....' inverted={true} />
+  if (activityStore.loadingInitial)
+    return (
+      <LoadingComponent content="Loading activities...." inverted={true} />
+    );
 
   return (
     <Fragment>
       {/* Using the React Semantic UI */}
-      <NavBar handleOpenCreateForm={handleOpenCreateForm} />
+      <NavBar 
+        //handleOpenCreateForm={handleOpenCreateForm} 
+      />
       <Container style={{ marginTop: "7em" }}>
         {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
         <ActivitiesDashboard
           //activities={activityStore.activities} //pass activity list as a prop
-          currentSelectedActivity={handleSelectedActivity} //pass select activity function / handler as a prop
-          setEditMode={setEditMode} //pass the Edit Mode function as a prop
-          setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
+          //currentSelectedActivity={handleSelectedActivity} //pass select activity function / handler as a prop
+          //setEditMode={setEditMode} //pass the Edit Mode function as a prop
+          //setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
           //createActivity={handleCreateActivity} //passing the handler for creating a new activity
-          editActivity={handleEditActivity} //passing the handler for editing an activity
+          //editActivity={handleEditActivity} //passing the handler for editing an activity
           deleteActivity={handleDeleteActivity}
-          submitState={submitState} //submission state
+          //submitState={submitState} //submission state
           deleteActivityID={deleteActivityID}
         />
       </Container>
@@ -247,7 +261,6 @@ const App = () => {
 //     </div>
 //   );
 // }
-
 
 //since the App component is watching the observables (ex: in "activityStore.ts"), we need to bind it with an observer
 //Observer is a higher level component which takes a component (in this case App) as an argument and return it with extra features (in this case with observer capabilities)
