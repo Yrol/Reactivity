@@ -13,6 +13,9 @@ import agent from "../api/agent";
 import { LoadingComponent } from "./LoadingComponent";
 import ActivityStore from "../stores/activityStore";
 import { observer } from "mobx-react-lite";
+import { Route } from "react-router-dom";
+import { HomePage } from "../../features/home/HomePage";
+import ActivityForm from "../../features/activities/form/ActivityForm";
 
 /************ Implementation of using Hooks ****************/
 const App = () => {
@@ -141,6 +144,7 @@ const App = () => {
       <LoadingComponent content="Loading activities...." inverted={true} />
     );
 
+  //******** Implementation using Routers *******/  
   return (
     <Fragment>
       {/* Using the React Semantic UI */}
@@ -148,23 +152,15 @@ const App = () => {
         //handleOpenCreateForm={handleOpenCreateForm} 
       />
       <Container style={{ marginTop: "7em" }}>
-        {/** Injecting the "ActivitiesDashboard" component and passing the activities list as a prop */}
-        <ActivitiesDashboard
-          //activities={activityStore.activities} //pass activity list as a prop
-          //currentSelectedActivity={handleSelectedActivity} //pass select activity function / handler as a prop
-          //setEditMode={setEditMode} //pass the Edit Mode function as a prop
-          //setSelectedActivity={setSelectedActivity} //passing the setSelectedActivity as a function
-          //createActivity={handleCreateActivity} //passing the handler for creating a new activity
-          //editActivity={handleEditActivity} //passing the handler for editing an activity
-          //deleteActivity={handleDeleteActivity}
-          //submitState={submitState} //submission state
-          //deleteActivityID={deleteActivityID}
-        />
+        {/** The keyword "exact" will be used for defining the exact path since "/" includes in routes "/activities" & etc - to prevent loading when these routes are loading"*/}
+        <Route exact path='/' component={HomePage} />
+        <Route path='/activities' component={ActivitiesDashboard} />
+        <Route path='/createActivity' component={ActivityForm} />
       </Container>
     </Fragment>
   );
 
-  //******** Implementation for passing props manually *******/
+  //******** Implementation for passing /injecting props manually to other components *******/
   // return (
   //   <Fragment>
   //     {/* Using the React Semantic UI */}
