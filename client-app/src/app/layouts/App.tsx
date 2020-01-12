@@ -163,8 +163,8 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
 
         {/** Loading same component in two different routes when creating('/createActivity') or editing('/manage/:id') an activity. Passing the routes in an array  */}
         {/** Since we're using the same component, we're also adding to key to use between edit and create activities to make decision on switching forms  */}
+        {/** The 'location.key' will be changed whenever navigate to "/createActivity" or "/manage/:id"  */}
         <Route
-          {/** The 'location.key' will be changed whenever navigate to "/createActivity" or "/manage/:id"  */}
           key={location.key}
           path={["/createActivity", "/manage/:id"]}
           component={ActivityForm}
