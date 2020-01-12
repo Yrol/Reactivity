@@ -75,13 +75,13 @@ const ActivitiesDashboard: React.FC<IProps> = ({
       <Grid.Column width={6}>
         {/** using the "selectedActivity &&"  to display "ActivityDetails" if not null (conditional)*/}
         {/** if edit mode true hide detail view */}
-        {selectedActivity && !editMode && (
+        {/* {selectedActivity && !editMode && (
           <ActivityDetails
             //activity={selectedActivity}
             //setEditMode={setEditMode}
             //setSelectedActivity={setSelectedActivity}
           />
-        )}
+        )} */}
 
         {/** if edit mode true show the form*/}
         {editMode && (

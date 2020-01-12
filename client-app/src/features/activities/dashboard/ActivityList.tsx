@@ -3,6 +3,7 @@ import { Item, Button, Label, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import { observer } from "mobx-react-lite";
 import ActivityStore from '../../../app/stores/activityStore'
+import { Link } from "react-router-dom";
 
 interface IProps {
   //activities: IActivity[];
@@ -47,12 +48,13 @@ const ActivityList: React.FC<IProps> = ({
                 {/** currentSelectedActivity is the handleSelectedActivity handler passed/originated in App.tsx */}
                 {/** setEditMode is the handleSelectedActivity handler passed/originated in App.tsx */}
                 <Button
-                  onClick={() => {
-                    setSelectActivity(activity.id)
-                    //currentSelectedActivity(activity.id);
-                    //setEditMode(false);
+                  as={Link} to={`/activities/${activity.id}`} // Routes integration
+                  // onClick={() => {
+                  //   setSelectActivity(activity.id) //After MobX integration
+                  //   //currentSelectedActivity(activity.id); // IProps (without MobX)
+                  //   //setEditMode(false); // IProps (without MobX)
 
-                  }}
+                  // }}
                   floated="right"
                   content="View"
                   color="blue"

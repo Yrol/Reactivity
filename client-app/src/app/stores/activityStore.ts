@@ -9,11 +9,11 @@ configure({enforceActions: 'always'})
 class ActivityStore {
   @observable activityRegistry = new Map();//This activity register will create an observable map using the activities. 
   //@observable activities: IActivity[] = [];
-  @observable selectedActivity: IActivity | null = null;
+  @observable selectedActivity: IActivity | null = null
   @observable loadingInitial = false;
   @observable editMode = false;
   @observable submitState = false;
-  @observable deleteActivityId: string| null = null;
+  @observable deleteActivityId: string | null = null;
 
   //get the activities sort by date - using the @computed decorator
   //This is referenced by the ActivityList, hence any changes to the activities (change date & etc) will be reflected (changing the list item positions & etc)
@@ -24,6 +24,7 @@ class ActivityStore {
     );
   }
 
+  //loading all the activities
   @action loadActivities = async () => {
     this.loadingInitial = true;
     try {
@@ -44,6 +45,34 @@ class ActivityStore {
       console.log(error);
     }
   };
+
+  //loading an individual activity (when navigate to the details view)
+  @action loadActivity = async (id: string) => {
+    let activity = this.getActivity(id);
+    if (activity) { // if the activity is available on the loaded list
+      this.selectedActivity = activity
+    } else { //load activity from the API
+      try {
+        //this.loadingInitial = true;
+        const activity = await agent.Activities.details(id);
+        runInAction(() =>{
+          this.selectedActivity = activity;
+          this.loadingInitial = false;
+          console.log(activity);
+        })
+      } catch (error) {
+        runInAction(() => {
+          this.loadingInitial = false;
+        })
+        console.log(error);
+      }
+    }
+  }
+
+  //a helper method to return an activity
+  getActivity = (id: string) => {
+    return this.activityRegistry.get(id)
+  }
 
   //action for selecting an activity
   @action setSelectActivity = (id: string) => {
@@ -106,13 +135,12 @@ class ActivityStore {
     } catch (error) {
       runInAction(() => {
         this.submitState = false;
-        this.setDeleteActivityID(null);
       })
       console.log(error);
     }
   }
 
-  @action setDeleteActivityID = (id: string | null) =>{
+  @action setDeleteActivityID = (id: string) =>{
     this.deleteActivityId = id;
   } 
 
