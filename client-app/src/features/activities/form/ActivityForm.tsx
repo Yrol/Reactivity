@@ -1,50 +1,87 @@
-import React, { useState, ChangeEvent, FormEvent, useContext } from "react";
+import React, {
+  useState,
+  ChangeEvent,
+  FormEvent,
+  useContext,
+  useEffect
+} from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import { v4 as uuid } from "uuid";
 import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
+import { RouteComponentProps } from "react-router-dom";
 
 interface IProps {
   //setEditMode: (emode: boolean) => void;
-  activity: IActivity;
-
+  //activity: IActivity;
   //createActivity: (activity: IActivity) => void;
   //editActivity: (activity: IActivity) => void;
-
   //submitState: boolean;
 }
 
-/** Adding an IProps interface and destructure them - such as setEditMode, activities and etc...  */
-const ActivityForm: React.FC<IProps> = ({
+interface DetailsParams {
+  id: string;
+}
+
+/** Adding an IProps interface and destructuring them - such as setEditMode, activities and etc...  */
+const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   //setEditMode,
-  activity: initialFormState //give an alias to the activity variable since another of same name used in "useState" below
+  //activity: initialFormState //give an alias to the activity variable since another of same name used in "useState" below
   //createActivity,
   //editActivity,
   //submitState
+  match
 }) => {
   //Defining the MobX store (ActivityStore) and destructuring the required functions and variables from it
   const activityStore = useContext(ActivityStore);
-  const { createActivity, editActivity, submitState, cancelFormOpen } = activityStore;
-  //if the activity aka - initialFormState is empty, create an empty IActivity defined in "activity.ts" an return
-  const initializeForm = () => {
-    if (initialFormState) {
-      return initialFormState;
-    } else {
-      return {
-        id: "",
-        title: "",
-        description: "",
-        category: "",
-        date: "",
-        city: ""
-      };
+  const {
+    selectedActivity: initialFormState,
+    createActivity,
+    editActivity,
+    submitState,
+    cancelFormOpen,
+    loadActivity
+  } = activityStore;
+
+  //running the useEffect only in edit mode to fetch the activity data from the API
+  useEffect(() => {
+    if (match.params.id) {
+      loadActivity(match.params.id).then(
+        () => initialFormState && setActivity(initialFormState)
+      );
     }
-  };
+  }); // Unlike "activityDetails" we're not setting a context using/within [] since we're using also "setActivity" within this context (ActivityForm)
+
+  //if the activity aka - initialFormState is empty, create an empty IActivity defined in "activity.ts" an return
+  // const initializeForm = () => {
+  //   if (initialFormState) {
+  //     return initialFormState;
+  //   } else {
+  //     return {
+  //       id: "",
+  //       title: "",
+  //       description: "",
+  //       category: "",
+  //       date: "",
+  //       city: ""
+  //     };
+  //   }
+  // };
 
   //This is a State Hook
   //Getting the object from "initializeForm" and add to the "activity" variable to use in the following form
-  const [activity, setActivity] = useState<IActivity>(initializeForm);
+  //const [activity, setActivity] = useState<IActivity>(initializeForm);
+
+  //setting the activity to empty initially and if in  edit mode, set the selected activity using "setActivity" above
+  const [activity, setActivity] = useState<IActivity>({
+    id: "",
+    title: "",
+    description: "",
+    category: "",
+    date: "",
+    city: ""
+  });
 
   //Handling input change without ChangeEvent or strict typing such as HTMLInputElement and HTMLTextAreaElement
   // const handleInputChange = (event: any) => {

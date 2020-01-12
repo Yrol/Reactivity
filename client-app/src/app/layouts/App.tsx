@@ -142,7 +142,7 @@ const App = () => {
 
   if (activityStore.loadingInitial)
     return (
-      <LoadingComponent content="Loading activities...." inverted={true} />
+      <LoadingComponent content="Loading activities. Please wait" inverted={true} />
     );
 
   //******** Implementation using Routers *******/  
@@ -157,7 +157,9 @@ const App = () => {
         <Route exact path='/' component={HomePage} />
         <Route exact path='/activities' component={ActivitiesDashboard} />
         <Route path='/activities/:id' component={ActivityDetails} />
-        <Route path='/createActivity' component={ActivityForm} />
+
+        {/** Loading same component in two different routes when creating('/createActivity') or editing('/manage/:id') an activity. Passing the routes in an array  */}
+        <Route path={['/createActivity', '/manage/:id']} component={ActivityForm} />
       </Container>
     </Fragment>
   );

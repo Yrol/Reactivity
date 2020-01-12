@@ -3,7 +3,7 @@ import { Card, Icon, Image, Button } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import ActivityStore from "../../../app/stores/activityStore"
 import { observer } from "mobx-react-lite";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, Link } from "react-router-dom";
 import { LoadingComponent } from "../../../app/layouts/LoadingComponent";
 
 interface IProps {
@@ -32,6 +32,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
     loadActivity(match.params.id)
   }, [loadActivity])
 
+  //if loading is true and the selectedActivity is empty
   if (loadingInitial || !selectedActivity) {
     return (
       <LoadingComponent content="Loading details...." inverted={true} />
@@ -53,8 +54,8 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
           <Button
             /** this will set "editMode" to true in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */
             // onClick={() => setEditMode(true)}
-
-            onClick={() => openEditForm(selectedActivity!.id)}
+            //onClick={() => openEditForm(selectedActivity!.id)}
+            as={Link} to={`/manage/${selectedActivity.id}`}
             basic
             color="blue"
             content="Edit"

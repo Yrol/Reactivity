@@ -16,7 +16,7 @@ const NavBar: React.FC<IProps> = ({
   return (
     <Menu fixed="top" inverted>
       <Container>
-        {/** using "as={Link}" to render the element as a  link then use "to" to specify the location */}
+        {/** using "as={NavLink}" to render the element as a  link then use "to" to specify the location */}
         {/** The keyword "exact" will be used for defining the exact path since "/" is included in routes "/activities" & etc - to prevent loading when these routes are loading"*/}
         <Menu.Item header as={NavLink} exact to='/'>
             <img src="/assets/logo192.png" alt="logo" style={{marginRight:'10px'}}/>

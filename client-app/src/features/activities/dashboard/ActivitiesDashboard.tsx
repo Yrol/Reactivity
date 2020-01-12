@@ -84,18 +84,18 @@ const ActivitiesDashboard: React.FC<IProps> = ({
         )} */}
 
         {/** if edit mode true show the form*/}
-        {editMode && (
+        {/** In here we're using "key" to make sure the form will be mounted and unmounted between editing and creating activities. */}
+        {/** Without a the "key", the form will not be re-rendered when we have an edit item and then attempting a create a new activity */}
+        {/* {editMode && (
           <ActivityForm
-            /** In here we're using "key" to make sure the form will be mounted and unmounted between editing and creating activities. */
-            /** Without a the "key", the form will not be re-rendered when we have an edit item and then attempting a create a new activity */
             key={selectedActivity && selectedActivity.id || 0}
-            //setEditMode={setEditMode}
+            setEditMode={setEditMode}
             activity={selectedActivity!}
-            //createActivity={createActivity}
-            //editActivity={editActivity}
-            //submitState={submitState}
+            createActivity={createActivity}
+            editActivity={editActivity}
+            submitState={submitState}
           />
-        )}
+        )} */}
       </Grid.Column>
     </Grid>
   );
