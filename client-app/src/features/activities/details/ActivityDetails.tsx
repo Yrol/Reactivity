@@ -22,7 +22,8 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   // activity,
   //setEditMode,
   //setSelectedActivity
-  match //match will consist of parameters sent with the URL such as ID and etc
+  match, //match will consist of parameters sent with the URL such as ID and etc
+  history // history object
 }) => {
   const activityStore = useContext(ActivityStore)
   const {selectedActivity, openEditForm, cancelSelectedActivity, loadActivity, loadingInitial} = activityStore
@@ -59,7 +60,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
             content="Edit"
           />
           <Button
-            onClick={cancelSelectedActivity}
+            onClick={() => history.push('/activities')}
             basic
             color="grey"
             content="Cancel"
