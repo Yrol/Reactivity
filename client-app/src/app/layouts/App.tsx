@@ -13,13 +13,13 @@ import agent from "../api/agent";
 import { LoadingComponent } from "./LoadingComponent";
 import ActivityStore from "../stores/activityStore";
 import { observer } from "mobx-react-lite";
-import { Route } from "react-router-dom";
+import { Route, withRouter, RouteComponentProps } from "react-router-dom";
 import { HomePage } from "../../features/home/HomePage";
 import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetails from "../../features/activities/details/ActivityDetails";
 
 /************ Implementation of using Hooks ****************/
-const App = () => {
+const App: React.FC<RouteComponentProps> = ({ location }) => {
   const activityStore = useContext(ActivityStore);
 
   //This is a State Hook
@@ -142,24 +142,33 @@ const App = () => {
 
   if (activityStore.loadingInitial)
     return (
-      <LoadingComponent content="Loading activities. Please wait" inverted={true} />
+      <LoadingComponent
+        content="Loading activities. Please wait"
+        inverted={true}
+      />
     );
 
-  //******** Implementation using Routers *******/  
+  //******** Implementation using Routers *******/
   return (
     <Fragment>
       {/* Using the React Semantic UI */}
-      <NavBar 
-        //handleOpenCreateForm={handleOpenCreateForm} 
+      <NavBar
+      //handleOpenCreateForm={handleOpenCreateForm}
       />
       <Container style={{ marginTop: "7em" }}>
         {/** The keyword "exact" will be used for defining the exact path since "/" includes in routes "/activities" & etc - to prevent loading when these routes are loading"*/}
-        <Route exact path='/' component={HomePage} />
-        <Route exact path='/activities' component={ActivitiesDashboard} />
-        <Route path='/activities/:id' component={ActivityDetails} />
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/activities" component={ActivitiesDashboard} />
+        <Route path="/activities/:id" component={ActivityDetails} />
 
         {/** Loading same component in two different routes when creating('/createActivity') or editing('/manage/:id') an activity. Passing the routes in an array  */}
-        <Route path={['/createActivity', '/manage/:id']} component={ActivityForm} />
+        {/** Since we're using the same component, we're also adding to key to use between edit and create activities to make decision on switching forms  */}
+        <Route
+          {/** The 'location.key' will be changed whenever navigate to "/createActivity" or "/manage/:id"  */}
+          key={location.key}
+          path={["/createActivity", "/manage/:id"]}
+          component={ActivityForm}
+        />
       </Container>
     </Fragment>
   );
@@ -264,4 +273,5 @@ const App = () => {
 
 //since the App component is watching the observables (ex: in "activityStore.ts"), we need to bind it with an observer
 //Observer is a higher level component which takes a component (in this case App) as an argument and return it with extra features (in this case with observer capabilities)
-export default observer(App);
+//"withRouter" is a higher order DOM which consist of props such as location, history and etc which we can access within the App components.
+export default withRouter(observer(App));

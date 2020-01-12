@@ -46,6 +46,11 @@ class ActivityStore {
     }
   };
 
+  //clearing the activity
+  @action clearActivity = () => {
+    this.selectedActivity = null;
+  }
+
   //loading an individual activity (when navigate to the details view)
   @action loadActivity = async (id: string) => {
     let activity = this.getActivity(id);

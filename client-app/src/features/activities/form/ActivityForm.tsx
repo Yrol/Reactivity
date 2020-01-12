@@ -41,17 +41,23 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     editActivity,
     submitState,
     cancelFormOpen,
-    loadActivity
+    loadActivity,
+    clearActivity
   } = activityStore;
 
   //running the useEffect only in edit mode to fetch the activity data from the API
   useEffect(() => {
     if (match.params.id) {
       loadActivity(match.params.id).then(
+        // execute "setActivity(initialFormState)" only if an activity is available in the "initialFormState"
         () => initialFormState && setActivity(initialFormState)
       );
     }
-  }); // Unlike "activityDetails" we're not setting a context using/within [] since we're using also "setActivity" within this context (ActivityForm)
+    //using the clean up function (componentWillUnmount when click on "Create Activity" button on Navbar) - https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
+    return () => {
+      clearActivity();
+    }
+  }, [loadActivity, match.params.id, initialFormState, clearActivity]); //defining all the dependencies
 
   //if the activity aka - initialFormState is empty, create an empty IActivity defined in "activity.ts" an return
   // const initializeForm = () => {
