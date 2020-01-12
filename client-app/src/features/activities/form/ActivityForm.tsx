@@ -57,7 +57,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     return () => {
       clearActivity();
     }
-  }, [loadActivity, match.params.id, initialFormState, clearActivity]); //defining all the dependencies.After the initial render, if these dependencies change, the useEffect will be executed
+  }, [loadActivity, match.params.id, initialFormState, clearActivity]); //defining all the dependencies.After the initial render, if these dependencies change, the useEffect will be executed. Simple example: https://codesandbox.io/s/l0n6qn3x7
 
   //if the activity aka - initialFormState is empty, create an empty IActivity defined in "activity.ts" an return
   // const initializeForm = () => {
