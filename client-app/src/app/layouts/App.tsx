@@ -151,25 +151,31 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
   //******** Implementation using Routers *******/
   return (
     <Fragment>
-      {/* Using the React Semantic UI */}
-      <NavBar
-      //handleOpenCreateForm={handleOpenCreateForm}
-      />
-      <Container style={{ marginTop: "7em" }}>
-        {/** The keyword "exact" will be used for defining the exact path since "/" includes in routes "/activities" & etc - to prevent loading when these routes are loading"*/}
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/activities" component={ActivitiesDashboard} />
-        <Route path="/activities/:id" component={ActivityDetails} />
+      {/** The keyword "exact" will be used for defining the exact path since "/" includes in routes "/activities" & etc - to prevent loading when these routes are loading"*/}
+      <Route exact path="/" component={HomePage} /> {/*Moving the homepage outside of Navigation (independent page)*/}
 
-        {/** Loading same component in two different routes when creating('/createActivity') or editing('/manage/:id') an activity. Passing the routes in an array  */}
-        {/** Since we're using the same component, we're also adding to key to use between edit and create activities to make decision on switching forms  */}
-        {/** The 'location.key' will be changed whenever navigate to "/createActivity" or "/manage/:id"  */}
-        <Route
-          key={location.key}
-          path={["/createActivity", "/manage/:id"]}
-          component={ActivityForm}
-        />
-      </Container>
+      {/** if anything matches/appended to the "/" the following will be rendered*/}
+      <Route path={'/(.+)'} render={() => 
+        <Fragment>
+          <NavBar
+          //handleOpenCreateForm={handleOpenCreateForm}
+          />
+          <Container style={{ marginTop: "7em" }}>
+            <Route exact path="/activities" component={ActivitiesDashboard} />
+            <Route path="/activities/:id" component={ActivityDetails} />
+
+            {/** Loading same component in two different routes when creating('/createActivity') or editing('/manage/:id') an activity. Passing the routes in an array  */}
+            {/** Since we're using the same component, we're also adding to key to use between edit and create activities to make decision on switching forms  */}
+            {/** The 'location.key' will be changed whenever navigate to "/createActivity" or "/manage/:id"  */}
+            <Route
+              key={location.key}
+              path={["/createActivity", "/manage/:id"]}
+              component={ActivityForm}
+            />
+          </Container>
+        </Fragment>
+      } />
+      {/* Using the React Semantic UI */}
     </Fragment>
   );
 
