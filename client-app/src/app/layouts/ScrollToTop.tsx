@@ -12,3 +12,5 @@ const ScrollToTop = ({children, match, location: {pathname}} : any) => {
 };
 
 export default withRouter(ScrollToTop);
+
+/** More implementation docs: https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/guides/scroll-restoration.md */
