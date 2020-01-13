@@ -30,7 +30,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
 
   useEffect(() => {
     loadActivity(match.params.id)
-  }, [loadActivity])
+  }, [loadActivity, match.params.id])
 
   //if loading is true and the selectedActivity is empty
   if (loadingInitial || !selectedActivity) {

@@ -31,7 +31,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   //createActivity,
   //editActivity,
   //submitState
-  match
+  match,
+  history
 }) => {
   //Defining the MobX store (ActivityStore) and destructuring the required functions and variables from it
   const activityStore = useContext(ActivityStore);
@@ -44,20 +45,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     loadActivity,
     clearActivity
   } = activityStore;
-
-  //running the useEffect only in edit mode to fetch the activity data from the API
-  useEffect(() => {
-    if (match.params.id) {
-      loadActivity(match.params.id).then(
-        // execute "setActivity(initialFormState)" only if an activity is available in the "initialFormState"
-        () => initialFormState && setActivity(initialFormState)
-      );
-    }
-    //using the clean up function (componentWillUnmount when click on "Create Activity" button on Navbar) - https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
-    return () => {
-      clearActivity();
-    }
-  }, [loadActivity, match.params.id, initialFormState, clearActivity]); //defining all the dependencies.After the initial render, if these dependencies change, the useEffect will be executed. Simple example: https://codesandbox.io/s/l0n6qn3x7
 
   //if the activity aka - initialFormState is empty, create an empty IActivity defined in "activity.ts" an return
   // const initializeForm = () => {
@@ -89,6 +76,22 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     city: ""
   });
 
+  //running the useEffect only in edit mode to fetch the activity data from the API
+  useEffect(() => {
+    //This condition will make sure it'll only be executed when there is an ID available in the URL and the activity is not loaded using setActivity below
+    //The reason we use "activity.id.length===0" is to make sure this will not run on submission, once loaded or unmounted
+    if (match.params.id && activity.id.length === 0) {
+      loadActivity(match.params.id).then(
+        // execute "setActivity(initialFormState)" only if an activity is available in the "initialFormState"
+        () => initialFormState && setActivity(initialFormState)
+      );
+    }
+    //using the clean up function (componentWillUnmount when click on "Create Activity" button on Navbar) - https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
+    return () => {
+      clearActivity();
+    }
+  }, [loadActivity, match.params.id, initialFormState, clearActivity, activity.id.length]); //defining all the dependencies.After the initial render, if these dependencies change, the useEffect will be executed. Simple example: https://codesandbox.io/s/l0n6qn3x7
+
   //Handling input change without ChangeEvent or strict typing such as HTMLInputElement and HTMLTextAreaElement
   // const handleInputChange = (event: any) => {
   //     const {name, value} = event.target
@@ -112,12 +115,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         ...activity,
         id: uuid() // npm package for generating unique IDs
       };
-      console.log(newActivity);
-      createActivity(newActivity);
+      //create activity and take the user to that new activity - using the history push to push a location to the history object
+      createActivity(newActivity).then(() => history.push(`/activities/${newActivity.id}`));
     } else {
-      //edit an activity
-      editActivity(activity);
-      console.log(activity);
+      //edit an activity and take the user to that new activity - using the history push to push a location to the history object
+      editActivity(activity).then(() => history.push(`/activities/${activity.id}`));
     }
   };
 
