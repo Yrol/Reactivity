@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useContext } from "react";
+import React, { SyntheticEvent, useContext, useEffect } from "react";
 import { Grid, List, GridColumn } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import ActivityList from "./ActivityList";
@@ -6,6 +6,7 @@ import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../form/ActivityForm";
 import ActivityStore from "../../../app/stores/activityStore";
 import {observer} from 'mobx-react-lite';
+import { LoadingComponent } from "../../../app/layouts/LoadingComponent";
 
 interface IProps {
   //activities: IActivity[];
@@ -51,7 +52,21 @@ const ActivitiesDashboard: React.FC<IProps> = ({
 }) => {
   //Using the MobX state in activity.ts
   const activityStore = useContext(ActivityStore)
-  const {editMode, selectedActivity} = activityStore
+  //const {editMode, selectedActivity} = activityStore
+
+  useEffect(() => {
+    activityStore.loadActivities();
+  }, [activityStore]); // the array contains the dependencies that needs to run the functions defined in useEffect
+
+  if (activityStore.loadingInitial)
+    return (
+      <LoadingComponent
+        content="Loading activities. Please wait"
+        inverted={true}
+      />
+    );
+
+
   return (
     <Grid>
       {/** The React Grid system supports up to 16 columns */}

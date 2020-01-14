@@ -133,7 +133,7 @@ class ActivityStore {
         this.activityRegistry.delete(id)
         if(this.selectedActivity?.id === id){
           this.cancelSelectedActivity();
-          this.cancelFormOpen();
+          //this.cancelFormOpen();
         }
         this.submitState = false;
       });
@@ -151,22 +151,22 @@ class ActivityStore {
 
   //action for opening the create form
   @action openCreateForm = () => {
-    this.editMode = true;
+    //this.editMode = true;
     this.selectedActivity = null;
   };
 
   @action openEditForm = (id: string) => {
     this.selectedActivity = this.activityRegistry.get(id)
-    this.editMode = true;
+    //this.editMode = true;
   }
 
   @action cancelSelectedActivity = () => {
     this.selectedActivity = null;
   }
 
-  @action cancelFormOpen = () => {
-    this.editMode = false
-  }
+  // @action cancelFormOpen = () => {
+  //   this.editMode = false
+  // }
 }
 
 export default createContext(new ActivityStore());

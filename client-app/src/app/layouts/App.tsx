@@ -136,17 +136,6 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
   // }, []); // using empty array [] to make sure useEffect will only run once (since we've other lifecycle methods baked into this). Otherwise this run into an infinite loop.
 
   //Version 3: Receiving activity using MobX store
-  useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]); // the array contains the dependencies that needs to run the functions defined in useEffect
-
-  if (activityStore.loadingInitial)
-    return (
-      <LoadingComponent
-        content="Loading activities. Please wait"
-        inverted={true}
-      />
-    );
 
   //******** Implementation using Routers *******/
   return (

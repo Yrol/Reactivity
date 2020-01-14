@@ -41,7 +41,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     createActivity,
     editActivity,
     submitState,
-    cancelFormOpen,
+    //cancelFormOpen,
     loadActivity,
     clearActivity
   } = activityStore;
@@ -169,7 +169,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         {/** this will set "editMode" to false in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */}
         <Button
           //onClick={() => setEditMode(false)}
-          onClick={() => cancelFormOpen()}
+          //onClick={() => cancelFormOpen()}
           floated="right"
           type="button"
           content="Cancel"
