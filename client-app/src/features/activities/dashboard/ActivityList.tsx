@@ -34,13 +34,22 @@ const ActivityList: React.FC<IProps> = ({
   const activityStore = useContext(ActivityStore);
   const {activitiesByDate, setSelectActivity, submitState, deleteActivity, deleteActivityId} = activityStore
   return (
-    <Segment clearing>
-      <Item.Group divided>
-        {activitiesByDate.map(activity => (
-          <ActivityListItem key={activity.id} activity={activity}/>
-        ))}
-      </Item.Group>
-    </Segment>
+    <Fragment>
+      {activitiesByDate.map(([group, activities]) => (
+        <Fragment key={group}>
+          <Label size='large' color='blue'>
+            {group}
+        </Label>   
+        <Segment clearing>
+            <Item.Group divided>
+              {activities.map(activity => (
+                <ActivityListItem key={activity.id} activity={activity}/>
+              ))}
+            </Item.Group>
+          </Segment>       
+        </Fragment>
+      ))}
+    </Fragment>
   );
 };
 

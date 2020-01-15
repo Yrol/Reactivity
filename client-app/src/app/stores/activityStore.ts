@@ -18,10 +18,26 @@ class ActivityStore {
   //get the activities sort by date - using the @computed decorator
   //This is referenced by the ActivityList, hence any changes to the activities (change date & etc) will be reflected (changing the list item positions & etc)
   @computed get activitiesByDate() {
-    //converting observable map (activityRegister) to an arry since it is not an array
-    return Array.from(this.activityRegistry.values()).sort(
+    //converting observable map (activityRegistry) to an arry using "Array.from" since it is not an array
+    return this.groupActivityByDate(Array.from(this.activityRegistry.values()));
+  }
+
+
+  //helper for sorting and grouping activities by the same date 
+  groupActivityByDate(activities: IActivity[]) {
+
+    //sorting the activities by date and time 
+    const sortedActivities = activities.sort(
       (a, b) => Date.parse(b.date) - Date.parse(a.date)
-    );
+    )
+
+    //then grouping the activities by date ONLY
+    return Object.entries(sortedActivities.reduce((activities, activity) => {
+      const date = activity.date.split('T')[0];//split by "T". ex:"2020-01-01T01:00:00"
+      //The key for each item is the unique activity date. hence, each item can consist of one or more activities fall within the same date
+      activities[date] = activities[date] ? [...activities[date], activity] : [activity]; // ternary operation - if activity has the same date put under the same array, else create new entry
+      return activities;
+    }, {} as {[key: string]: IActivity[]}));
   }
 
   //loading all the activities
