@@ -1,10 +1,14 @@
 import React, { useContext, useEffect } from "react";
-import { Card, Icon, Image, Button } from "semantic-ui-react";
+import { Card, Icon, Image, Button, Grid } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import ActivityStore from "../../../app/stores/activityStore"
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps, Link } from "react-router-dom";
 import { LoadingComponent } from "../../../app/layouts/LoadingComponent";
+import { ActivityDetailedHeader } from "./ActivityDetailedHeader";
+import { ActivityDetailedInfo } from "./ActivityDetailedInfo";
+import { ActivityDetailedChat } from "./ActivityDetailedChat";
+import { ActivityDetailedSidebar } from "./ActivityDetailedSidebar";
 
 interface IProps {
   //activity: IActivity;
@@ -40,35 +44,45 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   }
 
   return (
-    <Card>
-      <Card.Content>
-        <Card.Header>{selectedActivity!.title}</Card.Header>
-        <Card.Meta>
-          <span className="date">{selectedActivity!.date}</span>
-        </Card.Meta>
-        <Card.Description>{selectedActivity!.description}</Card.Description>
-        <Card.Meta>{selectedActivity!.city}</Card.Meta>
-      </Card.Content>
-      <Card.Content extra>
-        <Button.Group widths={2}>
-          <Button
-            /** this will set "editMode" to true in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */
-            // onClick={() => setEditMode(true)}
-            //onClick={() => openEditForm(selectedActivity!.id)}
-            as={Link} to={`/manage/${selectedActivity.id}`}
-            basic
-            color="blue"
-            content="Edit"
-          />
-          <Button
-            onClick={() => history.push('/activities')}
-            basic
-            color="grey"
-            content="Cancel"
-          />
-        </Button.Group>
-      </Card.Content>
-    </Card>
+    <Grid>
+      <Grid.Column width={10}>
+        <ActivityDetailedHeader activity={selectedActivity}/>
+        <ActivityDetailedInfo/>
+        <ActivityDetailedChat/>
+      </Grid.Column>
+      <Grid.Column width={6}>
+        <ActivityDetailedSidebar/>
+      </Grid.Column>
+    </Grid>
+    // <Card>
+    //   <Card.Content>
+    //     <Card.Header>{selectedActivity!.title}</Card.Header>
+    //     <Card.Meta>
+    //       <span className="date">{selectedActivity!.date}</span>
+    //     </Card.Meta>
+    //     <Card.Description>{selectedActivity!.description}</Card.Description>
+    //     <Card.Meta>{selectedActivity!.city}</Card.Meta>
+    //   </Card.Content>
+    //   <Card.Content extra>
+    //     <Button.Group widths={2}>
+    //       <Button
+    //         /** this will set "editMode" to true in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */
+    //         // onClick={() => setEditMode(true)}
+    //         //onClick={() => openEditForm(selectedActivity!.id)}
+    //         as={Link} to={`/manage/${selectedActivity.id}`}
+    //         basic
+    //         color="blue"
+    //         content="Edit"
+    //       />
+    //       <Button
+    //         onClick={() => history.push('/activities')}
+    //         basic
+    //         color="grey"
+    //         content="Cancel"
+    //       />
+    //     </Button.Group>
+    //   </Card.Content>
+    // </Card>
   );
 };
 
