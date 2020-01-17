@@ -5,7 +5,7 @@ import React, {
   useContext,
   useEffect
 } from "react";
-import { Segment, Form, Button } from "semantic-ui-react";
+import { Segment, Form, Button, Grid, GridColumn } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import { v4 as uuid } from "uuid";
 import ActivityStore from "../../../app/stores/activityStore";
@@ -89,8 +89,14 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     //using the clean up function (componentWillUnmount when click on "Create Activity" button on Navbar) - https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
     return () => {
       clearActivity();
-    }
-  }, [loadActivity, match.params.id, initialFormState, clearActivity, activity.id.length]); //defining all the dependencies.After the initial render, if these dependencies change, the useEffect will be executed. Simple example: https://codesandbox.io/s/l0n6qn3x7
+    };
+  }, [
+    loadActivity,
+    match.params.id,
+    initialFormState,
+    clearActivity,
+    activity.id.length
+  ]); //defining all the dependencies.After the initial render, if these dependencies change, the useEffect will be executed. Simple example: https://codesandbox.io/s/l0n6qn3x7
 
   //Handling input change without ChangeEvent or strict typing such as HTMLInputElement and HTMLTextAreaElement
   // const handleInputChange = (event: any) => {
@@ -116,66 +122,74 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         id: uuid() // npm package for generating unique IDs
       };
       //create activity and take the user to that new activity - using the history push to push a location to the history object
-      createActivity(newActivity).then(() => history.push(`/activities/${newActivity.id}`));
+      createActivity(newActivity).then(() =>
+        history.push(`/activities/${newActivity.id}`)
+      );
     } else {
       //edit an activity and take the user to that new activity - using the history push to push a location to the history object
-      editActivity(activity).then(() => history.push(`/activities/${activity.id}`));
+      editActivity(activity).then(() =>
+        history.push(`/activities/${activity.id}`)
+      );
     }
   };
 
   return (
-    <Segment clearing>
-      {/** "clearing" will include the Cancel and the Submit button within the form*/}
-      <Form onSubmit={handleSubmit}>
-        <Form.Input
-          onChange={handleInputChange}
-          name="title"
-          placeholder="Title"
-          value={activity.title}
-        />
-        <Form.TextArea
-          onChange={handleInputChange}
-          rows={2}
-          placeholder="Description"
-          name="description"
-          value={activity.description}
-        />
-        <Form.Input
-          onChange={handleInputChange}
-          name="category"
-          placeholder="Category"
-          value={activity.category}
-        />
-        <Form.Input
-          onChange={handleInputChange}
-          name="city"
-          placeholder="City"
-          value={activity.city}
-        />
-        <Form.Input
-          onChange={handleInputChange}
-          type="datetime-local"
-          name="date"
-          value={activity.date}
-        />
-        <Button
-          loading={submitState}
-          floated="right"
-          positive
-          type="submit"
-          content="Submit"
-        />
+    <Grid>
+      <GridColumn width={10}>
+        <Segment clearing>
+          {/** "clearing" will include the Cancel and the Submit button within the form*/}
+          <Form onSubmit={handleSubmit}>
+            <Form.Input
+              onChange={handleInputChange}
+              name="title"
+              placeholder="Title"
+              value={activity.title}
+            />
+            <Form.TextArea
+              onChange={handleInputChange}
+              rows={2}
+              placeholder="Description"
+              name="description"
+              value={activity.description}
+            />
+            <Form.Input
+              onChange={handleInputChange}
+              name="category"
+              placeholder="Category"
+              value={activity.category}
+            />
+            <Form.Input
+              onChange={handleInputChange}
+              name="city"
+              placeholder="City"
+              value={activity.city}
+            />
+            <Form.Input
+              onChange={handleInputChange}
+              type="datetime-local"
+              name="date"
+              value={activity.date}
+            />
+            <Button
+              loading={submitState}
+              floated="right"
+              positive
+              type="submit"
+              content="Submit"
+            />
 
-        {/** this will set "editMode" to false in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */}
-        <Button
-          //onClick={() => setEditMode(false)}
-          //onClick={() => cancelFormOpen()}
-          floated="right"
-          type="button"
-          content="Cancel"
-        />
-      </Form>
-    </Segment>
+            {/** this will set "editMode" to false in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */}
+            <Button
+              //onClick={() => setEditMode(false)}
+              //onClick={() => cancelFormOpen()}
+              floated="right"
+              type="button"
+              content="Cancel"
+            />
+          </Form>
+        </Segment>
+      </GridColumn>
+    </Grid>
   );
 };
 
