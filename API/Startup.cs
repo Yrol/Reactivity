@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Activities;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -52,8 +53,11 @@ namespace API
             //Specifying the MediatR for injection. We only need to reference one place where the MediatR has been used and it can be used in other places
             services.AddMediatR(typeof(ActivitiesList.Handler).Assembly);
 
-
-            services.AddControllers();
+            services.AddControllers()
+                //Binding the Fluent validator to the Controllers and specify the controller which is going to use it (in this case 'CreateActivity')
+                .AddFluentValidation(cfg => {
+                    cfg.RegisterValidatorsFromAssemblyContaining<CreateActivity>();
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
