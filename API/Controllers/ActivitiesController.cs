@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    //In the API route url  this will become [<hostname>/api/Activities] - the word "Controller" from "ActivitiesController" will be dropped. ex:http://localhost:5000/api/Activities/ 
     [Route("api/[controller]")]
     [ApiController]
     public class ActivitiesController : ControllerBase
@@ -36,7 +37,7 @@ namespace API.Controllers
         }
 
         //Create a new Activity
-        //Since we're using the [ApiController] above, its smart enogh to figure out the objects that the create command needs. Otherwise we've to use "[FromBody]CreateActivity.Command"
+        //Since we're using the [ApiController] above, its smart enough to figure out the objects that the create command needs. Otherwise we've to use "[FromBody]CreateActivity.Command"
         [HttpPost]
         public async Task<ActionResult<Unit>> Create(CreateActivity.Command command){
             return await _mediator.Send(command);

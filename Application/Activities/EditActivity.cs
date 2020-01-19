@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Activities.Errors;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -45,7 +47,8 @@ namespace Application.Activities
                 var activity = await _context.Activities.FindAsync(request.Id);
 
                 if(activity == null){
-                    throw new Exception("Could not find activity");
+                    //throwing exceptions such as not found activity [404] using the custom middleware
+                    throw new RestExceptions(HttpStatusCode.NotFound, new {activity = "Not found"});
                 }
                 
                 //The following will check if the value to the left (request) of the ?? is null, if so assign the original value from the activity
