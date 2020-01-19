@@ -37,6 +37,12 @@ namespace API.Controllers
         {
             //var value = await _context.Values.FirstOrDefaultAsync(r=>r.Id == id);
             var value = await _context.Values.FindAsync(id);
+
+            //If the value is not found this will return 404 HTTP respond to the client
+            if (value == null) {
+                return NotFound();
+            }
+
             return Ok(value);
         }
     }
