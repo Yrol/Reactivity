@@ -5,8 +5,13 @@ import { IActivity } from '../../models/activity';
 //base URL
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
+//This will receive all the server responses
+//The exceptions thrown here will be caught by the "activityStore" which calls this class
 axios.interceptors.response.use(undefined, error => {
     console.log(error.response);
+    if (error.response.status === 404) {
+        throw error.response;
+    }
 });
 
 //the response we're getting from the request - [response.data]

@@ -85,7 +85,8 @@ class ActivityStore {
         runInAction(() => {
           this.loadingInitial = false;
         })
-        console.log(error);
+        //This error originates from agent.ts and will be thrown again as below to be caught within Component classes (ActivityDetails & etc) which has access to route to pages (404 & etc) based on the error type 
+        throw error;
       }
     }
   }

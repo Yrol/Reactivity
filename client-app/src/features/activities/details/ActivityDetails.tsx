@@ -33,7 +33,9 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   const {selectedActivity, openEditForm, cancelSelectedActivity, loadActivity, loadingInitial} = activityStore
 
   useEffect(() => {
-    loadActivity(match.params.id)
+    loadActivity(match.params.id).catch(() => {
+      history.push('/notfound');//if an error occurred redirect to NotFound page
+    })
   }, [loadActivity, match.params.id])
 
   //if loading is true and the selectedActivity is empty
