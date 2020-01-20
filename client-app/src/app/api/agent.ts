@@ -5,6 +5,10 @@ import { IActivity } from '../../models/activity';
 //base URL
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
+axios.interceptors.response.use(undefined, error => {
+    console.log(error.response);
+});
+
 //the response we're getting from the request - [response.data]
 const responseBody = (response : AxiosResponse) => response.data;
 

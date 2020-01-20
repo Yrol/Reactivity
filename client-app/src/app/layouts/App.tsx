@@ -13,10 +13,11 @@ import agent from "../api/agent";
 import { LoadingComponent } from "./LoadingComponent";
 import ActivityStore from "../stores/activityStore";
 import { observer } from "mobx-react-lite";
-import { Route, withRouter, RouteComponentProps } from "react-router-dom";
+import { Route, withRouter, RouteComponentProps, Switch } from "react-router-dom";
 import { HomePage } from "../../features/home/HomePage";
 import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetails from "../../features/activities/details/ActivityDetails";
+import NotFound from "./NotFound";
 
 /************ Implementation of using Hooks ****************/
 const App: React.FC<RouteComponentProps> = ({ location }) => {
@@ -150,17 +151,22 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
           //handleOpenCreateForm={handleOpenCreateForm}
           />
           <Container style={{ marginTop: "7em" }}>
-            <Route exact path="/activities" component={ActivitiesDashboard} />
-            <Route path="/activities/:id" component={ActivityDetails} />
+            {/** the switch will ensure only one Route at a time get loaded. For instance preventing the "NotFound" route being loaded along with other routes since it does not have a path defined  */}
+            <Switch>
+              <Route exact path="/activities" component={ActivitiesDashboard} />
+              <Route path="/activities/:id" component={ActivityDetails} />
 
-            {/** Loading same component in two different routes when creating('/createActivity') or editing('/manage/:id') an activity. Passing the routes in an array  */}
-            {/** Since we're using the same component, we're also adding to key to use between edit and create activities to make decision on switching forms  */}
-            {/** The 'location.key' will be changed whenever navigate to "/createActivity" or "/manage/:id" - this allows the "ActivityForm" re-render since for both activities we're using the same form  */}
-            <Route
-              key={location.key}
-              path={["/createActivity", "/manage/:id"]}
-              component={ActivityForm}
-            />
+              {/** Loading same component in two different routes when creating('/createActivity') or editing('/manage/:id') an activity. Passing the routes in an array  */}
+              {/** Since we're using the same component, we're also adding to key to use between edit and create activities to make decision on switching forms  */}
+              {/** The 'location.key' will be changed whenever navigate to "/createActivity" or "/manage/:id" - this allows the "ActivityForm" re-render since for both activities we're using the same form  */}
+              <Route
+                key={location.key}
+                path={["/createActivity", "/manage/:id"]}
+                component={ActivityForm}
+              />
+              {/*The default 404 page. When the above routes failed, the application will automatically fallback to this route*/}
+              <Route component={NotFound}/>
+            </Switch>
           </Container>
         </Fragment>
       } />
