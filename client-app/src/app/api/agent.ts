@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 import { url } from 'inspector';
 import { IActivity } from '../../models/activity';
+import { history } from '../..';
 
 //base URL
 axios.defaults.baseURL = 'http://localhost:5000/api';
@@ -10,7 +11,7 @@ axios.defaults.baseURL = 'http://localhost:5000/api';
 axios.interceptors.response.use(undefined, error => {
     console.log(error.response);
     if (error.response.status === 404) {
-        throw error.response;
+        history.push('/notfound');// getting the access to history from <Router> which has been defined in index.tsx
     }
 });
 
