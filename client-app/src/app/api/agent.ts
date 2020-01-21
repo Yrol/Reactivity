@@ -9,9 +9,14 @@ axios.defaults.baseURL = 'http://localhost:5000/api';
 //This will receive all the server responses
 //The exceptions thrown here will be caught by the "activityStore" which calls this class
 axios.interceptors.response.use(undefined, error => {
-    console.log(error.response);
-    if (error.response.status === 404) {
+    const {status, data, config} = error.response;
+    if (status === 404) {
         history.push('/notfound');// getting the access to history from <Router> which has been defined in index.tsx
+    }
+
+    //Handling the 400 GUID error
+    if (status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')) {
+        history.push('/notfound');
     }
 });
 
