@@ -10,7 +10,15 @@ axios.defaults.baseURL = 'http://localhost:5000/api';
 //This will receive all the server responses
 //The exceptions thrown here will be caught by the "activityStore" which calls this class
 axios.interceptors.response.use(undefined, error => {
+
+    //handling network errors - ex: when the API
+    if (error.message === 'Network Error' && !error.response) {
+        console.log(error.message);
+        toast.error('Network error - Make sure the API is running!');
+    }
+
     const {status, data, config} = error.response;
+
     if (status === 404) {
         history.push('/notfound');// getting the access to history from <Router> which has been defined in index.tsx
     }
