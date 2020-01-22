@@ -46,7 +46,7 @@ class ActivityStore {
     try {
       // await will make sure it'll get the list of activities first and then execute the code below
       const activityList = await agent.Activities.list();
-      runInAction(() => { //strict mode to make sure state changes happens within @action is covered after the "await" above
+      runInAction(() => { //"runInAction" is the strict mode to make sure state changes happens within @action is covered after the "await" above
         activityList.forEach(activity => {
           //loop through the API response.data
           activity.date = activity.date.split(".")[0]; //splitting the time before the dot(.)
@@ -69,9 +69,13 @@ class ActivityStore {
 
   //loading an individual activity (when navigate to the details view)
   @action loadActivity = async (id: string) => {
+    this.loadingInitial = true;
     let activity = this.getActivity(id);
     if (activity) { // if the activity is available on the loaded list
-      this.selectedActivity = activity
+      runInAction(() => {
+        this.selectedActivity = activity
+        this.loadingInitial = false;
+      })
     } else { //load activity from the API
       try {
         //this.loadingInitial = true;
@@ -79,7 +83,6 @@ class ActivityStore {
         runInAction(() =>{
           this.selectedActivity = activity;
           this.loadingInitial = false;
-          console.log(activity);
         })
       } catch (error) {
         runInAction(() => {

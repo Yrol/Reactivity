@@ -25,6 +25,9 @@ namespace Application.Activities
             }
             public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
             {
+                //throw a 500 error intentionally for testing
+                //throw new Exception("Throwing a 500 server error intentionally");
+
                 var activity = await _context.Activities.FindAsync(request.Id);
 
                 if(activity == null){

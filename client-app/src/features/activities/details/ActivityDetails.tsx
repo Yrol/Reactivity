@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Card, Icon, Image, Button, Grid } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
-import ActivityStore from "../../../app/stores/activityStore"
+import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps, Link } from "react-router-dom";
 import { LoadingComponent } from "../../../app/layouts/LoadingComponent";
@@ -18,7 +18,7 @@ interface IProps {
 
 //interface to cast the parameters passed in the details
 interface DetailParams {
-  id: string //id parameter
+  id: string; //id parameter
 }
 
 /** Adding the "RouteComponentProps" which give access to history, current location(URL) and match(params attached to the URL such as IDs & etc)  */
@@ -29,8 +29,14 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match, //match will consist of parameters sent with the URL such as ID and etc
   history // history object
 }) => {
-  const activityStore = useContext(ActivityStore)
-  const {selectedActivity, openEditForm, cancelSelectedActivity, loadActivity, loadingInitial} = activityStore
+  const activityStore = useContext(ActivityStore);
+  const {
+    selectedActivity,
+    openEditForm,
+    cancelSelectedActivity,
+    loadActivity,
+    loadingInitial
+  } = activityStore;
 
   //implementation of using catch exception when loading the activity (catching the exception thrown from "activityStore")
   // useEffect(() => {
@@ -39,27 +45,36 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   //   })
   // }, [loadActivity, match.params.id])
 
-  //implementation of 
+  //implementation of useEffect without exception handling
   useEffect(() => {
-    loadActivity(match.params.id)
-  }, [loadActivity, match.params.id])
+    loadActivity(match.params.id);
+  }, [loadActivity, match.params.id]);
 
   //if loading is true and the selectedActivity is empty
-  if (loadingInitial || !selectedActivity) {
+  if (loadingInitial) {
+    return <LoadingComponent content="Loading details...." inverted={true} />;
+  }
+
+  //this block will be presented when there is a 500 error. Rest of the errors are handled in the "agent.ts" by redirecting to not found
+  if (!loadingInitial && !selectedActivity) {
     return (
-      <LoadingComponent content="Loading details...." inverted={true} />
+      <Grid.Column>
+        <Grid.Column width={10}>
+          <p>Activity not found</p>
+        </Grid.Column>
+      </Grid.Column>
     );
   }
 
   return (
     <Grid>
       <Grid.Column width={10}>
-        <ActivityDetailedHeader activity={selectedActivity}/>
-        <ActivityDetailedInfo activity={selectedActivity}/>
-        <ActivityDetailedChat/>
+        <ActivityDetailedHeader activity={selectedActivity!} />
+        <ActivityDetailedInfo activity={selectedActivity!} />
+        <ActivityDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <ActivityDetailedSidebar/>
+        <ActivityDetailedSidebar />
       </Grid.Column>
     </Grid>
     // <Card>

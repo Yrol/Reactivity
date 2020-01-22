@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 import { url } from 'inspector';
 import { IActivity } from '../../models/activity';
 import { history } from '../..';
+import { toast } from 'react-toastify';
 
 //base URL
 axios.defaults.baseURL = 'http://localhost:5000/api';
@@ -18,6 +19,12 @@ axios.interceptors.response.use(undefined, error => {
     if (status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')) {
         history.push('/notfound');
     }
+
+    //handling the 500 server errors using the "react-toastify" library  (ActivityDetails for now)
+    if (status === 500) {
+        toast.error('Server error');
+    }
+
 });
 
 //the response we're getting from the request - [response.data]

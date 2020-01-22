@@ -18,6 +18,7 @@ import { HomePage } from "../../features/home/HomePage";
 import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetails from "../../features/activities/details/ActivityDetails";
 import NotFound from "./NotFound";
+import {ToastContainer} from 'react-toastify';
 
 /************ Implementation of using Hooks ****************/
 const App: React.FC<RouteComponentProps> = ({ location }) => {
@@ -141,6 +142,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
   //******** Implementation using Routers *******/
   return (
     <Fragment>
+      <ToastContainer position='bottom-right' />{/**react-toastify library for showing toast notifcations */}
       {/** The keyword "exact" will be used for defining the exact path since "/" includes in routes "/activities" & etc - to prevent loading when these routes are loading"*/}
       <Route exact path="/" component={HomePage} /> {/*Moving the homepage outside of Navigation (independent page)*/}
 
