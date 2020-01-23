@@ -11,6 +11,7 @@ import { v4 as uuid } from "uuid";
 import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
+import { Form as FinalForm, Field } from "react-final-form";
 
 interface IProps {
   //setEditMode: (emode: boolean) => void;
@@ -113,80 +114,89 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     setActivity({ ...activity, [name]: value });
   };
 
-  //handle the form submit activity
-  const handleSubmit = () => {
-    if (activity.id.length === 0) {
-      //new activity
-      let newActivity = {
-        ...activity,
-        id: uuid() // npm package for generating unique IDs
-      };
-      //create activity and take the user to that new activity - using the history push to push a location to the history object
-      createActivity(newActivity).then(() =>
-        history.push(`/activities/${newActivity.id}`)
-      );
-    } else {
-      //edit an activity and take the user to that new activity - using the history push to push a location to the history object
-      editActivity(activity).then(() =>
-        history.push(`/activities/${activity.id}`)
-      );
-    }
+  //handle the form submit activity -  this method will only be used when we don't use "react-final-form" for validation. i.e binding directly to the submit button
+  // const handleSubmit = () => {
+  //   if (activity.id.length === 0) {
+  //     //new activity
+  //     let newActivity = {
+  //       ...activity,
+  //       id: uuid() // npm package for generating unique IDs
+  //     };
+  //     //create activity and take the user to that new activity - using the history push to push a location to the history object
+  //     createActivity(newActivity).then(() =>
+  //       history.push(`/activities/${newActivity.id}`)
+  //     );
+  //   } else {
+  //     //edit an activity and take the user to that new activity - using the history push to push a location to the history object
+  //     editActivity(activity).then(() =>
+  //       history.push(`/activities/${activity.id}`)
+  //     );
+  //   }
+  // };
+
+  const handleFinalFormSubmit = (values: any) => {
+    console.log(values);
   };
 
   return (
     <Grid>
       <GridColumn width={10}>
+        {/** "clearing" will include the Cancel and the Submit button within the form in UI*/}
         <Segment clearing>
-          {/** "clearing" will include the Cancel and the Submit button within the form*/}
-          <Form onSubmit={handleSubmit}>
-            <Form.Input
-              onChange={handleInputChange}
-              name="title"
-              placeholder="Title"
-              value={activity.title}
-            />
-            <Form.TextArea
-              onChange={handleInputChange}
-              rows={2}
-              placeholder="Description"
-              name="description"
-              value={activity.description}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="category"
-              placeholder="Category"
-              value={activity.category}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="city"
-              placeholder="City"
-              value={activity.city}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              type="datetime-local"
-              name="date"
-              value={activity.date}
-            />
-            <Button
-              loading={submitState}
-              floated="right"
-              positive
-              type="submit"
-              content="Submit"
-            />
+          <FinalForm
+            onSubmit={handleFinalFormSubmit}
+            render={({ handleSubmit }) => (
+              <Form onSubmit={handleSubmit}>
+                <Form.Input
+                  onChange={handleInputChange}
+                  name="title"
+                  placeholder="Title"
+                  value={activity.title}
+                />
+                <Form.TextArea
+                  onChange={handleInputChange}
+                  rows={2}
+                  placeholder="Description"
+                  name="description"
+                  value={activity.description}
+                />
+                <Form.Input
+                  onChange={handleInputChange}
+                  name="category"
+                  placeholder="Category"
+                  value={activity.category}
+                />
+                <Form.Input
+                  onChange={handleInputChange}
+                  name="city"
+                  placeholder="City"
+                  value={activity.city}
+                />
+                <Form.Input
+                  onChange={handleInputChange}
+                  type="datetime-local"
+                  name="date"
+                  value={activity.date}
+                />
+                <Button
+                  loading={submitState}
+                  floated="right"
+                  positive
+                  type="submit"
+                  content="Submit"
+                />
 
-            {/** this will set "editMode" to false in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */}
-            <Button
-              //onClick={() => setEditMode(false)}
-              //onClick={() => cancelFormOpen()}
-              floated="right"
-              type="button"
-              content="Cancel"
-            />
-          </Form>
+                {/** this will set "editMode" to false in "const [editMode, setEditMode]=useState(false)"  defined in Apps.tsx */}
+                <Button
+                  //onClick={() => setEditMode(false)}
+                  //onClick={() => cancelFormOpen()}
+                  floated="right"
+                  type="button"
+                  content="Cancel"
+                />
+              </Form>
+            )}
+          />
         </Segment>
       </GridColumn>
     </Grid>
