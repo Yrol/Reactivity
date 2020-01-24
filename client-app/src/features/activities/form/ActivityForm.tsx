@@ -12,6 +12,7 @@ import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
+import {TextInput} from "../../../app/common/form/TextInput"
 
 interface IProps {
   //setEditMode: (emode: boolean) => void;
@@ -107,12 +108,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 
   //Handling input change with FormEvent and strict typing - HTMLInputElement and HTMLTextAreaElement
   //Without this implementation we won't be able to type inside the form fields since React is based on virtual DOM
-  const handleInputChange = (
-    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = event.currentTarget;
-    setActivity({ ...activity, [name]: value });
-  };
+  // const handleInputChange = (
+  //   event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => {
+  //   const { name, value } = event.currentTarget;
+  //   setActivity({ ...activity, [name]: value });
+  // };
 
   //handle the form submit activity -  this method will only be used when we don't use "react-final-form" for validation. i.e binding directly to the submit button
   const handleSubmit = () => {
@@ -153,32 +154,29 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   name="title"
                   placeholder="Title"
                   value={activity.title}
-                  component="input"
+                  component={TextInput} //using the reusable custom TextInput we've created
                 />
-                <Form.TextArea
-                  onChange={handleInputChange}
-                  rows={2}
+                <Field
                   placeholder="Description"
                   name="description"
-                  value={activity.description}
+                  component={TextInput}
                 />
-                <Form.Input
-                  onChange={handleInputChange}
+                <Field
                   name="category"
                   placeholder="Category"
                   value={activity.category}
+                  component={TextInput}//using the reusable custom TextInput we've created
                 />
-                <Form.Input
-                  onChange={handleInputChange}
+                <Field
                   name="city"
                   placeholder="City"
                   value={activity.city}
+                  component={TextInput} //using the reusable custom TextInput we've created
                 />
-                <Form.Input
-                  onChange={handleInputChange}
-                  type="datetime-local"
+                <Field
                   name="date"
                   value={activity.date}
+                  component={TextInput}
                 />
                 <Button
                   loading={submitState}
