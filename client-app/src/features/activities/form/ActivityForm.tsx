@@ -13,6 +13,7 @@ import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
 import {TextInput} from "../../../app/common/form/TextInput"
+import { TextAreaInput } from "../../../app/common/form/TextAreaInput";
 
 interface IProps {
   //setEditMode: (emode: boolean) => void;
@@ -157,9 +158,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   component={TextInput} //using the reusable custom TextInput we've created
                 />
                 <Field
+
                   placeholder="Description"
                   name="description"
-                  component={TextInput}
+                  rows={3}
+                  component={TextAreaInput}
                 />
                 <Field
                   name="category"
