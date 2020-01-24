@@ -13,7 +13,9 @@ import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
 import {TextInput} from "../../../app/common/form/TextInput"
-import { TextAreaInput } from "../../../app/common/form/TextAreaInput";
+import {TextAreaInput} from "../../../app/common/form/TextAreaInput";
+import {SelectInput} from "../../../app/common/form/SelectInput"
+import { category } from "../../../app/common/options/categoryOptions";
 
 interface IProps {
   //setEditMode: (emode: boolean) => void;
@@ -162,13 +164,14 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   placeholder="Description"
                   name="description"
                   rows={3}
-                  component={TextAreaInput}
+                  component={TextAreaInput} //using the reusable custom TextAreaInput we've created
                 />
                 <Field
                   name="category"
+                  options={category}
                   placeholder="Category"
                   value={activity.category}
-                  component={TextInput}//using the reusable custom TextInput we've created
+                  component={SelectInput}//using the reusable custom SelectInput we've created
                 />
                 <Field
                   name="city"
@@ -179,7 +182,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                 <Field
                   name="date"
                   value={activity.date}
-                  component={TextInput}
+                  component={TextInput} //using the reusable custom TextInput we've created
                 />
                 <Button
                   loading={submitState}
