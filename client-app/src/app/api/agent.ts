@@ -14,22 +14,26 @@ axios.interceptors.response.use(undefined, error => {
     //handling network errors - ex: when the API
     if (error.message === 'Network Error' && !error.response) {
         console.log(error.message);
+        //throw error; will be caught by the "activityStore"
         toast.error('Network error - Make sure the API is running!');
     }
 
     const {status, data, config} = error.response;
 
     if (status === 404) {
+        //throw error; will be caught by the "activityStore"
         history.push('/notfound');// getting the access to history from <Router> which has been defined in index.tsx
     }
 
     //Handling the 400 GUID error
     if (status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')) {
+        //throw error; will be caught by the "activityStore"
         history.push('/notfound');
     }
 
     //handling the 500 server errors using the "react-toastify" library  (ActivityDetails for now)
     if (status === 500) {
+        //throw error; will be caught by the "activityStore"
         toast.error('Server error');
     }
 
