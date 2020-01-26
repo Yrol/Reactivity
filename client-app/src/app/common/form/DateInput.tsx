@@ -22,6 +22,8 @@ export const DateInput: React.FC<IProps> = ({
     <Form.Field error={touched && !!error} width={width}>
       <DateTimePicker
         placeholder={placeholder}
+        date={date}
+        time={time}
         value={input.value! || null} //"input.value" when we're editing an activity - date already exists. Null is for a new activity where there's is no date 
         onChange={input.onChange} // the value we're getting back from React Final from when the value is changed
         {...rest}

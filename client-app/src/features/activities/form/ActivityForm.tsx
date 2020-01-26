@@ -6,15 +6,15 @@ import React, {
   useEffect
 } from "react";
 import { Segment, Form, Button, Grid, GridColumn } from "semantic-ui-react";
-import { IActivity } from "../../../models/activity";
+import { IActivity, IActivityFormValue } from "../../../models/activity";
 import { v4 as uuid } from "uuid";
 import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
-import {TextInput} from "../../../app/common/form/TextInput"
-import {TextAreaInput} from "../../../app/common/form/TextAreaInput";
-import {SelectInput} from "../../../app/common/form/SelectInput"
+import { TextInput } from "../../../app/common/form/TextInput";
+import { TextAreaInput } from "../../../app/common/form/TextAreaInput";
+import { SelectInput } from "../../../app/common/form/SelectInput";
 import { category } from "../../../app/common/options/categoryOptions";
 import { DateInput } from "../../../app/common/form/DateInput";
 
@@ -73,12 +73,13 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   //const [activity, setActivity] = useState<IActivity>(initializeForm);
 
   //setting the activity to empty initially and if in  edit mode, set the selected activity using "setActivity" above
-  const [activity, setActivity] = useState<IActivity>({
-    id: "",
+  const [activity, setActivity] = useState<IActivityFormValue>({
+    id: undefined,
     title: "",
     description: "",
     category: "",
-    date: null,
+    date: undefined, 
+    time: undefined,
     city: ""
   });
 
@@ -86,7 +87,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   useEffect(() => {
     //This condition will make sure it'll only be executed when there is an ID available in the URL and the activity is not loaded using setActivity below
     //The reason we use "activity.id.length===0" is to make sure this will not run on submission, once loaded or unmounted
-    if (match.params.id && activity.id.length === 0) {
+    if (match.params.id && activity.id) {
       loadActivity(match.params.id).then(
         // execute "setActivity(initialFormState)" only if an activity is available in the "initialFormState"
         () => initialFormState && setActivity(initialFormState)
@@ -101,7 +102,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     match.params.id,
     initialFormState,
     clearActivity,
-    activity.id.length
+    activity.id
   ]); //defining all the dependencies.After the initial render, if these dependencies change, the useEffect will be executed. Simple example: https://codesandbox.io/s/l0n6qn3x7
 
   //Handling input change without ChangeEvent or strict typing such as HTMLInputElement and HTMLTextAreaElement
@@ -161,7 +162,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   component={TextInput} //using the reusable custom TextInput we've created
                 />
                 <Field
-
                   placeholder="Description"
                   name="description"
                   rows={3}
@@ -172,7 +172,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   options={category}
                   placeholder="Category"
                   value={activity.category}
-                  component={SelectInput}//using the reusable custom SelectInput we've created
+                  component={SelectInput} //using the reusable custom SelectInput we've created
                 />
                 <Field
                   name="city"
@@ -180,12 +180,23 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   value={activity.city}
                   component={TextInput} //using the reusable custom TextInput we've created
                 />
-                <Field
-                  name="date"
-                  placeholder="date"
-                  value={activity.date}
-                  component={DateInput!} //using the reusable custom TextInput we've created
-                />
+                <Form.Group widths="equal">
+                  <Field
+                    name="date"
+                    date={true}
+                    placeholder="date"
+                    value={activity.date}
+                    component={DateInput} //using the reusable custom DateInput we've created
+                  />
+                  <Field
+                    name="time"
+                    time={true}
+                    placeholder="time"
+                    value={activity.time}
+                    component={DateInput} //using the reusable custom DateInput we've created
+                  />
+                </Form.Group>
+
                 <Button
                   loading={submitState}
                   floated="right"

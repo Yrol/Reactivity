@@ -28,12 +28,12 @@ class ActivityStore {
 
     //sorting the activities by date and time 
     const sortedActivities = activities.sort(
-      (a, b) => b.date!.getTime() - a.date!.getTime()
+      (a, b) => b.date.getTime() - a.date.getTime()
     )
 
     //then grouping the activities by date ONLY
     return Object.entries(sortedActivities.reduce((activities, activity) => {
-      const date = activity.date!.toISOString().split('T')[0];//split by "T". ex:"2020-01-01T01:00:00"
+      const date = activity.date.toISOString().split('T')[0];//split by "T". ex:"2020-01-01T01:00:00"
       //The key for each item is the unique activity date. hence, each item can consist of one or more activities fall within the same date
       activities[date] = activities[date] ? [...activities[date], activity] : [activity]; // ternary operation - if activity has the same date put under the same array, else create new entry
       return activities;
@@ -49,7 +49,7 @@ class ActivityStore {
       runInAction(() => { //"runInAction" is the strict mode to make sure state changes happens within @action is covered after the "await" above
         activityList.forEach(activity => {
           //loop through the API response.data
-          activity.date = new Date(activity.date!);
+          activity.date = new Date(activity.date);
           this.activityRegistry.set(activity.id, activity);// adding the activity to the observable map (activityRegister)
         });
         this.loadingInitial = false;

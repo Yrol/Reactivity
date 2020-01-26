@@ -5,6 +5,12 @@ export interface IActivity{
     title: string;
     description: string;
     category: string;
-    date: Date | null;// using the "?" to specify it could be either a Date ot Undefined
+    date: Date;
     city: string;
+}
+
+//Partially Extend the IActivity interface defined above 
+//Partial will make the all the values optional inside the interface
+export interface IActivityFormValue extends Partial<IActivity> {
+    time?: Date
 }
