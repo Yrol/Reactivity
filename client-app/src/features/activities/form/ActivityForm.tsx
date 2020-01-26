@@ -16,6 +16,7 @@ import {TextInput} from "../../../app/common/form/TextInput"
 import {TextAreaInput} from "../../../app/common/form/TextAreaInput";
 import {SelectInput} from "../../../app/common/form/SelectInput"
 import { category } from "../../../app/common/options/categoryOptions";
+import { DateInput } from "../../../app/common/form/DateInput";
 
 interface IProps {
   //setEditMode: (emode: boolean) => void;
@@ -77,7 +78,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     title: "",
     description: "",
     category: "",
-    date: "",
+    date: null,
     city: ""
   });
 
@@ -119,24 +120,24 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   // };
 
   //handle the form submit activity -  this method will only be used when we don't use "react-final-form" for validation. i.e binding directly to the submit button
-  const handleSubmit = () => {
-    if (activity.id.length === 0) {
-      //new activity
-      let newActivity = {
-        ...activity,
-        id: uuid() // npm package for generating unique IDs
-      };
-      //create activity and take the user to that new activity - using the history push to push a location to the history object
-      createActivity(newActivity).then(() =>
-        history.push(`/activities/${newActivity.id}`)
-      );
-    } else {
-      //edit an activity and take the user to that new activity - using the history push to push a location to the history object
-      editActivity(activity).then(() =>
-        history.push(`/activities/${activity.id}`)
-      );
-    }
-  };
+  // const handleSubmit = () => {
+  //   if (activity.id.length === 0) {
+  //     //new activity
+  //     let newActivity = {
+  //       ...activity,
+  //       id: uuid() // npm package for generating unique IDs
+  //     };
+  //     //create activity and take the user to that new activity - using the history push to push a location to the history object
+  //     createActivity(newActivity).then(() =>
+  //       history.push(`/activities/${newActivity.id}`)
+  //     );
+  //   } else {
+  //     //edit an activity and take the user to that new activity - using the history push to push a location to the history object
+  //     editActivity(activity).then(() =>
+  //       history.push(`/activities/${activity.id}`)
+  //     );
+  //   }
+  // };
 
   const handleFinalFormSubmit = (values: any) => {
     console.log(values);
@@ -181,8 +182,9 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                 />
                 <Field
                   name="date"
+                  placeholder="date"
                   value={activity.date}
-                  component={TextInput} //using the reusable custom TextInput we've created
+                  component={DateInput!} //using the reusable custom TextInput we've created
                 />
                 <Button
                   loading={submitState}

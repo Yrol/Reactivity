@@ -22,6 +22,6 @@
   },
   "include": [
     "src",
-    "./typings-customs/**/*.ts"
+    "./typings-customs/**/*.ts" // custom file created to include date-fns
   ]
 }

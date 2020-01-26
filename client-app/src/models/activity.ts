@@ -5,6 +5,6 @@ export interface IActivity{
     title: string;
     description: string;
     category: string;
-    date: string;
+    date: Date | null;// using the "?" to specify it could be either a Date ot Undefined
     city: string;
 }
