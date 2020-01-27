@@ -17,6 +17,7 @@ import { TextAreaInput } from "../../../app/common/form/TextAreaInput";
 import { SelectInput } from "../../../app/common/form/SelectInput";
 import { category } from "../../../app/common/options/categoryOptions";
 import { DateInput } from "../../../app/common/form/DateInput";
+import { combineDateAndTime } from "../../../app/common/Util/utils";
 
 interface IProps {
   //setEditMode: (emode: boolean) => void;
@@ -141,7 +142,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   // };
 
   const handleFinalFormSubmit = (values: any) => {
-    console.log(values);
+    const dateAndTime = combineDateAndTime(values.date, values.time);
+    const {date, time, ...activity} = values; //using the spread operator here to minus date and time from the "values" object but dump all the other values to the "activity" array
+    activity.date = dateAndTime; // add the "dateAndTime" string to the activity.date
+    console.log(activity);
   };
 
   return (
