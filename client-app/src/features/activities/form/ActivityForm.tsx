@@ -6,7 +6,11 @@ import React, {
   useEffect
 } from "react";
 import { Segment, Form, Button, Grid, GridColumn } from "semantic-ui-react";
-import { IActivity, IActivityFormValue } from "../../../models/activity";
+import {
+  IActivity,
+  IActivityFormValues,
+  ActivityFormValues
+} from "../../../models/activity";
 import { v4 as uuid } from "uuid";
 import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
@@ -74,36 +78,46 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   //const [activity, setActivity] = useState<IActivity>(initializeForm);
 
   //setting the activity to empty initially and if in  edit mode, set the selected activity using "setActivity" above
-  const [activity, setActivity] = useState<IActivityFormValue>({
-    id: undefined,
-    title: "",
-    description: "",
-    category: "",
-    date: undefined, 
-    time: undefined,
-    city: ""
-  });
+  // const [activity, setActivity] = useState<IActivityFormValues>({
+  //   id: undefined,
+  //   title: "",
+  //   description: "",
+  //   category: "",
+  //   date: undefined,
+  //   time: undefined,
+  //   city: ""
+  // });
+
+  //
+  const [activity, setActivity] = useState(new ActivityFormValues());
+  const [loading, setLoading] = useState(false);
 
   //running the useEffect only in edit mode to fetch the activity data from the API
   useEffect(() => {
     //This condition will make sure it'll only be executed when there is an ID available in the URL and the activity is not loaded using setActivity below
     //The reason we use "activity.id.length===0" is to make sure this will not run on submission, once loaded or unmounted
-    if (match.params.id && activity.id) {
-      loadActivity(match.params.id).then(
-        // execute "setActivity(initialFormState)" only if an activity is available in the "initialFormState"
-        () => initialFormState && setActivity(initialFormState)
-      );
+    if (match.params.id) {
+      setLoading(true);
+      loadActivity(match.params.id)
+        .then(
+          // execute "setActivity(initialFormState)" only if an activity is available in the "initialFormState"
+          //() => initialFormState && setActivity(initialFormState)
+
+          //passing the activity returning from activityStore to ActivityFormValues
+          activity => setActivity(new ActivityFormValues(activity))
+        )
+        .finally(() => setLoading(false)); //whatever happens set the loading indicator to false
     }
     //using the clean up function (componentWillUnmount when click on "Create Activity" button on Navbar) - https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
-    return () => {
-      clearActivity();
-    };
+    // return () => {
+    //   clearActivity();
+    // };
   }, [
     loadActivity,
     match.params.id,
-    initialFormState,
-    clearActivity,
-    activity.id
+    //initialFormState,
+    clearActivity
+    //activity.id
   ]); //defining all the dependencies.After the initial render, if these dependencies change, the useEffect will be executed. Simple example: https://codesandbox.io/s/l0n6qn3x7
 
   //Handling input change without ChangeEvent or strict typing such as HTMLInputElement and HTMLTextAreaElement
@@ -143,7 +157,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 
   const handleFinalFormSubmit = (values: any) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
-    const {date, time, ...activity} = values; //using the spread operator here to minus date and time from the "values" object but dump all the other values to the "activity" array
+    const { date, time, ...activity } = values; //using the spread operator here to minus date and time from the "values" object but dump all the other values to the "activity" array
     activity.date = dateAndTime; // add the "dateAndTime" string to the activity.date
     console.log(activity);
   };
@@ -156,9 +170,13 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           {/** "handleSubmit" is a property passed by FinalForm and in here we're destructuring it and passing it to onSubmit of the <Form>*/}
           {/** We're using the <Field> elements which is a part of <FinalForm>*/}
           <FinalForm
+            initialValues={activity}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit }) => (
-              <Form onSubmit={handleSubmit}>
+              <Form 
+                onSubmit={handleSubmit} 
+                loading={loading}//adding the loading indicator
+                >
                 <Field
                   name="title"
                   placeholder="Title"
@@ -205,6 +223,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   loading={submitState}
                   floated="right"
                   positive
+                  disabled={loading}//disable the button when loading
                   type="submit"
                   content="Submit"
                 />
@@ -215,6 +234,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   //onClick={() => cancelFormOpen()}
                   floated="right"
                   type="button"
+                  disabled={loading}//disable the button when loading
                   content="Cancel"
                 />
               </Form>

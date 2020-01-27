@@ -73,18 +73,20 @@ class ActivityStore {
     let activity = this.getActivity(id);
     if (activity) { // if the activity is available on the loaded list
       runInAction(() => {
-        activity.date = new Date(activity.date);//assign the activity's Date to JS Date object
         this.selectedActivity = activity;
         this.loadingInitial = false;
       })
+      return activity;//return the activity
     } else { //load activity from the API
       try {
         //this.loadingInitial = true;
         const activity = await agent.Activities.details(id);
         runInAction(() =>{
+          activity.date = new Date(activity.date);//assign the activity's Date to JS Date object
           this.selectedActivity = activity;
           this.loadingInitial = false;
         })
+        return activity;//return the activity
       } catch (error) {
         runInAction(() => {
           this.loadingInitial = false;
