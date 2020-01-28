@@ -25,7 +25,7 @@ axios.interceptors.response.use(undefined, error => {
         history.push('/notfound');// getting the access to history from <Router> which has been defined in index.tsx
     }
 
-    //Handling the 400 GUID error
+    //Handling the 400 GUID error for GET methods only 
     if (status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')) {
         //throw error; will be caught by the "activityStore"
         history.push('/notfound');
@@ -36,6 +36,8 @@ axios.interceptors.response.use(undefined, error => {
         //throw error; will be caught by the "activityStore"
         toast.error('Server error');
     }
+
+    throw error;
 
 });
 

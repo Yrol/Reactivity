@@ -158,8 +158,23 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   const handleFinalFormSubmit = (values: any) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const { date, time, ...activity } = values; //using the spread operator here to minus date and time from the "values" object but dump all the other values to the "activity" array
-    activity.date = dateAndTime; // add the "dateAndTime" string to the activity.date
-    console.log(activity);
+    activity.date = dateAndTime; // add the "dateAndTime" string to the activity.dat
+    if (!activity.id) {
+      //new activity
+      let newActivity = {
+        ...activity,
+        id: uuid() // npm package for generating unique IDs
+      };
+      //create activity and take the user to that new activity - using the history push to push a location to the history object
+      createActivity(newActivity).then(() =>
+        history.push(`/activities/${newActivity.id}`)
+      );
+    } else {
+      //edit an activity and take the user to that new activity - using the history push to push a location to the history object
+      editActivity(activity).then(() =>
+        history.push(`/activities/${activity.id}`)
+      );
+    }
   };
 
   return (
@@ -173,10 +188,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
             initialValues={activity}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit }) => (
-              <Form 
-                onSubmit={handleSubmit} 
-                loading={loading}//adding the loading indicator
-                >
+              <Form
+                onSubmit={handleSubmit}
+                loading={loading} //adding the loading indicator
+              >
                 <Field
                   name="title"
                   placeholder="Title"
@@ -223,7 +238,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   loading={submitState}
                   floated="right"
                   positive
-                  disabled={loading}//disable the button when loading
+                  disabled={loading} //disable the button when loading
                   type="submit"
                   content="Submit"
                 />
@@ -232,9 +247,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                 <Button
                   //onClick={() => setEditMode(false)}
                   //onClick={() => cancelFormOpen()}
+
+                  // if the activity ID is set go to that particular ID else go to the activities page
+                  onClick={activity.id ? () => history.push(`/activities/${activity.id}`) : () => history.push('/activities/') }
                   floated="right"
                   type="button"
-                  disabled={loading}//disable the button when loading
+                  disabled={loading} //disable the button when loading
                   content="Cancel"
                 />
               </Form>

@@ -85,6 +85,9 @@ class ActivityStore {
           activity.date = new Date(activity.date);//assign the activity's Date to JS Date object
           this.selectedActivity = activity;
           this.loadingInitial = false;
+
+          // adding the activity to the observable map (activityRegister) if it loads from the server. So next time it'll load from this collection instead of making a server call
+          this.activityRegistry.set(activity.id, activity);
         })
         return activity;//return the activity
       } catch (error) {
