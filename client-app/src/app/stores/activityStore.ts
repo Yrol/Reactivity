@@ -2,6 +2,9 @@ import { observable, action, computed, configure, runInAction } from "mobx";
 import { IActivity } from "../../models/activity";
 import agent from "../api/agent";
 import { createContext, SyntheticEvent } from "react";
+import { history } from '../..';
+import { toast } from "react-toastify";
+
 
 //enforcing the "strict mode" to make sure the state changes are happening only within the context of actions (@actions)
 configure({enforceActions: 'always'})
@@ -122,11 +125,13 @@ class ActivityStore {
         this.editMode = false;
         this.submitState = false;
       });
+      history.push(`/activities/${activity.id}`)
     } catch (error) {
       runInAction(() => {
         this.submitState = false;
       })
       console.log(error);
+      toast.error("An error occurred while creating the new activity");
     }
   };
 
@@ -141,11 +146,12 @@ class ActivityStore {
         this.submitState = false;
         this.editMode = false;
       });
+      history.push(`/activities/${activity.id}`)
     } catch (error) {
       runInAction(() => {
         this.submitState = false;
       });
-      console.log(error);
+      toast.error("An error occurred while editing the activity");
     }
   }
 

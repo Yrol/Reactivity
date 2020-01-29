@@ -166,20 +166,24 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         id: uuid() // npm package for generating unique IDs
       };
       //create activity and take the user to that new activity - using the history push to push a location to the history object
-      createActivity(newActivity).then(() =>
-        history.push(`/activities/${newActivity.id}`)
-      );
+      // createActivity(newActivity).then(() =>
+      //   history.push(`/activities/${newActivity.id}`)
+      // );
+
+      //creating the new activity
+      createActivity(newActivity);
     } else {
       //edit an activity and take the user to that new activity - using the history push to push a location to the history object
-      editActivity(activity).then(() =>
-        history.push(`/activities/${activity.id}`)
-      );
+      // editActivity(activity).then(() =>
+      //   history.push(`/activities/${activity.id}`)
+      // );
+      editActivity(activity);
     }
   };
 
   return (
     <Grid>
-      <GridColumn width={10}>
+      <GridColumn width={12}>
         {/** "clearing" will include the Cancel and the Submit button within the form in UI*/}
         <Segment clearing>
           {/** "handleSubmit" is a property passed by FinalForm and in here we're destructuring it and passing it to onSubmit of the <Form>*/}
