@@ -22,6 +22,23 @@ import { SelectInput } from "../../../app/common/form/SelectInput";
 import { category } from "../../../app/common/options/categoryOptions";
 import { DateInput } from "../../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../../app/common/Util/utils";
+import { combineValidators, isRequired, composeValidators, hasLengthGreaterThan } from 'revalidate' // frontend validation
+
+//setting frontend validation rules using combineValidators. Then the const "validate" should be passed to the form
+const validate = combineValidators({
+  title: isRequired({message: 'The event title is required'}), // giving a custom message
+  category: isRequired('Category'), // using the default name given the field name
+
+  //using compose validators to add more than one rule per field
+  description: composeValidators(
+    isRequired('Description'),
+    hasLengthGreaterThan(4)({message:'Description has to be at least 5 characters'})
+  )(),
+  city: isRequired('City'),
+  date:isRequired('Date'),
+  time:isRequired('Time')
+})
+
 
 interface IProps {
   //setEditMode: (emode: boolean) => void;
@@ -189,6 +206,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           {/** "handleSubmit" is a property passed by FinalForm and in here we're destructuring it and passing it to onSubmit of the <Form>*/}
           {/** We're using the <Field> elements which is a part of <FinalForm>*/}
           <FinalForm
+            validate={validate}
             initialValues={activity}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit }) => (
