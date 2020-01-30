@@ -25,7 +25,7 @@ export const SelectInput: React.FC<IProps> = ({
         options={options}
         />
       {/**Show the Label only if the input has been touched and there is an error */}
-      {touched && error && <Label basic color="red"></Label>}
+  {touched && error && <Label basic color="red">{error}</Label>}
     </Form.Field>
   );
 };

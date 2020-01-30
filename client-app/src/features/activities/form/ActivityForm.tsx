@@ -204,12 +204,14 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         {/** "clearing" will include the Cancel and the Submit button within the form in UI*/}
         <Segment clearing>
           {/** "handleSubmit" is a property passed by FinalForm and in here we're destructuring it and passing it to onSubmit of the <Form>*/}
+          {/** "pristine" means no fields have been modified. When the form loads by default this is set to true*/}
+          {/** "invalid" is the form validation  */}
           {/** We're using the <Field> elements which is a part of <FinalForm>*/}
           <FinalForm
             validate={validate}
             initialValues={activity}
             onSubmit={handleFinalFormSubmit}
-            render={({ handleSubmit }) => (
+            render={({ handleSubmit, invalid, pristine }) => (
               <Form
                 onSubmit={handleSubmit}
                 loading={loading} //adding the loading indicator
@@ -260,7 +262,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   loading={submitState}
                   floated="right"
                   positive
-                  disabled={loading} //disable the button when loading
+                  disabled={loading || invalid || pristine} //disable the button when loading
                   type="submit"
                   content="Submit"
                 />

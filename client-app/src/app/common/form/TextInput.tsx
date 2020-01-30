@@ -22,7 +22,7 @@ export const TextInput: React.FC<IProps> = ({
       {/** "{...input}" will pass all the properties (such as input.value, input.onChange & etc) of the input as an array*/}
       <input {...input} placeholder={placeholder} />
       {/**Show the Label only if the input has been touched and there is an error */}
-      {touched && error && <Label basic color="red"></Label>}
+  {touched && error && <Label basic color="red">{error}</Label>}
     </Form.Field>
   );
 };

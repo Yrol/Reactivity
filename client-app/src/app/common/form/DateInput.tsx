@@ -26,10 +26,12 @@ export const DateInput: React.FC<IProps> = ({
         time={time}
         value={input.value! || null} //"input.value" when we're editing an activity - date already exists. Null is for a new activity where there's is no date 
         onChange={input.onChange} // the value we're getting back from React Final from when the value is changed
+        onBlur={input.onBlur} // notify the component has been touched
+        onKeyDown={(e) => e.preventDefault()}//prevent user typing inside the field
         {...rest}
       />
       {/**Show the Label only if the input has been touched and there is an error */}
-      {touched && error && <Label basic color="red"></Label>}
+      {touched && error && <Label basic color="red">{error}</Label>}
     </Form.Field>
   );
 };
