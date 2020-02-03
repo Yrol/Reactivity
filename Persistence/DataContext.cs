@@ -1,9 +1,14 @@
 using Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public class DataContext : DbContext
+    //public class DataContext : DbContext
+
+    //We're using IdentityDbContext instead of DbContext since we need to use this class with .NET Core Identity 
+    //Passing the AppUser Class defined in Domain project
+    public class DataContext : IdentityDbContext<AppUser>
     {
         public DataContext(DbContextOptions options) : base(options)
         {    
@@ -20,6 +25,10 @@ namespace Persistence
         //overriding "OnModelCreating" method of the DbContext
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //we use OnModelCreating since we're using IdentityDbContext and AppUser (class defined in Domain project)
+            //OnModelCreating gives you access to a ModelBuilder instance that you can use to configure/customize the model.
+            base.OnModelCreating(builder);
+
             builder.Entity<Value>()
                 .HasData(
                     new Value {Id = 1, Name = "Value 101"},
