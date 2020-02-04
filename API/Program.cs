@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,13 +29,14 @@ namespace API
                 var services = scope.ServiceProvider;
                 try{
                    var context = services.GetRequiredService<DataContext>(); 
-
+                   var userManager =  services.GetRequiredService<UserManager<AppUser>>();
                    //The "Migrate" command will create the DB and tables IF not exists (only the pending ones) in runtime
                    ////This will also seed data defined in "OnModelCreating" method of the DataContext class
                    context.Database.Migrate();
 
                    //Another way of seeding data using the custom class "Seed"
-                   Seed.SeedData(context);
+                   //using "Wait" since "SeedData" is an async Task and this call needs to be wait until it finishes the execution
+                   Seed.SeedData(context, userManager).Wait();
                 }
                 catch(Exception ex){
 
