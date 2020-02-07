@@ -12,8 +12,8 @@ namespace API.Controllers
         //route for login will be [<hostname>/api/User/login]
         [HttpPost("login")]
 
-        //Returning the AppUser
-        public async Task<ActionResult<AppUser>> Login(Login.Query query)
+        //Returning the User
+        public async Task<ActionResult<User>> Login(Login.Query query)
         {
             return await Mediator.Send(query);
         }
