@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Middleware;
 using Application.Activities;
+using Application.Interfaces;
 using Domain;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -68,6 +70,10 @@ namespace API
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();//will be used to sign-in the user using username and password
             services.AddAuthentication();
+
+            //adding the IJwtGenerator (interface) and the concrete implementation of it JwtGenerator through services
+            //By doing this, the constrcutors of our classes have access to these and their methods
+            services.AddScoped<IJwtGenerator, JwtGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
