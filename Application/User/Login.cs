@@ -29,7 +29,6 @@ namespace Application.User
             }
         }
 
-
         //returning AppUser
         public class Handler : IRequestHandler<Query, AppUser>
         {
