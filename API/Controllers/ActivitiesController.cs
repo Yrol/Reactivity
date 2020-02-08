@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Activities;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -33,6 +34,7 @@ namespace API.Controllers
 
         //get a single activity by ID
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Activity>> Get(Guid id){
             return await Mediator.Send(new SingleActivity.Query{Id = id});
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using API.Middleware;
 using Application.Activities;
@@ -9,6 +10,7 @@ using Domain;
 using FluentValidation.AspNetCore;
 using Infrastructure.Security;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -19,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Persistence;
 
 namespace API
@@ -69,7 +72,20 @@ namespace API
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();//will be used to sign-in the user using username and password
-            services.AddAuthentication();
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt => {
+                    //Define what parameters need to be validated when a token is received
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateAudience = false,
+                        ValidateIssuer = false
+                    };
+                });
 
             //adding the IJwtGenerator (interface) and the concrete implementation of it JwtGenerator through services
             //By doing this, the constrcutors of our classes have access to these and their methods
@@ -86,14 +102,16 @@ namespace API
                 //app.UseDeveloperExceptionPage();// turning off the inbuilt exception
             }
 
-            //Enabling Cross Origin added above in ConfigureServices as a Middleware
-            app.UseCors("CorsPolicy");
-
             //disable/enable HTTPS. eg: https://localhost:5000/
             //app.UseHttpsRedirection();
 
-            app.UseRouting();
+            //The following order is important
 
+            app.UseRouting();
+            //Enabling Cross Origin added above in ConfigureServices as a Middleware
+            app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
