@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Activities.Errors;
 using Application.Interfaces;
+using Application.Validators;
 using Domain;
 using FluentValidation;
 using MediatR;
@@ -34,8 +35,16 @@ namespace Application.User
             {
                 RuleFor(x => x.DisplayName).NotEmpty();
                 RuleFor(x => x.Username).NotEmpty();
-                RuleFor(x => x.Email).EmailAddress();
-                RuleFor(x => x.Password).NotEmpty();
+                RuleFor(x => x.Email).EmailAddress().NotEmpty();
+
+                //using Fluent validation chaining
+                // RuleFor(x => x.Password).NotEmpty().MinimumLength(6).
+                //     WithMessage("Password must be at least 6 characters").Matches("[A-Z]").
+                //     WithMessage("Password must contain 1 uppercase letter");
+
+                //Using the custom extension of IRuleBuilder written for validating password
+                //The custom implementation is found in "Reactivity\Application\Validators\ValidatorExtensions.cs"
+                RuleFor(x => x.Password).Password();
             }
         }
 
