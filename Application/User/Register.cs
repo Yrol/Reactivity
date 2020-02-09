@@ -54,6 +54,8 @@ namespace Application.User
             private readonly ILogger _logger;
             private readonly UserManager<AppUser> _userManager;
             private readonly IJwtGenerator _jwtGenerator;
+
+            //Injecting DataContext, ILogger, UserManager, IJwtGenerator
             public Handler(DataContext context, ILogger<Register> logger, UserManager<AppUser> userManager, IJwtGenerator jwtGenerator)
             {
                 _jwtGenerator = jwtGenerator;

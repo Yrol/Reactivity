@@ -99,6 +99,9 @@ namespace API
             //adding the IJwtGenerator (interface) and the concrete implementation of it JwtGenerator through services
             //By doing this, the constrcutors of our classes have access to these and their methods
             services.AddScoped<IJwtGenerator, JwtGenerator>();
+
+            //adding the IUserAccessor (interface) and the concrete implementation of it UserAccessor through services
+            services.AddScoped<IUserAccessor, UserAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
