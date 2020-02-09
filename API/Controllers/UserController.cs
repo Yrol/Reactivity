@@ -1,12 +1,15 @@
 using System.Threading.Tasks;
 using Application.User;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     //This is controller for handling users
     //Base path for this API will be [<hostname>/api/User]
+    // [AllowAnonymous] - will exempt from authenticating - hence can be access without a token.
+    [AllowAnonymous]
     public class UserController : BaseController
     {
         //route for login will be [<hostname>/api/User/login]

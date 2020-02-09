@@ -11,11 +11,13 @@ using FluentValidation.AspNetCore;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -61,8 +63,14 @@ namespace API
             //Specifying the MediatR for injection. We only need to reference one place where the MediatR has been used and it can be used in other places
             services.AddMediatR(typeof(ActivitiesList.Handler).Assembly);
             services.AddMvc(); // Dependency Injection for MVC services
-            services.AddControllers()
-                //Binding the Fluent validator to the Controllers and specify the controller which is going to use it (in this case 'CreateActivity')
+
+            services.AddControllers(opt => {
+
+                //Adding the Authorization policy to all the controller, and for the ones we don't need, we can add the exception "[AllowAnonymous]" - can be added to individual controllers as well as to the methods inside them
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy)); 
+            })
+                //Binding the Fluent validator to the Controllers and specify which controller is going to use it (in this case 'CreateActivity')
                 .AddFluentValidation(cfg => {
                     cfg.RegisterValidatorsFromAssemblyContaining<CreateActivity>();
                 });

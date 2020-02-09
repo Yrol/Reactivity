@@ -26,7 +26,9 @@ namespace API.Controllers
         //An async task that'll return a List of Activities from the mediator implemented in Activities
         //We're also passing a cancellation token which'll allow the users to cancel the requests from the browser
         // The "Mediator" is coming from the BaseController
+        // [AllowAnonymous] - will exempt from authenticating - hence can be access without a token.
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Activity>>> GetAll(CancellationToken ct)
         {
             return await Mediator.Send(new ActivitiesList.Query(), ct);
@@ -34,7 +36,7 @@ namespace API.Controllers
 
         //get a single activity by ID
         [HttpGet("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<Activity>> Get(Guid id){
             return await Mediator.Send(new SingleActivity.Query{Id = id});
         }
