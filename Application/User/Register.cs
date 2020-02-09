@@ -90,7 +90,7 @@ namespace Application.User
                     };
                 }
 
-                throw new Exception("Problem saving changes");
+                throw new Exception("Problem creating user");
 
             }
         }
