@@ -201,4 +201,5 @@ class ActivityStore {
   // }
 }
 
+//createContext will save an instance of the ActivityStore within the React context
 export default createContext(new ActivityStore());

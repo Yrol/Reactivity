@@ -3,6 +3,7 @@ import { url } from 'inspector';
 import { IActivity } from '../../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
+import { IUser, IUserFormValues } from '../../models/user';
 
 //base URL
 axios.defaults.baseURL = 'http://localhost:5000/api';
@@ -59,7 +60,7 @@ const requests = {
 }
 
 
-//object that contains all the requests specific to this app
+//object that contains all the requests specific to Activities of the app
 const Activities = {
     list: (): Promise<IActivity[]> => requests.get('/activities'), // get all activities with the return type of IActivity in a Promise
     details: (id: string) => requests.get(`/activities/${id}`), //accepts a string argument
@@ -68,9 +69,17 @@ const Activities = {
     delete: (id: string) => requests.del(`/activities/${id}`)  //accepts a string argument
 }
 
+//object that contains all the requests specific to Users of the app
+const User = {
+    current: (): Promise<IUser> => requests.get('/user'),
+    login: (user: IUserFormValues): Promise<IUser> => requests.post(`/user/login`, user),
+    register: (user: IUserFormValues): Promise<IUser> => requests.post(`/user/register`, user),
+}
+
 //give access to the Activities object
 export default {
-    Activities
+    Activities,
+    User
 }
 
 
