@@ -4,12 +4,21 @@ import agent from "../api/agent";
 import { createContext, SyntheticEvent } from "react";
 import { history } from '../..';
 import { toast } from "react-toastify";
+import { RootStore } from "./rootStore";
 
 
 //enforcing the "strict mode" to make sure the state changes are happening only within the context of actions (@actions)
 configure({enforceActions: 'always'})
 
-class ActivityStore {
+export default class ActivityStore {
+
+  rootStore: RootStore | undefined;
+
+  //constructor that accepts RootStore
+  constructor (rootStore: RootStore) {
+    this.rootStore = rootStore;
+  }
+
   @observable activityRegistry = new Map();//This activity register will create an observable map using the activities. 
   //@observable activities: IActivity[] = [];
   @observable selectedActivity: IActivity | null = null
@@ -202,4 +211,4 @@ class ActivityStore {
 }
 
 //createContext will save an instance of the ActivityStore within the React context
-export default createContext(new ActivityStore());
+//export default createContext(new ActivityStore());

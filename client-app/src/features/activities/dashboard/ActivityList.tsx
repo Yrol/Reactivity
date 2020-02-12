@@ -2,9 +2,10 @@ import React, { Fragment, SyntheticEvent, useContext } from "react";
 import { Item, Button, Label, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import { observer } from "mobx-react-lite";
-import ActivityStore from "../../../app/stores/activityStore";
+//import ActivityStore from "../../../app/stores/activityStore";
 import { Link } from "react-router-dom";
 import ActivityListItem from "./ActivityListItem";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 interface IProps {
   //activities: IActivity[];
@@ -28,14 +29,16 @@ const ActivityList: React.FC<IProps> = (
   }
 ) => {
   //Defining the MobX store (ActivityStore) and destructuring the required functions and variables from it
-  const activityStore = useContext(ActivityStore);
-  const {
-    activitiesByDate,
-    setSelectActivity,
-    submitState,
-    deleteActivity,
-    deleteActivityId
-  } = activityStore;
+  //const activityStore = useContext(ActivityStore);
+  const rootStore = useContext(RootStoreContext);
+  const { activitiesByDate } = rootStore.activityStore!
+  // const {
+  //   activitiesByDate,
+  //   setSelectActivity,
+  //   submitState,
+  //   deleteActivity,
+  //   deleteActivityId
+  // } = activityStore;
   return (
     <Fragment>
       {activitiesByDate.map(([group, activities]) => (

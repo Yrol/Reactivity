@@ -9,6 +9,7 @@ import ActivityDetailedHeader from "./ActivityDetailedHeader";
 import { ActivityDetailedInfo } from "./ActivityDetailedInfo";
 import { ActivityDetailedChat } from "./ActivityDetailedChat";
 import { ActivityDetailedSidebar } from "./ActivityDetailedSidebar";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 interface IProps {
   //activity: IActivity;
@@ -29,14 +30,17 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match, //match will consist of parameters sent with the URL such as ID and etc
   history // history object
 }) => {
-  const activityStore = useContext(ActivityStore);
-  const {
-    selectedActivity,
-    openEditForm,
-    cancelSelectedActivity,
-    loadActivity,
-    loadingInitial
-  } = activityStore;
+  //const activityStore = useContext(ActivityStore);
+  // const {
+  //   selectedActivity,
+  //   openEditForm,
+  //   cancelSelectedActivity,
+  //   loadActivity,
+  //   loadingInitial
+  // } = activityStore;
+
+  const rootStore = useContext(RootStoreContext);
+  const {loadingInitial, loadActivity, selectedActivity} = rootStore.activityStore!
 
   //implementation of using catch exception when loading the activity (catching the exception thrown from "activityStore")
   // useEffect(() => {

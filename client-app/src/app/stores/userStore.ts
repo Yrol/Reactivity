@@ -1,8 +1,15 @@
 import { observable, computed, action } from "mobx";
 import { IUser, IUserFormValues } from "../../models/user";
 import agent from "../api/agent";
+import { RootStore } from "./rootStore";
 
 export default class UserStore {
+
+    rootStore:RootStore | undefined;
+
+    constructor(rootStore: RootStore){
+        this.rootStore = rootStore;
+    }
 
     //can be either an IUser or null
     @observable user: IUser | null = null;

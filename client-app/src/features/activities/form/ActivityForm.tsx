@@ -23,6 +23,7 @@ import { category } from "../../../app/common/options/categoryOptions";
 import { DateInput } from "../../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../../app/common/Util/utils";
 import { combineValidators, isRequired, composeValidators, hasLengthGreaterThan } from 'revalidate' // frontend validation
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 //setting frontend validation rules using combineValidators. Then the const "validate" should be passed to the form
 const validate = combineValidators({
@@ -63,7 +64,18 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   history
 }) => {
   //Defining the MobX store (ActivityStore) and destructuring the required functions and variables from it
-  const activityStore = useContext(ActivityStore);
+  //const activityStore = useContext(ActivityStore);
+  // const {
+  //   selectedActivity: initialFormState,
+  //   createActivity,
+  //   editActivity,
+  //   submitState,
+  //   //cancelFormOpen,
+  //   loadActivity,
+  //   clearActivity
+  // } = activityStore;
+
+  const rootStore = useContext(RootStoreContext);
   const {
     selectedActivity: initialFormState,
     createActivity,
@@ -72,7 +84,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     //cancelFormOpen,
     loadActivity,
     clearActivity
-  } = activityStore;
+  } = rootStore.activityStore!;
 
   //if the activity aka - initialFormState is empty, create an empty IActivity defined in "activity.ts" an return
   // const initializeForm = () => {

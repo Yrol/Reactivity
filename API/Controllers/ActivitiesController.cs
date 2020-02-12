@@ -45,18 +45,21 @@ namespace API.Controllers
         //Create a new Activity
         //Since we're using the [ApiController] above, its smart enough to figure out the objects that the create command needs. Otherwise we've to use "[FromBody]CreateActivity.Command"
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Unit>> Create(CreateActivity.Command command){
             return await Mediator.Send(command);
         }
 
         //Editing an activity
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Unit>> Edit(Guid id, EditActivity.Command command){
             command.Id = id;
             return await Mediator.Send(command);
         }
 
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Unit>> Delete(Guid id){
             return await Mediator.Send(new DeleteActivity.Command{Id = id});
         }

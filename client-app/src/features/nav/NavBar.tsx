@@ -3,6 +3,7 @@ import { Menu, Segment, Container, Icon, Button } from "semantic-ui-react";
 import ActivityStore from "../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 import { Link, NavLink } from "react-router-dom";
+import { RootStoreContext } from "../../app/stores/rootStore";
 
 interface IProps {
   //handleOpenCreateForm: () => void;
@@ -12,7 +13,10 @@ const NavBar: React.FC<IProps> = ({
   //handleOpenCreateForm
 }) => {
   //Defining the MobX store (ActivityStore)
-  const activityStore = useContext(ActivityStore)
+  //const activityStore = useContext(ActivityStore)
+
+  const rootStore = useContext(RootStoreContext);
+  const {openCreateForm} = rootStore.activityStore!
   return (
     <Menu fixed="top" inverted>
       <Container>
@@ -24,7 +28,7 @@ const NavBar: React.FC<IProps> = ({
         <Menu.Item name="Activities" as={NavLink} to='/activities' />
         <Menu.Item>
             {/* <Button onClick={() => handleOpenCreateForm()} positive content="Create Activity"/> */}
-            <Button onClick={activityStore.openCreateForm} positive content="Create Activity" as={NavLink} to='/createactivity'/>
+            <Button onClick={openCreateForm} positive content="Create Activity" as={NavLink} to='/createactivity'/>
         </Menu.Item>
       </Container>
     </Menu>

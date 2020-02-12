@@ -4,9 +4,10 @@ import { IActivity } from "../../../models/activity";
 import ActivityList from "./ActivityList";
 import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../form/ActivityForm";
-import ActivityStore from "../../../app/stores/activityStore";
+//import ActivityStore from "../../../app/stores/activityStore";
 import {observer} from 'mobx-react-lite';
 import { LoadingComponent } from "../../../app/layouts/LoadingComponent";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 interface IProps {
   //activities: IActivity[];
@@ -51,14 +52,16 @@ const ActivitiesDashboard: React.FC<IProps> = ({
   //deleteActivityID
 }) => {
   //Using the MobX state in activity.ts
-  const activityStore = useContext(ActivityStore)
+  //const activityStore = useContext(ActivityStore)
   //const {editMode, selectedActivity} = activityStore
+  const rootStore = useContext(RootStoreContext);
+  const {loadActivities, loadingInitial} = rootStore.activityStore!
 
   useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]); // the array contains the dependencies that needs to run the functions defined in useEffect
+    loadActivities();
+  }, [loadActivities]); // the array contains the dependencies that needs to run the functions defined in useEffect
 
-  if (activityStore.loadingInitial)
+  if (loadingInitial)
     return (
       <LoadingComponent
         content="Loading activities. Please wait"

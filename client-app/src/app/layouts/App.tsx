@@ -22,7 +22,7 @@ import {ToastContainer} from 'react-toastify';
 
 /************ Implementation of using Hooks ****************/
 const App: React.FC<RouteComponentProps> = ({ location }) => {
-  const activityStore = useContext(ActivityStore);
+  //const activityStore = useContext(ActivityStore);
 
   //This is a State Hook
   //Assigning activities and setActivities for state updates when the page loads. Return an array
