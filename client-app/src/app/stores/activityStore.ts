@@ -8,7 +8,7 @@ import { RootStore } from "./rootStore";
 
 
 //enforcing the "strict mode" to make sure the state changes are happening only within the context of actions (@actions)
-configure({enforceActions: 'always'})
+//configure({enforceActions: 'always'})
 
 export default class ActivityStore {
 
@@ -29,6 +29,7 @@ export default class ActivityStore {
 
   //get the activities sort by date - using the @computed decorator
   //This is referenced by the ActivityList, hence any changes to the activities (change date & etc) will be reflected (changing the list item positions & etc)
+  //If the activities list changes (i.e a new activity has been added & etc), the @computed will get notified and rearrange the activities list in compliance with the new activity 
   @computed get activitiesByDate() {
     //converting observable map (activityRegistry) to an arry using "Array.from" since it is not an array
     return this.groupActivityByDate(Array.from(this.activityRegistry.values()));
