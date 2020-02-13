@@ -19,6 +19,7 @@ import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetails from "../../features/activities/details/ActivityDetails";
 import NotFound from "./NotFound";
 import {ToastContainer} from 'react-toastify';
+import { LoginForm } from "../../features/user/LoginForm";
 
 /************ Implementation of using Hooks ****************/
 const App: React.FC<RouteComponentProps> = ({ location }) => {
@@ -166,6 +167,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                 path={["/createActivity", "/manage/:id"]}
                 component={ActivityForm}
               />
+              <Route path='/login' component={LoginForm}/>
               {/*The default 404 page. When the above routes failed, the application will automatically fallback to this route*/}
               <Route component={NotFound}/>
             </Switch>
