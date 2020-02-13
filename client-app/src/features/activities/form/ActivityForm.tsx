@@ -274,7 +274,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   loading={submitState}
                   floated="right"
                   positive
-                  disabled={loading || invalid || pristine} //disable the button when loading
+                  disabled={loading || invalid || pristine} //disable the button when loading, validation has not passed or nothing has changed in edit mode (pristine)
                   type="submit"
                   content="Submit"
                 />

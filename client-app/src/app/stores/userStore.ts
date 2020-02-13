@@ -26,7 +26,7 @@ export default class UserStore {
             })
             console.log(user);
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 }

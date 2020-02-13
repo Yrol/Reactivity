@@ -38,7 +38,8 @@ axios.interceptors.response.use(undefined, error => {
         toast.error('Server error');
     }
 
-    throw error;
+    //error response will throw a proper error response
+    throw error.response;
 
 });
 
