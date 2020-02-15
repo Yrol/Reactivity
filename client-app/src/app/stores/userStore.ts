@@ -34,6 +34,18 @@ export default class UserStore {
         }
     }
 
+    //get the user from "User.current" method defined in "agent.ts" method
+    @action getUser = async () => {
+        try {
+            const user = await agent.User.current();
+            runInAction(() => {
+                this.user = user;
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     //handling the logout
     @action logout = () => {
         this.rootStore?.commonStore?.setToken(null); //set token to null

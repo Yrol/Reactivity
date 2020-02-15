@@ -20,10 +20,27 @@ import ActivityDetails from "../../features/activities/details/ActivityDetails";
 import NotFound from "./NotFound";
 import {ToastContainer} from 'react-toastify';
 import { LoginForm } from "../../features/user/LoginForm";
+import { RootStoreContext } from "../stores/rootStore";
 
 /************ Implementation of using Hooks ****************/
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   //const activityStore = useContext(ActivityStore);
+
+  const rootStore = useContext(RootStoreContext);
+  const {setAppLoaded, token, appLoaded} = rootStore.commonStore!;
+  const {getUser} = rootStore.userStore!;
+
+  //this will run at every refresh
+  useEffect(() =>{
+    if (token) {
+      getUser().finally(() => setAppLoaded());
+    }else {
+      setAppLoaded();
+    }
+  }, [getUser, setAppLoaded, token]) // Dependencies which'll prevent running this running over and over when a component re-renders
+
+  //check if a JWT token exist in local storage, if so get user from API
+
 
   //This is a State Hook
   //Assigning activities and setActivities for state updates when the page loads. Return an array
@@ -141,6 +158,11 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
   //Version 3: Receiving activity using MobX store
 
   //******** Implementation using Routers *******/
+
+  //show the loading component if the app is still loading
+  //the "appLoaded" is defined in "commonStore" and set to true after "getUser" method finishes
+  if(!appLoaded) return <LoadingComponent content="Loading app" />
+
   return (
     <Fragment>
       <ToastContainer position='bottom-right' />{/**react-toastify library for showing toast notifcations */}
