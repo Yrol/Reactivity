@@ -8,7 +8,21 @@ import { IUser, IUserFormValues } from '../../models/user';
 //base URL
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
-//This will receive all the server responses
+//Utilizing the token send with every request using "axios request interceptors"
+axios.interceptors.request.use((config) => {
+
+    //Grab the token from localStorage pass it along with the request header as Bearer
+    const token = window.localStorage.getItem('jwt');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+},error => {
+    //"Promise.reject" returns a Promise object that is rejected with a given reason - Promise.reject(reason)
+    return Promise.reject(error)
+} )
+
+//This will receive all the server responses using "axios response interceptors"
 //The exceptions thrown here will be caught by the "activityStore" which calls this class
 axios.interceptors.response.use(undefined, error => {
 

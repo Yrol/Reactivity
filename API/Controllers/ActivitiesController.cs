@@ -28,7 +28,7 @@ namespace API.Controllers
         // The "Mediator" is coming from the BaseController
         // [AllowAnonymous] - will exempt from authenticating - hence can be access without a token.
         [HttpGet]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult<List<Activity>>> GetAll(CancellationToken ct)
         {
             return await Mediator.Send(new ActivitiesList.Query(), ct);
