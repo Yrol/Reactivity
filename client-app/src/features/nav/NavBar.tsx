@@ -17,7 +17,7 @@ const NavBar: React.FC<IProps> = ({
 
   const rootStore = useContext(RootStoreContext);
   const {openCreateForm} = rootStore.activityStore!
-  const {isLoggedIn, user} = rootStore.userStore!
+  const {isLoggedIn, user, logout} = rootStore.userStore!
   return (
     <Menu fixed="top" inverted>
       <Container>
@@ -39,7 +39,7 @@ const NavBar: React.FC<IProps> = ({
             <Dropdown pointing='top left' text={user.displayName} >
               <Dropdown.Menu>
                 <Dropdown.Item as={Link} to={`/profile/username`} text="My profile" icon='user'/>
-                <Dropdown.Item text='Logout' icon='power'/>
+                <Dropdown.Item onClick={logout} text='Logout' icon='power'/>
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Item>

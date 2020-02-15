@@ -26,9 +26,18 @@ export default class UserStore {
                 this.user = user;
             })
             console.log(user);
+            //save the token to the commonStore once retrieved successfully from the server
+            this.rootStore?.commonStore?.setToken(user.token);
             history.push('/activities')
         } catch (error) {
             throw error;
         }
+    }
+
+    //handling the logout
+    @action logout = () => {
+        this.rootStore?.commonStore?.setToken(null); //set token to null
+        this.user = null; // set user to null
+        history.push('/'); // send user back to homepage
     }
 }
