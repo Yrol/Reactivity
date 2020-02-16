@@ -7,6 +7,7 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import { IUserFormValues } from "../../models/user";
 import { FORM_ERROR } from "final-form";
 import { combineValidators, isRequired } from "revalidate";
+import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 
 //using "combineValidators" to validate required fields
 const validate = combineValidators({
@@ -37,7 +38,7 @@ export const LoginForm = () => {
         pristine, 
         dirtySinceLastSubmit //return true when the value of the field is not equal to the value last submitted 
       }) => (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} error>
           <Header as='h2' content='Login to Reactivities' color='teal' textAlign='center' />
           <Field name="email" component={TextInput} placeholder="Email" />
           <Field
@@ -56,7 +57,8 @@ export const LoginForm = () => {
           />
           <pre>
             {submitError && !dirtySinceLastSubmit && (
-              <Label color="red" basic content={submitError.statusText} />
+              // <Label color="red" basic content={submitError.statusText} />
+              <ErrorMessage error={submitError} text="Invalid email or password" />
             )}
           </pre>
 

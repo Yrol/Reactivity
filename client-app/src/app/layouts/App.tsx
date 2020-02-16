@@ -32,7 +32,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
   const {setAppLoaded, token, appLoaded} = rootStore.commonStore!;
   const {getUser} = rootStore.userStore!;
 
-  //this will run at every refresh
+  //this will run at every refresh (when we refresh the browser manually)
   useEffect(() =>{
     if (token) {
       getUser().finally(() => setAppLoaded());
