@@ -34,6 +34,19 @@ export default class UserStore {
             this.rootStore?.modalStore?.closeModal();
             history.push('/activities')
         } catch (error) {
+            //this error will be caught by the login form
+            throw error;
+        }
+    }
+
+    @action register = async (values: IUserFormValues) => {
+        try {
+            const user = await agent.User.register(values)
+            this.rootStore?.commonStore?.setToken(user.token);
+            this.rootStore?.modalStore?.closeModal();
+            history.push('/activities')
+        } catch  (error) {
+            //this error will be caught by the register form
             throw error;
         }
     }

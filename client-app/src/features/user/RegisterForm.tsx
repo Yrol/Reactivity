@@ -11,26 +11,25 @@ import { ErrorMessage } from "../../app/common/form/ErrorMessage";
 
 //using "combineValidators" to validate required fields
 const validate = combineValidators({
+  username: isRequired("username"),
+  displayName: isRequired("display name"),
   email: isRequired("email"),
   password: isRequired("password")
 });
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const rootStore = useContext(RootStoreContext);
-  const { login } = rootStore.userStore!; //destructuring the login value from "userStore"
+  const { register } = rootStore.userStore!; //destructuring the login value from "userStore"
   return (
     <FinalForm
       //passing the current form values of type IUserFormValues on submission to the login func in userStore
       onSubmit={(values: IUserFormValues) =>
-        login(values).catch(error => ({
+        register(values).catch(error => ({
           //setting the errors thrown by the "userStore" to the form if there's any error
           [FORM_ERROR]: error
         }))
       }
-
-      //enable validation using combine validators
       validate={validate}
-
       //"submitting" is the submitting status and "form" contains the information about the form (both available in FinalForm)
       render={({
         handleSubmit,
@@ -38,12 +37,27 @@ export const LoginForm = () => {
         form,
         submitError,
         invalid,
-        pristine, 
-        dirtySinceLastSubmit //return true when the value of the field is not equal to the value last submitted 
+        pristine,
+        dirtySinceLastSubmit //return true when the value of the field is not equal to the value last submitted
       }) => (
         <Form onSubmit={handleSubmit} error>
-          <Header as='h2' content='Login to Reactivities' color='teal' textAlign='center' />
+          <Header
+            as="h2"
+            content="Sign up to Reactivities"
+            color="teal"
+            textAlign="center"
+          />
+
+          <Field name="username" component={TextInput} placeholder="Username" />
+
+          <Field
+            name="displayName"
+            component={TextInput}
+            placeholder="Display Name"
+          />
+
           <Field name="email" component={TextInput} placeholder="Email" />
+
           <Field
             name="password"
             component={TextInput}
@@ -55,13 +69,16 @@ export const LoginForm = () => {
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
             loading={submitting}
             positive
-            content="Login"
+            content="Register"
             fluid
           />
           <pre>
             {submitError && !dirtySinceLastSubmit && (
               // <Label color="red" basic content={submitError.statusText} />
-              <ErrorMessage error={submitError} text="Invalid email or password" />
+              <ErrorMessage
+                error={submitError}
+                text={JSON.stringify(submitError.data.errors)}
+              />
             )}
           </pre>
 
