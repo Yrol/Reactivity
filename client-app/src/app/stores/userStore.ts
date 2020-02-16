@@ -3,6 +3,7 @@ import { IUser, IUserFormValues } from "../../models/user";
 import agent from "../api/agent";
 import { RootStore } from "./rootStore";
 import { history } from '../..';
+import ModalStore from "./modalStore";
 
 export default class UserStore {
 
@@ -28,6 +29,9 @@ export default class UserStore {
             console.log(user);
             //save the token to the commonStore once retrieved successfully from the server
             this.rootStore?.commonStore?.setToken(user.token);
+
+            //hiding the modal (also set it's content to null)
+            this.rootStore?.modalStore?.closeModal();
             history.push('/activities')
         } catch (error) {
             throw error;

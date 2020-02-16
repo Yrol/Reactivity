@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { values } from "mobx";
-import { Form, Button, Label } from "semantic-ui-react";
+import { Form, Button, Label, Header } from "semantic-ui-react";
 import { TextInput } from "../../app/common/form/TextInput";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { IUserFormValues } from "../../models/user";
@@ -38,6 +38,7 @@ export const LoginForm = () => {
         dirtySinceLastSubmit //return true when the value of the field is not equal to the value last submitted 
       }) => (
         <Form onSubmit={handleSubmit}>
+          <Header as='h2' content='Login to Reactivities' color='teal' textAlign='center' />
           <Field name="email" component={TextInput} placeholder="Email" />
           <Field
             name="password"
@@ -51,6 +52,7 @@ export const LoginForm = () => {
             loading={submitting}
             positive
             content="Login"
+            fluid
           />
           <pre>
             {submitError && !dirtySinceLastSubmit && (

@@ -2,10 +2,12 @@ import React, { useContext, Fragment } from "react";
 import { Container, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { RootStoreContext } from "../../app/stores/rootStore";
+import { LoginForm } from "../user/LoginForm";
 
 export const HomePage = () => {
   const rootStore = useContext(RootStoreContext);
   const { isLoggedIn, user } = rootStore.userStore!;
+  const {openModal} = rootStore.modalStore!
 
   return (
     <Container style={{ marginTop: "7em" }}>
@@ -19,9 +21,12 @@ export const HomePage = () => {
         </Fragment>
       ) : (
         <Fragment>
-          <Button as={Link} to="/login" size="huge">
+          {/* <Button as={Link} to="/login" size="huge">
             Login
-          </Button>
+          </Button> */}
+
+          {/** passing the <LoginForm/> to the modal which'll then render out the form inside the modal*/}
+          <Button onClick={() => openModal(<LoginForm/>)} size="huge">Login</Button>
         </Fragment>
       )}
     </Container>
