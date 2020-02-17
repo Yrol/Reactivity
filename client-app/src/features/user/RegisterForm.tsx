@@ -77,7 +77,8 @@ export const RegisterForm = () => {
               // <Label color="red" basic content={submitError.statusText} />
               <ErrorMessage
                 error={submitError}
-                text={JSON.stringify(submitError.data.errors)}
+                text={""}
+                //text={JSON.stringify(submitError.data.errors)}
               />
             )}
           </pre>

@@ -9,7 +9,7 @@ const ScrollToTop: React.FC<RouteComponentProps> = ({children, match, history, l
         if (history.action === 'PUSH'){
             window.scrollTo(0, 0)
         }
-    }, [pathname])
+    }, [pathname, history])
 
     return children
 };

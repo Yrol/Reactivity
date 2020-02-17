@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 import ActivityListItem from "./ActivityListItem";
 import { RootStoreContext } from "../../../app/stores/rootStore";
+import {format} from 'date-fns'
 
 interface IProps {
   //activities: IActivity[];
@@ -44,7 +45,8 @@ const ActivityList: React.FC<IProps> = (
       {activitiesByDate.map(([group, activities]) => (
         <Fragment key={group}>
           <Label size="large" color="blue">
-            {group}
+            {/** formatting the date */}
+            {format(group, 'eeee do  MMMM')}
           </Label>
             <Item.Group divided>
               {activities.map(activity => (
