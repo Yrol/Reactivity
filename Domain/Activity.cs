@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Domain
 {
@@ -11,5 +12,9 @@ namespace Domain
         public string Category {get; set;}
         public DateTime Date {get; set;}
         public string City {get; set;}
+
+        
+        //the following collection will define the relationship between Activity and UserActivity
+        public ICollection<UserActivity> UserActivities { get; set; }
     }
 }
