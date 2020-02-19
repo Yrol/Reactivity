@@ -21,6 +21,7 @@ namespace Persistence
         public DbSet<Value> Values {get; set;}
         public DbSet<Activity> Activities {get; set;}
 
+        //in this case UserActivities is our table name
         public DbSet<UserActivity> UserActivities { get; set; }
 
         //seeding data into the DB
@@ -51,7 +52,7 @@ namespace Persistence
             builder.Entity<UserActivity>()
                 .HasOne(a => a.Activity)
                 .WithMany(u => u.UserActivities)
-                .HasForeignKey(a => a.AppUserId);
+                .HasForeignKey(a => a.ActivityId);
 
             //one activity can have many appUsers and also an appUser can have many activities
 
