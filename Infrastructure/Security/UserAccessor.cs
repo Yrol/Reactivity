@@ -15,6 +15,7 @@ namespace Infrastructure.Security
             _httpContextAccessor = httpContextAccessor;
         }
 
+        //getting the currently logged in user by matching through the token
         public string GetCurrentUsername()
         {
             //Accessing the User object inside the HttpContext and if the User object exist, get the matching user via the Claims identifier

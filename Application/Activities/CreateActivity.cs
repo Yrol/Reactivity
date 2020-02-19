@@ -2,9 +2,11 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
@@ -39,9 +41,13 @@ namespace Application.Activities
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserAccessor _userAccessor;
+
+            //in here we're injecting IUserAccessor to access user information
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 _context = context;
+                _userAccessor = userAccessor;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -59,7 +65,22 @@ namespace Application.Activities
                 //we're NOT using AddAsync since it's ideal when only doing special value generation through sql db
                 _context.Activities.Add(activity);
 
-                //SaveChangesAsync returs a value boolean greater than 0 is successfully added to the DB
+                //This will give us the user object of the currently logged in user
+                var user  = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+
+                //creating the attendee object with the user in it
+                var attendee = new UserActivity
+                {
+                    AppUser = user,
+                    Activity = activity,
+                    IsHost = true,
+                    DateJoined = DateTime.Now
+                };
+
+                //adding the attendee object to the user activities
+                _context.UserActivities.Add(attendee);
+
+                //SaveChangesAsync returns a value boolean greater than 0 is successfully added to the DB
                 var success = await _context.SaveChangesAsync() > 0;
 
                 //returning the success as the type Unit
