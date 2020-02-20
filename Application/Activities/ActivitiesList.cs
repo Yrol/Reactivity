@@ -28,7 +28,17 @@ namespace Application.Activities
             public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation($"ActivitiesList Executed");
-                var activities = await _context.Activities.ToListAsync(cancellationToken);
+
+                //returning activities without any relative data
+                //var activities = await _context.Activities.ToListAsync(cancellationToken);
+
+                
+                //Loading related data - following will not only get activities but also AppUser of each activity
+                var activities = await _context.Activities
+                    .Include(x => x.UserActivities)
+                    .ThenInclude(x => x.AppUser)
+                    .ToListAsync();
+
                 return activities;
             }
         }
