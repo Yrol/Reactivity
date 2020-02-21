@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using API.Middleware;
 using Application.Activities;
 using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using FluentValidation.AspNetCore;
 using Infrastructure.Security;
@@ -60,8 +61,12 @@ namespace API
                 });
             });
 
-            //Specifying the MediatR for injection. We only need to reference one place where the MediatR has been used and it can be used in other places
+            //Specifying the MediatR for injection. We only need to reference one place where the MediatR can be used within the project - this is the Assembly (in this case it is ActivitiesList handler)
             services.AddMediatR(typeof(ActivitiesList.Handler).Assembly);
+
+            //Specifying the AutoMapper for injection. We only need to reference one place where the MediatR can be used within the project - this is the Assembly (in this case it is ActivitiesList handler)
+            services.AddAutoMapper(typeof(ActivitiesList.Handler).Assembly);
+
             services.AddMvc(); // Dependency Injection for MVC services
 
             services.AddControllers(opt => {

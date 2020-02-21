@@ -12,19 +12,24 @@ namespace Application.Activities
 {
     public class SingleActivity
     {
-        public class Query : IRequest<Activity>
+        public class Query : IRequest<ActivityDto>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Activity>
+        //We've used the following "public class Handler" with the Activity object before introducing the ActivityDto
+        //public class Handler : IRequestHandler<Query, Activity>
+        public class Handler : IRequestHandler<Query, ActivityDto>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
             {
                 _context = context;
             }
-            public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
+
+            //We've used the following "async Task "with the Activity object before introducing the ActivityDto
+            //public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActivityDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 //throw a 500 error intentionally for testing
                 //throw new Exception("Throwing a 500 server error intentionally");
@@ -43,7 +48,8 @@ namespace Application.Activities
                     throw new RestExceptions(HttpStatusCode.NotFound, new {activity = "Not found"});
                 }
 
-                return activity;
+                //return activity;
+                
             }
         }
     }
