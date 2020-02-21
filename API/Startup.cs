@@ -78,7 +78,10 @@ namespace API
                 //Binding the Fluent validator to the Controllers and specify which controller is going to use it (in this case 'CreateActivity')
                 .AddFluentValidation(cfg => {
                     cfg.RegisterValidatorsFromAssemblyContaining<CreateActivity>();
-                });
+                })
+
+                //This is to rectify the error in HTTP response - "A possible object cycle was detected which is not supported. This can either be due to a cycle or if the object depth is larger than the maximum allowed depth of 32"
+                .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             //Configuring ASP .NET Core Identity
             var builder = services.AddIdentityCore<AppUser>();// Adding the AddIdentityCore and letting know about the custom user entity AppUser

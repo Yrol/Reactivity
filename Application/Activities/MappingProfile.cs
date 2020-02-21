@@ -4,6 +4,7 @@ using Domain;
 namespace Application.Activities
 {
     //This class will be used define the relationship between object. Hence, the objects can be mapped with each other automatically
+    //this class inherits the Profile of AutoMapper library
     public class MappingProfile : Profile
     {
         public MappingProfile()
@@ -13,7 +14,10 @@ namespace Application.Activities
             CreateMap<Activity, ActivityDto>();
 
             //additional mapper for attendees
-            CreateMap<UserActivity, AttendeeDto>();
+            CreateMap<UserActivity, AttendeeDto>()
+                //Define where we're mapping from destination is AttendeeDto and  the source is UserActivity.AppUser (since the mapping values is not directly inside the UserActivity but inside the "UserActivity.AppUser")
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.AppUser.UserName))
+                .ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName));
             
         }
     }

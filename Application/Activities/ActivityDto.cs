@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 namespace Application.Activities
 {
     //This is the DTO for returning activities
+    //This will be mapped with Activity.cs using the AutoMapper
     public class ActivityDto
     {
 
@@ -16,8 +17,10 @@ namespace Application.Activities
         public string City {get; set;}
 
         //Returning the attendees of this activity
-
+        //"JsonPropertyName" will change the return "UserActivities" object attached to each Activity as "attendees"
         [JsonPropertyName("attendees")]
-        public ICollection<AttendeeDto> UserActivity { get; set; }
+
+        //since we've defined mapping in "MappingProfile.cs", the collection name should be identical to what's in Activity.cs which is "UserActivities"  
+        public ICollection<AttendeeDto> UserActivities { get; set; }
     }
 }
