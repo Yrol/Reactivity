@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Activities.Errors;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +23,13 @@ namespace Application.Activities
         public class Handler : IRequestHandler<Query, ActivityDto>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IMapper _mapper;
+
+            //injection DataContext and AutoMapper
+            public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
             //We've used the following "async Task "with the Activity object before introducing the ActivityDto
@@ -48,8 +53,11 @@ namespace Application.Activities
                     throw new RestExceptions(HttpStatusCode.NotFound, new {activity = "Not found"});
                 }
 
-                //return activity;
-                
+                //return activity; // returning just the activity - when using without AutoMapper
+
+                //doing the mapping based on Activity and ActivityDto
+                var activityToReturn = _mapper.Map<Activity, ActivityDto>(activity);
+                return activityToReturn;
             }
         }
     }

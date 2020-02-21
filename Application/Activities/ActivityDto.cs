@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Application.Activities
 {
@@ -15,6 +16,8 @@ namespace Application.Activities
         public string City {get; set;}
 
         //Returning the attendees of this activity
-        public ICollection<AttendeesDto> Attendees { get; set; }
+
+        [JsonPropertyName("attendees")]
+        public ICollection<AttendeeDto> UserActivity { get; set; }
     }
 }

@@ -38,7 +38,8 @@ namespace API.Controllers
         [HttpGet("{id}")]
         //[Authorize] - Authorize will enforce the endpoint to be authenticated
         [AllowAnonymous]
-        public async Task<ActionResult<Activity>> Get(Guid id){
+        //public async Task<ActionResult<Activity>> Get(Guid id){
+        public async Task<ActionResult<ActivityDto>> Get(Guid id){
             return await Mediator.Send(new SingleActivity.Query{Id = id});
         }
 
