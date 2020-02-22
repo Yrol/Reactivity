@@ -15,6 +15,9 @@ namespace Domain
 
         
         //the following collection will define the relationship between Activity and UserActivity
-        public ICollection<UserActivity> UserActivities { get; set; }
+        //public ICollection<UserActivity> UserActivities { get; set; }// without "virtual" for Eager loading
+
+        public virtual ICollection<UserActivity> UserActivities { get; set; }// using "virtual" for Lazy loading
+
     }
 }

@@ -4,13 +4,13 @@
     <UserSecretsId>56d24f73-a25a-4bdd-99b5-c6481622ba3b</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj"/>
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj"/>
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
   </ItemGroup>
 </Project>

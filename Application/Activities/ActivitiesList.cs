@@ -34,9 +34,13 @@ namespace Application.Activities
 
                 
                 //Loading related data - following will not only get activities but also AppUser of each activity
+                // var activities = await _context.Activities
+                //     .Include(x => x.UserActivities)
+                //     .ThenInclude(x => x.AppUser)
+                //     .ToListAsync();
+
+                //Lazy loading
                 var activities = await _context.Activities
-                    .Include(x => x.UserActivities)
-                    .ThenInclude(x => x.AppUser)
                     .ToListAsync();
 
                 return activities;

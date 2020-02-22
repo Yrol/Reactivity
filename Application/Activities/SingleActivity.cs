@@ -43,10 +43,16 @@ namespace Application.Activities
                 //var activity = await _context.Activities.FindAsync(request.Id);
 
                 //Return an activity with relative data which includes AppUser of the activity
+                //The following way of loading data is known as "Eager loading" that uses statements such as "Include" and "ThenInclude"
+                // var activity = await _context.Activities
+                //     .Include(x => x.UserActivities)
+                //     .ThenInclude(x => x.AppUser)
+                //     .SingleOrDefaultAsync(x => x.Id == request.Id);
+
+                //Lazy loading
                 var activity = await _context.Activities
-                    .Include(x => x.UserActivities)
-                    .ThenInclude(x => x.AppUser)
-                    .SingleOrDefaultAsync(x => x.Id == request.Id);
+                    .FindAsync(request.Id);
+
 
                 if(activity == null){
                     //throwing exceptions such as not found activity [404] using the custom middleware
