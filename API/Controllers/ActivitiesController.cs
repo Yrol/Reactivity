@@ -65,12 +65,23 @@ namespace API.Controllers
             return await Mediator.Send(new DeleteActivity.Command{Id = id});
         }
 
-        //Endpoint to add a user as an attendee to an activity
-        //Endpoint is <id>/attend
+        //Endpoint to add a user as an attendee to an activity (POST)
+        //Endpoint: <id>/attend
+        //API call example: [POST]http://localhost:5000/api/activities/68cd87e1-1ebf-4364-a56d-95aa7cc9cc3b/attend
         [HttpPost("{id}/attend")]
         public async Task<ActionResult<Unit>> Attend(Guid id)
         {
             return await Mediator.Send(new Attend.Command{Id = id});
         }
+
+        //Endpoint to remove an attendee from an activity (DELETE)
+        //Endpoint: <id>/attend
+        //API call example: [DELETE]http://localhost:5000/api/activities/68cd87e1-1ebf-4364-a56d-95aa7cc9cc3b/attend
+        [HttpDelete("{id}/attend")]
+        public async Task<ActionResult<Unit>> Unattend(Guid id)
+        {
+            return await Mediator.Send(new Unattend.Command{Id = id});
+        }
+
     }
 }

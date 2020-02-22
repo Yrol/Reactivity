@@ -4,16 +4,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Activities.Errors;
 using Application.Interfaces;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
 {
-    //This Class will be used to add a user to the attendee list of an activity
-    public class Attend
+    //This Class will be used to remove a user/attendee from an activity
+    public class Unattend
     {
+        //This Class will be used to add a user to the attendee list of an activity
         public class Command : IRequest
         {
             public Guid Id { get; set; }
@@ -47,20 +47,16 @@ namespace Application.Activities
                 var attendance = await _context.UserActivities
                     .SingleOrDefaultAsync(x => x.ActivityId == activity.Id && x.AppUserId == user.Id);
 
-                //throw and exception if user is already an attendee of the activity
-                if (attendance != null)
-                    throw new RestExceptions(HttpStatusCode.BadRequest, new {Attendance = "Already attending this activity"});
+                //if the user is not found to be an attendee, then exit out of this handler
+                if (attendance == null)
+                    return Unit.Value;
 
-                attendance = new UserActivity
-                {
-                    Activity = activity,
-                    AppUser = user,
-                    IsHost = false,
-                    DateJoined = DateTime.Now
-                };
+                //check if the use is the host of the activity. In that case it'll prevent removing and throw and exception
+                if (attendance.IsHost)
+                    throw new RestExceptions(HttpStatusCode.BadRequest, new {Attendance = "You cannot remove yourself as host"});
 
-                //add the attendee
-                _context.UserActivities.Add(attendance);
+                //remove the attendee
+                _context.UserActivities.Remove(attendance);
 
                 var success = await _context.SaveChangesAsync() > 0;
 
