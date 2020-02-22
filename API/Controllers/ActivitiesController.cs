@@ -64,5 +64,13 @@ namespace API.Controllers
         public async Task<ActionResult<Unit>> Delete(Guid id){
             return await Mediator.Send(new DeleteActivity.Command{Id = id});
         }
+
+        //Endpoint to add a user as an attendee to an activity
+        //Endpoint is <id>/attend
+        [HttpPost("{id}/attend")]
+        public async Task<ActionResult<Unit>> Attend(Guid id)
+        {
+            return await Mediator.Send(new Attend.Command{Id = id});
+        }
     }
 }
