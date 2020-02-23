@@ -52,15 +52,17 @@ namespace API.Controllers
         }
 
         //Editing an activity
+        //Passing the Authorize policy "IsActivityHost" which enables only the host of the activity to edit the activity
         [HttpPut("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "IsActivityHost")]
         public async Task<ActionResult<Unit>> Edit(Guid id, EditActivity.Command command){
             command.Id = id;
             return await Mediator.Send(command);
         }
 
+        //Passing the Authorize policy "IsActivityHost" which enables only the host of the activity to delete the activity
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "IsActivityHost")]
         public async Task<ActionResult<Unit>> Delete(Guid id){
             return await Mediator.Send(new DeleteActivity.Command{Id = id});
         }

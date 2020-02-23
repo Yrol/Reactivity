@@ -90,6 +90,16 @@ namespace API
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();//will be used to sign-in the user using username and password
 
+            //passing the authorization for deleting/editing an activity by the host of the activity
+            services.AddAuthorization(opt => {
+                opt.AddPolicy("IsActivityHost", policy => 
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+
             //"configuration["TokenKey"]" is the Key that has been generated using "dotnet user-secrets set "TokenKey" "super secret key" -p .\API\"
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokenkey"]));
 
