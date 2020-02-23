@@ -21,6 +21,7 @@ namespace Persistence
                 {
                     new AppUser
                     {
+                        Id = "a",
                         DisplayName = "Bob", // this field is defined in our implementation - AppUser
                         UserName = "bob", //  this field is coming from .Net Core IdentityUser
                         Email = "bob@test.com" //this field is coming from .Net Core IdentityUser
@@ -28,6 +29,7 @@ namespace Persistence
 
                     new AppUser
                     {
+                        Id = "b",
                         DisplayName = "Tom", // this field is defined in our implementation - AppUser
                         UserName = "tom", //  this field is coming from .Net Core IdentityUser
                         Email = "tom@test.com" //this field is coming from .Net Core IdentityUser
@@ -35,6 +37,7 @@ namespace Persistence
 
                     new AppUser
                     {
+                        Id = "c",
                         DisplayName = "jane", // this field is defined in our implementation - AppUser
                         UserName = "jane", //  this field is coming from .Net Core IdentityUser
                         Email = "jane@test.com" //this field is coming from .Net Core IdentityUser
@@ -60,6 +63,15 @@ namespace Persistence
                         Description = "Activity 2 months ago",
                         Category = "Drinks",
                         City = "Colombo",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                AppUserId = "a",
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(-2)
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -68,6 +80,23 @@ namespace Persistence
                         Description = "Activity 3 months ago",
                         Category = "Dinner",
                         City = "Kandy",
+
+                        //attendees of the activity
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                AppUserId = "b",
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(-1)
+                            },
+                            new UserActivity
+                            {
+                                AppUserId = "a",
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(-1)
+                            },
+                        }
                     },
                     new Activity
                     {
@@ -76,6 +105,23 @@ namespace Persistence
                         Description = "Activity 4 months ago",
                         Category = "Lunch",
                         City = "Galle",
+
+                        //attendees of the activity
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                AppUserId = "b",
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(1)
+                            },
+                            new UserActivity
+                            {
+                                AppUserId = "a",
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(1)
+                            },
+                        }
                     },
                     new Activity
                     {
@@ -84,6 +130,23 @@ namespace Persistence
                         Description = "Activity in 2 months time",
                         Category = "Evening catch up",
                         City = "Jaffna",
+
+                        //attendees of the activity
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                AppUserId = "c",
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(2)
+                            },
+                            new UserActivity
+                            {
+                                AppUserId = "a",
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(2)
+                            },
+                        }
                     }
                 };
 
