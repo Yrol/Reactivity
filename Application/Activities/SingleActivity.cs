@@ -13,6 +13,7 @@ namespace Application.Activities
 {
     public class SingleActivity
     {
+        //public class Query : IRequest<Activity> //used this before introduced DTO (ActivityDto) which returns just the object
         public class Query : IRequest<ActivityDto>
         {
             public Guid Id { get; set; }
@@ -26,13 +27,14 @@ namespace Application.Activities
             private readonly IMapper _mapper;
 
             //injection DataContext and AutoMapper
+             //Passing the IMapper for mapping data between DTO object (ActivityDto) and Activity object 
             public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
             }
 
-            //We've used the following "async Task "with the Activity object before introducing the ActivityDto
+            //We've used the following "async Task "with the return type Activity object before introducing the ActivityDto (DTO pattern)
             //public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
             public async Task<ActivityDto> Handle(Query request, CancellationToken cancellationToken)
             {
