@@ -29,7 +29,7 @@ namespace API.Controllers
         // [AllowAnonymous] - will exempt from authenticating - hence can be access without a token.
         [HttpGet]
         //[AllowAnonymous]
-        public async Task<ActionResult<List<Activity>>> GetAll(CancellationToken ct)
+        public async Task<ActionResult<List<ActivityDto>>> GetAll(CancellationToken ct)
         {
             return await Mediator.Send(new ActivitiesList.Query(), ct);
         }
