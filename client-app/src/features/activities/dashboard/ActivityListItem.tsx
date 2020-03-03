@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { Item, Button, Label, Segment, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { IActivity } from "../../../models/activity";
+import { IActivity, IAttendee } from "../../../models/activity";
 import ActivityList from "./ActivityList";
 import { observer } from "mobx-react-lite";
 import {format} from 'date-fns';// date-fns formatter to format the date values
+import { ActivityListItemAttendees } from "./ActivityListItemAttendees";
 
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
   return (
@@ -27,7 +28,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
         <Icon name="clock" /> {format(activity.date!, 'h:mm a')}
         <Icon name="marker" /> {activity.city}
       </Segment>
-      <Segment secondary>Attendees will go here</Segment>
+      <Segment secondary><ActivityListItemAttendees attendees={activity.attendees}/></Segment>
       <Segment clearing>
         <span>{activity.description}</span>
         {/** currentSelectedActivity is the handleSelectedActivity handler passed/originated in App.tsx */}

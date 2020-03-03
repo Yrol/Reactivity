@@ -7,6 +7,7 @@ export interface IActivity{
     category: string;
     date: Date;
     city: string;
+    attendees: IAttendee[];
 }
 
 //Partially Extend the IActivity interface defined above 
@@ -36,4 +37,12 @@ export class ActivityFormValues implements IActivityFormValues {
         //automatically mapping the other values of the Activity object from init (init is the Activity object returned from the activityStore fetch from DB)
         Object.assign(this, init)
     }
+}
+
+//interface for attendees
+export interface IAttendee {
+    username: string;
+    displayName: string;
+    image: string;
+    isHost: boolean;
 }
