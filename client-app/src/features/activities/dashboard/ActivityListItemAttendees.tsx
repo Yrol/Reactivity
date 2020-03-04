@@ -2,6 +2,7 @@ import React from "react";
 import { List, Image, Popup } from "semantic-ui-react";
 import { IAttendee } from "../../../models/activity";
 
+//passing attendee collection of the type of IAttendee (interface)
 interface IProps {
   attendees: IAttendee[];
 }
@@ -17,6 +18,7 @@ export const ActivityListItemAttendees: React.FC<IProps> = ({ attendees }) => {
             <Popup 
                 header={attendee.displayName}
                 trigger={
+                    //display the attendees image or else display the default image from project assets
                     <Image size="mini" circular src={attendee.image || "/assets/logo192.png"} />
                 }
             />
