@@ -5,6 +5,7 @@ import { createContext, SyntheticEvent } from "react";
 import { history } from '../..';
 import { toast } from "react-toastify";
 import { RootStore } from "./rootStore";
+import { setActivityProps } from "../common/Util/utils";
 
 
 //enforcing the "strict mode" to make sure the state changes are happening only within the context of actions (@actions)
@@ -56,13 +57,14 @@ export default class ActivityStore {
   //loading all the activities
   @action loadActivities = async () => {
     this.loadingInitial = true;
+    const user = this.rootStore?.userStore?.user; // getting the user
+
     try {
       // await will make sure it'll get the list of activities first and then execute the code below
       const activityList = await agent.Activities.list();
       runInAction(() => { //"runInAction" is the strict mode to make sure state changes happens within @action is covered after the "await" above
         activityList.forEach(activity => {
-          //loop through the API response.data
-          activity.date = new Date(activity.date);
+          setActivityProps(activity, user!)
           this.activityRegistry.set(activity.id, activity);// adding the activity to the observable map (activityRegister)
         });
         this.loadingInitial = false;
@@ -81,9 +83,12 @@ export default class ActivityStore {
   }
 
   //loading an individual activity (when navigate to the details view)
-  @action loadActivity = async (id: string) => {
+@action loadActivity = async (id: string) => {
+
     this.loadingInitial = true;
     let activity = this.getActivity(id);
+    const user = this.rootStore?.userStore?.user; // getting the user
+
     if (activity) { // if the activity is available on the loaded list
       runInAction(() => {
         this.selectedActivity = activity;
@@ -95,7 +100,7 @@ export default class ActivityStore {
         //this.loadingInitial = true;
         const activity = await agent.Activities.details(id);
         runInAction(() =>{
-          activity.date = new Date(activity.date);//assign the activity's Date to JS Date object
+          setActivityProps(activity, user!);
           this.selectedActivity = activity;
           this.loadingInitial = false;
 

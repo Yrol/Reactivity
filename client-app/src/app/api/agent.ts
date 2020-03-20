@@ -87,8 +87,8 @@ const Activities = {
 //object that contains all the requests specific to Users of the app
 const User = {
     current: (): Promise<IUser> => requests.get('/user'),
-    login: (user: IUserFormValues): Promise<IUser> => requests.post(`/user/login`, user),
-    register: (user: IUserFormValues): Promise<IUser> => requests.post(`/user/register`, user),
+    login: (user: IUserFormValues): Promise<IUser> => requests.post(`/user/login`, user), //passing[post] an IUserFormValues object to the login and returning an IUser object
+    register: (user: IUserFormValues): Promise<IUser> => requests.post(`/user/register`, user), //passing[post] an IUserFormValues object to the login and returning an IUser object
 }
 
 //give access to the Activities object

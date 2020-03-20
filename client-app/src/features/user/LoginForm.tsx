@@ -20,7 +20,7 @@ export const LoginForm = () => {
   const { login } = rootStore.userStore!; //destructuring the login value from "userStore"
   return (
     <FinalForm
-      //passing the current form values of type IUserFormValues on submission to the login func in userStore
+      //passing the current form values of type IUserFormValues (values in form fields will be mapped automatically to the entities in IUserFormValues by the field name) on submission to the login func in userStore
       onSubmit={(values: IUserFormValues) =>
         login(values).catch(error => ({
           //setting the errors thrown by the "userStore" to the form if there's any error

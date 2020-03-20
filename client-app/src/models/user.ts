@@ -10,4 +10,5 @@ export interface IUserFormValues {
     password: string;
     displayName: string;
     userName?: string;
+    testVal?: string;
 }

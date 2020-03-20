@@ -14,7 +14,7 @@ Specifiying the JWT user secret key
 dotnet user-secrets init -p API/
 ```
 
-The above command will add the user secret key to the API project in the API.csproj file as shown below
+The above command will add the user secret key to the API project in the API.csproj file as shown below (an example only)
 ```
 <UserSecretsId>56d24f73-a25a-4bdd-99b5-c6481622ba3b</UserSecretsId>
 ```

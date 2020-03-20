@@ -7,7 +7,9 @@ export interface IActivity{
     category: string;
     date: Date;
     city: string;
-    attendees: IAttendee[];
+    isGoing: boolean; // if the currently logged in user is going to the event
+    isHost: boolean; // if the currently logged in user is the host
+    attendees: IAttendee[]; // attendees collection of type IAttendee
 }
 
 //Partially Extend the IActivity interface defined above 

@@ -4,19 +4,44 @@ import { Link } from "react-router-dom";
 import { IActivity, IAttendee } from "../../../models/activity";
 import ActivityList from "./ActivityList";
 import { observer } from "mobx-react-lite";
-import {format} from 'date-fns';// date-fns formatter to format the date values
+import { format } from "date-fns"; // date-fns formatter to format the date values
 import { ActivityListItemAttendees } from "./ActivityListItemAttendees";
 
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
+  const host = activity.attendees.filter(x => x.isHost === true)[0]; // getting the host of the activity from the "IAttendee" object available inside the "IActivity" (which has the "isHost"). Getting the 0th element since "filter" returns an array
+  //console.log(JSON.stringify(host))
   return (
     <Segment.Group>
       <Segment>
         <Item.Group>
           <Item>
-            <Item.Image size="tiny" circular src="/assets/logo192.png" />
+            {/* using the host image if availale or else the defualt image*/}
+            <Item.Image size="tiny" circular src={host.image || "/assets/logo192.png"} />
             <Item.Content>
-              <Item.Header as="a">{activity.title}</Item.Header>
-              <Item.Description>Hosted by Bob</Item.Description>
+              <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
+              <Item.Description>{host.username}</Item.Description>
+              {/* if the activity is hosted by the logged in user*/}
+              {activity.isHost && (
+                <Item.Description>
+                  <Label
+                    basic
+                    color="orange"
+                    content="You're hosting this activity"
+                  />
+                </Item.Description>
+              )}
+
+              {/* if the logged in user is going to the activity */}
+              {activity.isGoing && !activity.isHost && (
+                <Item.Description>
+                  <Label
+                    basic
+                    color="green"
+                    content="You're going to this activity"
+                  />
+                </Item.Description>
+              )}
+
               <Item.Extra>
                 <Label basic content={activity.category} />
               </Item.Extra>
@@ -25,10 +50,12 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
         </Item.Group>
       </Segment>
       <Segment>
-        <Icon name="clock" /> {format(activity.date!, 'h:mm a')}
+        <Icon name="clock" /> {format(activity.date!, "h:mm a")}
         <Icon name="marker" /> {activity.city}
       </Segment>
-      <Segment secondary><ActivityListItemAttendees attendees={activity.attendees}/></Segment>
+      <Segment secondary>
+        <ActivityListItemAttendees attendees={activity.attendees} />
+      </Segment>
       <Segment clearing>
         <span>{activity.description}</span>
         {/** currentSelectedActivity is the handleSelectedActivity handler passed/originated in App.tsx */}
