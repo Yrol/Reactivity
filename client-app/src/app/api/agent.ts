@@ -81,7 +81,9 @@ const Activities = {
     details: (id: string) => requests.get(`/activities/${id}`), //accepts a string argument
     create: (activity: IActivity) => requests.post('/activities', activity), //accepts an IActivity as argument
     update: (activity: IActivity) => requests.put(`/activities/${activity.id}`, activity), //accepts an IActivity as argument
-    delete: (id: string) => requests.del(`/activities/${id}`)  //accepts a string argument
+    delete: (id: string) => requests.del(`/activities/${id}`),  //accepts a string argument
+    attend: (id: string) => requests.post(`/activities/${id}/attend`, {}), //accepts string argument. Need to pass an empty body "{}" since this is a post request
+    unattend: (id: string) => requests.del(`/activities/${id}/attend`)
 }
 
 //object that contains all the requests specific to Users of the app
