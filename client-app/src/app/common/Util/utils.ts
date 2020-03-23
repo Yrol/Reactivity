@@ -1,6 +1,6 @@
 //class that contains additional functions
 
-import { IActivity } from "../../../models/activity";
+import { IActivity, IAttendee } from "../../../models/activity";
 import { IUser } from "../../../models/user";
 
 //function for extracting time
@@ -17,7 +17,7 @@ export const combineDateAndTime = (date: Date, time: Date) => {
   return new Date(dateString + " " + timeString);
 };
 
-//generic functionality used by loadActivities() and loadactivity() in activityStore.ts
+//generic functionality being used by loadActivities() and loadactivity() in activityStore.ts
 export const setActivityProps = (activity: IActivity, user: IUser) => {
   activity.date = new Date(activity.date); //assign the activity's Date to JS Date object
 
@@ -36,3 +36,13 @@ export const setActivityProps = (activity: IActivity, user: IUser) => {
 
   return activity;
 };
+
+//create the user object from the currently logged in user when need to attend to a given activity
+export const createAttendee = (user: IUser): IAttendee => {
+  return {
+    displayName: user.displayName,
+    isHost: false,
+    username: user.username,
+    image: user.image! // adding "!" since the image could potentially be null
+  }
+}

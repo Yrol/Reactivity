@@ -5,7 +5,7 @@ import { createContext, SyntheticEvent } from "react";
 import { history } from '../..';
 import { toast } from "react-toastify";
 import { RootStore } from "./rootStore";
-import { setActivityProps } from "../common/Util/utils";
+import { setActivityProps, createAttendee } from "../common/Util/utils";
 
 
 //enforcing the "strict mode" to make sure the state changes are happening only within the context of actions (@actions)
@@ -203,7 +203,7 @@ export default class ActivityStore {
   };
 
   @action openEditForm = (id: string) => {
-    this.selectedActivity = this.activityRegistry.get(id)
+    this.selectedActivity = this.activityRegistry.get(id);
     //this.editMode = true;
   }
 
@@ -211,8 +211,25 @@ export default class ActivityStore {
     this.selectedActivity = null;
   }
 
+  //action for attending an activity
   @action attendActivity = () => {
-    
+    const attendee = createAttendee(this.rootStore?.userStore?.user!);
+
+    //if an activity is selected then pass the attendee object
+    if (this.selectedActivity) {
+      this.selectedActivity.attendees.push(attendee);
+      this.selectedActivity.isGoing = true;
+      this.activityRegistry.set(this.selectedActivity.id, this.selectedActivity); //updating the activityRegistry with the new changes to the selected activity (adding the current user as an attendee)
+    }
+  }
+
+  @action cancelAttendance = () => {
+    if (this.selectedActivity) {
+      //remove the current user from attendees by selecting all the users from attendees colletion of the currently selected activity 
+      this.selectedActivity.attendees = this.selectedActivity.attendees.filter(a => a.username !== this.rootStore?.userStore?.user?.username);
+      this.selectedActivity.isGoing = false;
+      this.activityRegistry.set(this.selectedActivity.id, this.selectedActivity);
+    }
   }
 
   // @action cancelFormOpen = () => {
