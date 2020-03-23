@@ -211,6 +211,10 @@ export default class ActivityStore {
     this.selectedActivity = null;
   }
 
+  @action attendActivity = () => {
+    
+  }
+
   // @action cancelFormOpen = () => {
   //   this.editMode = false
   // }
