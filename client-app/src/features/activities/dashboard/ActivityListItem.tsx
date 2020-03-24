@@ -6,10 +6,13 @@ import ActivityList from "./ActivityList";
 import { observer } from "mobx-react-lite";
 import { format } from "date-fns"; // date-fns formatter to format the date values
 import { ActivityListItemAttendees } from "./ActivityListItemAttendees";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
   const host = activity.attendees.filter(x => x.isHost === true)[0]; // getting the host of the activity from the "IAttendee" object available inside the "IActivity" (which has the "isHost"). Getting the 0th element since "filter" returns an array
   //console.log(JSON.stringify(host))
+  const rootStore = useContext(RootStoreContext);
+  const { deleteActivity, loading } = rootStore.activityStore!
   return (
     <Segment.Group>
       <Segment>
@@ -69,17 +72,19 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
           //   //setEditMode(false); // IProps (without MobX)
 
           // }}
+          disabled={loading} // disable the view when deleting the activity
           floated="right"
           content="View"
           color="blue"
         ></Button>
         <Button
           name={activity.id}
-          //event "e" will be used for passing button properties in this case the "name" to the deleteActivity method. Event e is a type of SyentheticEvent
+          //event "e" will be used for passing button properties in this case the "name" to the deleteActivity method. This will make sure each button will be identified uniquely. Event e is a type of SyentheticEvent
           onClick={e => {
-            // deleteActivity(e, activity.id);
+            deleteActivity(e, activity.id);
           }}
           //loading={deleteActivityId === activity.id &&submitState}
+          loading={loading}
           floated="right"
           content="Delete"
           color="red"

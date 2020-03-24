@@ -63,8 +63,8 @@ export default class ActivityStore {
     try {
       // await will make sure it'll get the list of activities first and then execute the code below
       const activityList = await agent.Activities.list();
+      //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
       runInAction(() => {
-        //"runInAction" is the strict mode to make sure state changes happens within @action is covered after the "await" above
         activityList.forEach(activity => {
           setActivityProps(activity, user!);
           this.activityRegistry.set(activity.id, activity); // adding the activity to the observable map (activityRegister)
@@ -91,6 +91,7 @@ export default class ActivityStore {
     const user = this.rootStore?.userStore?.user; // getting the user
 
     if (activity) {
+      //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
       // if the activity is available on the loaded list
       runInAction(() => {
         this.selectedActivity = activity;
@@ -102,6 +103,7 @@ export default class ActivityStore {
       try {
         //this.loadingInitial = true;
         const activity = await agent.Activities.details(id);
+        //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
         runInAction(() => {
           setActivityProps(activity, user!);
           this.selectedActivity = activity;
@@ -138,6 +140,16 @@ export default class ActivityStore {
     this.submitState = true;
     try {
       await agent.Activities.create(activity);
+
+      //adding the creator of the activity (the logged in user) as an attendee as well as the host of the activity
+      const attendee = createAttendee(this.rootStore?.userStore?.user!);
+      attendee.isHost = true;
+      let attendees = [];
+      attendees.push(attendee);
+      activity.attendees = attendees;
+      activity.isHost = true;
+
+      //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
       runInAction(() => {
         this.activityRegistry.set(activity.id, activity);
         this.editMode = false;
@@ -158,8 +170,8 @@ export default class ActivityStore {
     this.submitState = true;
     try {
       await agent.Activities.update(activity);
+      //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
       runInAction(() => {
-        //strict mode to make sure state changes happens within @action is covered after the "await" above
         this.activityRegistry.set(activity.id, activity);
         this.setSelectActivity(activity.id);
         this.submitState = false;
@@ -179,24 +191,27 @@ export default class ActivityStore {
     event: SyntheticEvent<HTMLButtonElement>,
     id: string
   ) => {
+    this.loading = true;
     this.submitState = true;
     this.setDeleteActivityID(event.currentTarget.name);
     try {
       await agent.Activities.delete(id);
+      //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
       runInAction(() => {
-        //strict mode to make sure state changes happens within @action is covered after the "await" above
         this.activityRegistry.delete(id);
         if (this.selectedActivity?.id === id) {
           this.cancelSelectedActivity();
           //this.cancelFormOpen();
         }
         this.submitState = false;
+        this.loading = false;
       });
     } catch (error) {
       runInAction(() => {
         this.submitState = false;
+        this.loading = false;
       });
-      console.log(error);
+      toast.error("An error occured while deleting the activity");
     }
   };
 
@@ -227,7 +242,7 @@ export default class ActivityStore {
 
     try {
       await agent.Activities.attend(this.selectedActivity?.id!);
-      runInAction(() => {//"runInAction" is the strict mode to make sure state changes happens within @action is covered after the "await" above
+      runInAction(() => {//"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
         //if an activity is selected then pass the attendee object
         if (this.selectedActivity) {
           this.selectedActivity.attendees.push(attendee);
@@ -251,7 +266,7 @@ export default class ActivityStore {
     this.loading = true;
     try {
       await agent.Activities.unattend(this.selectedActivity?.id!)
-      runInAction(() => { //"runInAction" is the strict mode to make sure state changes happens within @action is covered after the "await" above
+      runInAction(() => { //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
         if (this.selectedActivity) {
           //remove the current user from attendees by selecting all the users from attendees colletion of the currently selected activity
           this.selectedActivity.attendees = this.selectedActivity.attendees.filter(

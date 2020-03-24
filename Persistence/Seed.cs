@@ -12,6 +12,7 @@ namespace Persistence
         //defining as a static class
         //passing the context to save DB activities
         //passing the UserManager create users using .Net core Identity
+        //This class will execute within program.cs to seed the following test data structure to the app
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
 

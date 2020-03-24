@@ -8,6 +8,8 @@ namespace Persistence
 
     //We're using IdentityDbContext instead of DbContext since we need to use this class with .NET Core Identity 
     //Passing the AppUser Class defined in Domain project
+    //Refer to the Seed.cs class to find the DB relationships including Activities, Users and User Activities (attendees and hosts)
+    //The Seed.cs will run  when the program executes to seed sample data to the app
     public class DataContext : IdentityDbContext<AppUser>
     {
         public DataContext(DbContextOptions options) : base(options)
