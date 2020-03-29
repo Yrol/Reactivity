@@ -4,7 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace Application.Activities
 {
-    //This is the DTO for returning activities
+    //This is the Data Transfer Object (DTO) for returning activities
+    //DTO are simple classes with properties which can be used to return objects in a controlled manner via the http response
     //This will be mapped with Activity.cs using the AutoMapper
     public class ActivityDto
     {

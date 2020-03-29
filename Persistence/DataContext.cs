@@ -44,20 +44,19 @@ namespace Persistence
             //building the primary key between AppUser and Activities
             builder.Entity<UserActivity>(x => x.HasKey(ua => new { ua.AppUserId, ua.ActivityId }));
 
-            //[first half] Relationship - AppUser with many activities and shares one foreign key which is the AppUserId
+            //[first half] Relationship - AppUser with many UserActivities i.e. as attendee or host (defined using ICollection inside AppUser) and shares one foreign key which is the AppUserId
             builder.Entity<UserActivity>()
                 .HasOne(u => u.AppUser)
                 .WithMany(a => a.UserActivities)
                 .HasForeignKey(u => u.AppUserId);
 
-            //[second half] this is the opposite of the above, Relationship - an Activity can have many users
+            //[second half] of the Relationship - an Activity can have many UserActivities i.e. many attendees (defined using ICollection inside Activity) and shares one foreign key which is the ActvityId
             builder.Entity<UserActivity>()
                 .HasOne(a => a.Activity)
                 .WithMany(u => u.UserActivities)
                 .HasForeignKey(a => a.ActivityId);
 
             //one activity can have many appUsers and also an appUser can have many activities
-
         }
     }
 }

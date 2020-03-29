@@ -29,9 +29,13 @@ namespace API.Controllers
         // [AllowAnonymous] - will exempt from authenticating - hence can be access without a token.
         [HttpGet]
         //[AllowAnonymous]
-        public async Task<ActionResult<List<ActivityDto>>> GetAll(CancellationToken ct)
+
+        //ver1: "public async Task<ActionResult<List<ActivityDto>>> GetAll(CancellationToken ct)" - before the ActivitiesEnevelope introduced
+        //Passing the limit and the offset - limit is to limit the number of activities and the offset to skip the number of activities (or the starting position) from all the activities. Ex: http://localhost:5000/api/Activities?limit=2
+        //Ex: display 10 activities starting from the 2nd activity - http://localhost:5000/api/Activities?limit=10&offset= 2
+        public async Task<ActionResult<ActivitiesList.ActivitiesEnevelope>> GetAll(int? limit, int? offset, CancellationToken ct)
         {
-            return await Mediator.Send(new ActivitiesList.Query(), ct);
+            return await Mediator.Send(new ActivitiesList.Query(limit, offset), ct);
         }
 
         //get a single activity by ID
