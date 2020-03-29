@@ -12,6 +12,12 @@ export interface IActivity{
     attendees: IAttendee[]; // attendees collection of type IAttendee
 }
 
+//Activity envelope that contains the activities (collection) and the number of activities - this will be used for pagination
+export interface IActivitiesEnvelope {
+    activities: IActivity[];
+    activityCount: number;
+}
+
 //Partially Extend the IActivity interface defined above 
 //Partial will make the all the values optional inside the interface
 export interface IActivityFormValues extends Partial<IActivity> {

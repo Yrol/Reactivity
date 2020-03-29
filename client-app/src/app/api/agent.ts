@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { url } from 'inspector';
-import { IActivity } from '../../models/activity';
+import { IActivity, IActivitiesEnvelope } from '../../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../../models/user';
@@ -77,7 +77,8 @@ const requests = {
 
 //object that contains all the requests specific to Activities of the app
 const Activities = {
-    list: (): Promise<IActivity[]> => requests.get('/activities'), // get all activities with the return type of IActivity in a Promise
+    //Ver1: list: (): Promise<IActivity[]> => requests.get('/activities'), // get all activities with the return type of IActivity in a Promise.
+    list: (limit?: number, page? : number): Promise<IActivitiesEnvelope> => requests.get(`/activities?limit=${limit}&offset=${page ? page*limit! : 0}`), //  get all activities with the return type of IActivitiesEnvelope that sets the limt and the offset
     details: (id: string) => requests.get(`/activities/${id}`), //accepts a string argument
     create: (activity: IActivity) => requests.post('/activities', activity), //accepts an IActivity as argument
     update: (activity: IActivity) => requests.put(`/activities/${activity.id}`, activity), //accepts an IActivity as argument

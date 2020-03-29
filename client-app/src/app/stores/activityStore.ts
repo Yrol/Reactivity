@@ -10,6 +10,8 @@ import { setActivityProps, createAttendee } from "../common/Util/utils";
 //enforcing the "strict mode" to make sure the state changes are happening only within the context of actions (@actions)
 //configure({enforceActions: 'always'})
 
+const LIMIT = 2;
+
 export default class ActivityStore {
   rootStore: RootStore | undefined;
 
@@ -26,6 +28,18 @@ export default class ActivityStore {
   @observable submitState = false;
   @observable deleteActivityId: string | null = null;
   @observable loading = false;
+  @observable activityCount = 0;
+  @observable page = 0;
+
+  //computed method to get the total number of pages with the limiter is in place (using ceil to get the nearest number)
+  @computed get totalPages() {
+    return Math.ceil(this.activityCount / LIMIT);
+  }
+
+  //action which sets the page number
+  @action setPage = (page: number) => {
+    this.page = page
+  }
 
   //get the activities sort by date - using the @computed decorator
   //This is referenced by the ActivityList, hence any changes to the activities (change date & etc) will be reflected (changing the list item positions & etc)
@@ -62,13 +76,15 @@ export default class ActivityStore {
 
     try {
       // await will make sure it'll get the list of activities first and then execute the code below
-      const activityList = await agent.Activities.list();
+      const activitiesEnvelope = await agent.Activities.list(LIMIT, this.page);
+      const {activities, activityCount} = activitiesEnvelope;
       //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
       runInAction(() => {
-        activityList.forEach(activity => {
+        activities.forEach(activity => {
           setActivityProps(activity, user!);
           this.activityRegistry.set(activity.id, activity); // adding the activity to the observable map (activityRegister)
         });
+        this.activityCount = activityCount;
         this.loadingInitial = false;
       });
     } catch (error) {
