@@ -31,7 +31,7 @@ export default class ActivityStore {
   @observable activityCount = 0;
   @observable page = 0;
 
-  //computed method to get the total number of pages with the limiter is in place (using ceil to get the nearest number)
+  //computed method to get the total number of pages with the limiter is in place (using ceil to get the nearest number after dividing the activity count)
   @computed get totalPages() {
     return Math.ceil(this.activityCount / LIMIT);
   }
