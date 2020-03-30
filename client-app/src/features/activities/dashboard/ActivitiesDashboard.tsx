@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
-import { Grid, List, GridColumn, Button } from "semantic-ui-react";
+import { Grid, List, GridColumn, Button, Loader } from "semantic-ui-react";
 import { IActivity } from "../../../models/activity";
 import ActivityList from "./ActivityList";
 import ActivityDetails from "../details/ActivityDetails";
@@ -8,6 +8,7 @@ import ActivityForm from "../form/ActivityForm";
 import { observer } from "mobx-react-lite";
 import { LoadingComponent } from "../../../app/layouts/LoadingComponent";
 import { RootStoreContext } from "../../../app/stores/rootStore";
+import InfiniteScroll from 'react-infinite-scroller';
 
 interface IProps {
   //activities: IActivity[];
@@ -56,13 +57,14 @@ const ActivitiesDashboard: React.FC<IProps> = (
     page,
     totalPages
   } = rootStore.activityStore!;
-  const [loadingNext, setLoadingNext] = useState(false); //state for loading activities on "view more" / pagination
+  const [loadingNext, setLoadingNext] = useState(false); //state for loading activities on "view more" / pagination (binding this with the "View More" button loading state)
 
   //getting the next set of activites on "view more"
   const handleGetNext = () => {
     setLoadingNext(true);
     setPage(page + 1);
 
+    //setting the setLoadingNext to false when loadActivities in activityStore finishes (i.e. return promise )
     loadActivities().then(() => setLoadingNext(false));
   };
 
@@ -84,22 +86,35 @@ const ActivitiesDashboard: React.FC<IProps> = (
       <Grid.Column width={10}>
         {/** Passing the activities to the ActivityList as a Prop */}
         {/** Passing the currentSelectedActivity to the ActivityList as a Prop*/}
-        <ActivityList
-        //activities={activities}
-        //currentSelectedActivity={currentSelectedActivity}
-        //setEditMode={setEditMode}
-        //deleteActivity={deleteActivity}
-        //submitState={submitState}
-        //deleteActivityID={deleteActivityID}
-        />
-        <Button
+
+        {/** implementation of "react-infinite-scroll" */}
+        <InfiniteScroll
+        pageStart={0}
+        loadMore={handleGetNext}
+        hasMore={!loadingNext && page + 1 < totalPages}
+        initialLoad={false}
+        >
+          <ActivityList/>
+        </InfiniteScroll>
+        {/* <ActivityList/> */}
+        {/* <ActivityList
+        activities={activities}
+        currentSelectedActivity={currentSelectedActivity}
+        setEditMode={setEditMode}
+        deleteActivity={deleteActivity}
+        submitState={submitState}
+        deleteActivityID={deleteActivityID}
+        /> */}
+
+        {/** Button for view more activities */}
+        {/* <Button
           floated="left"
           content="View More"
           positive
           onClick={handleGetNext}
           disabled={totalPages === page + 1} // disable when all the pages have been loaded
           loading={loadingNext}
-        />
+        /> */}
         {/* <List>
           {activities.map(activity => (
             <List.Item key={activity.id}>{activity.title}</List.Item>
@@ -130,6 +145,9 @@ const ActivitiesDashboard: React.FC<IProps> = (
             submitState={submitState}
           />
         )} */}
+      </Grid.Column>
+      <Grid.Column width={10}>
+        <Loader active={loadingNext} />
       </Grid.Column>
     </Grid>
   );
