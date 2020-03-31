@@ -9,6 +9,7 @@ import { observer } from "mobx-react-lite";
 import { LoadingComponent } from "../../../app/layouts/LoadingComponent";
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import InfiniteScroll from 'react-infinite-scroller';
+import ActivityFilters from "./ActivityFilters";
 
 interface IProps {
   //activities: IActivity[];
@@ -145,6 +146,7 @@ const ActivitiesDashboard: React.FC<IProps> = (
             submitState={submitState}
           />
         )} */}
+        <ActivityFilters/>
       </Grid.Column>
       <Grid.Column width={10}>
         <Loader active={loadingNext} />
