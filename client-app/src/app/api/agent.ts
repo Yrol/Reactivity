@@ -78,7 +78,8 @@ const requests = {
 //object that contains all the requests specific to Activities of the app
 const Activities = {
     //Ver1: list: (): Promise<IActivity[]> => requests.get('/activities'), // get all activities with the return type of IActivity in a Promise.
-    list: (limit?: number, page? : number): Promise<IActivitiesEnvelope> => requests.get(`/activities?limit=${limit}&offset=${page ? page*limit! : 0}`), //  get all activities with the return type of IActivitiesEnvelope that sets the limt and the offset
+    //Ver2: list: (limit?: number, page? : number): Promise<IActivitiesEnvelope> => requests.get(`/activities?limit=${limit}&offset=${page ? page*limit! : 0}`), //  get all activities with the return type of IActivitiesEnvelope that sets the limt and the offset
+    list: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get('/activities', {params: params}).then(sleep(1000)).then(responseBody), //use sleep to cause a delay deliberately
     details: (id: string) => requests.get(`/activities/${id}`), //accepts a string argument
     create: (activity: IActivity) => requests.post('/activities', activity), //accepts an IActivity as argument
     update: (activity: IActivity) => requests.put(`/activities/${activity.id}`, activity), //accepts an IActivity as argument

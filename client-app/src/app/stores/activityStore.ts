@@ -1,4 +1,4 @@
-import { observable, action, computed, configure, runInAction } from "mobx";
+import { observable, action, computed, configure, runInAction, values, keys, reaction } from "mobx";
 import { IActivity } from "../../models/activity";
 import agent from "../api/agent";
 import { createContext, SyntheticEvent } from "react";
@@ -18,6 +18,17 @@ export default class ActivityStore {
   //constructor that accepts RootStore
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+    
+    //using a MobX reaction to act automatically if the predicate values have changed
+    //if the keys
+    reaction(
+      () => this.predicate.keys(),//if the predicate keys changed, do the following - set page to 0, clear the registry and reload the activities
+      () => {
+        this.page = 0;
+        this.activityRegistry.clear();
+        this.loadActivities();
+      }
+    )
   }
 
   @observable activityRegistry = new Map(); //This activity register will create an observable map using the activities.
@@ -30,6 +41,31 @@ export default class ActivityStore {
   @observable loading = false;
   @observable activityCount = 0;
   @observable page = 0;
+  @observable predicate = new Map(); // will store query string as key value pairs. For ex: limit set to a number. IsGoing set to true/false & etc
+
+  @action setPredicate = (predicate: string, value: string | Date) => {
+    this.predicate.clear();
+    if (predicate !== 'all') {
+      this.predicate.set(predicate, value)
+    }
+  }
+
+  //build/rebuild the query parameter for retriving activities. This will be passed down to the "loadActivities" action below
+  @computed get axiosParams() {
+    const params = new URLSearchParams(); //using the JavaScript URLSearchParams interface for building the query string
+
+    //the "limit" and "offset" query params will always be added
+    params.append('limit', String(LIMIT));//set the limit
+    params.append('offset', `${this.page ? this.page * LIMIT : 0}`) //set the offset
+    this.predicate.forEach((value, key) => {
+      if (key === 'startDate') {
+        params.append(key, value.toISOString())
+      } else {// this is for isHost and isGoing query params
+        params.append(key, value); 
+      }
+    })
+    return params;
+  }
 
   //computed method to get the total number of pages with the limiter is in place (using ceil to get the nearest number after dividing the activity count)
   @computed get totalPages() {
@@ -76,7 +112,7 @@ export default class ActivityStore {
 
     try {
       // await will make sure it'll get the list of activities first and then execute the code below
-      const activitiesEnvelope = await agent.Activities.list(LIMIT, this.page);
+      const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
       const {activities, activityCount} = activitiesEnvelope;
       //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
       runInAction(() => {
