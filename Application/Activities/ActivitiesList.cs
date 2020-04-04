@@ -110,7 +110,7 @@ namespace Application.Activities
                 //Lazy loading
                 //ver1: var activities = await _context.Activities.ToListAsync(cancellationToken); -  before queryable introduced which does not return activities along with a limit or an offset
 
-                //if the offset is not set it'll be defaulted to 0, then will set the number of items to be returned, if that's not set already will be set to 3 items
+                //if the offset (offset is the starting position of the list of activities) is not set it'll be defaulted to 0, then will set the number of items to be returned, if that's not set already will be set to 3 items
                 var activities =  await queryable
                     .Skip(request.Offset ?? 0)
                     .Take(request.Limit ?? 3).ToListAsync();

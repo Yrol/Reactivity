@@ -19,8 +19,7 @@ export default class ActivityStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     
-    //using a MobX reaction to act automatically if the predicate values have changed
-    //if the keys
+    //using a MobX reaction to trigger automatically if the predicate values have changed
     reaction(
       () => this.predicate.keys(),//if the predicate keys changed, do the following - set page to 0, clear the registry and reload the activities
       () => {
@@ -44,7 +43,7 @@ export default class ActivityStore {
   @observable predicate = new Map(); // will store query string as key value pairs. For ex: limit set to a number. IsGoing set to true/false & etc
 
   @action setPredicate = (predicate: string, value: string | Date) => {
-    this.predicate.clear();
+    this.predicate.clear();//clear the exisiting predicate
     if (predicate !== 'all') {
       this.predicate.set(predicate, value)
     }

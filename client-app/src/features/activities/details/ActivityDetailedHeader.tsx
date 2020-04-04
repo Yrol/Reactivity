@@ -22,6 +22,7 @@ const activityImageTextStyle = {
 const ActivityDetailedHeader: React.FC<{activity : IActivity}> = ({activity}) => {
   const rootStore = useContext(RootStoreContext);
   const { attendActivity, cancelAttendance, loading } = rootStore.activityStore!
+  const host = activity.attendees.filter(x => x.isHost === true)[0]; // getting the host of the activity from the "IAttendee" object available inside the "IActivity" (which has the "isHost"). Getting the 0th element since "filter" returns an array
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -37,9 +38,7 @@ const ActivityDetailedHeader: React.FC<{activity : IActivity}> = ({activity}) =>
                   style={{ color: "white" }}
                 />
                 <p>{format(activity.date, 'eeee do MMMM')}</p>
-                <p>
-                    Hosted by <strong>Bob</strong>
-                </p>
+                <p>Hosted by <strong>{host.displayName}</strong></p>
 
               </Item.Content>
             </Item>
