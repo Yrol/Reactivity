@@ -8,8 +8,9 @@ import ActivityForm from "../form/ActivityForm";
 import { observer } from "mobx-react-lite";
 import { LoadingComponent } from "../../../app/layouts/LoadingComponent";
 import { RootStoreContext } from "../../../app/stores/rootStore";
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from "react-infinite-scroller";
 import ActivityFilters from "./ActivityFilters";
+import ActivityListItemPlaceholder from "./ActivityListItemPlaceholder";
 
 interface IProps {
   //activities: IActivity[];
@@ -56,7 +57,7 @@ const ActivitiesDashboard: React.FC<IProps> = (
     loadingInitial,
     setPage,
     page,
-    totalPages
+    totalPages,
   } = rootStore.activityStore!;
   const [loadingNext, setLoadingNext] = useState(false); //state for loading activities on "view more" / pagination (binding this with the "View More" button loading state)
 
@@ -73,13 +74,15 @@ const ActivitiesDashboard: React.FC<IProps> = (
     loadActivities();
   }, [loadActivities]); // the array contains the dependencies that needs to run the functions defined in useEffect
 
-  if (loadingInitial && page === 0) //make sure only loads in the first time
-    return (
-      <LoadingComponent
-        content="Loading activities. Please wait"
-        inverted={true}
-      />
-    );
+  //Show loading component if the items are loading
+  // if (loadingInitial && page === 0)
+  //   //make sure only loads in the first time
+  //   return (
+  //     <LoadingComponent
+  //       content="Loading activities. Please wait"
+  //       inverted={true}
+  //     />
+  //   );
 
   return (
     <Grid>
@@ -88,15 +91,29 @@ const ActivitiesDashboard: React.FC<IProps> = (
         {/** Passing the activities to the ActivityList as a Prop */}
         {/** Passing the currentSelectedActivity to the ActivityList as a Prop*/}
 
+        {/** implementation of "react-infinite-scroll" with semantic-ui placeholder */}
+        {loadingInitial && page === 0 ? (
+          <ActivityListItemPlaceholder />
+        ) : (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={handleGetNext}
+            hasMore={!loadingNext && page + 1 < totalPages}
+            initialLoad={false}
+          >
+            <ActivityList />
+          </InfiniteScroll>
+        )}
+
         {/** implementation of "react-infinite-scroll" */}
-        <InfiniteScroll
+        {/* <InfiniteScroll
         pageStart={0}
         loadMore={handleGetNext}
         hasMore={!loadingNext && page + 1 < totalPages}
         initialLoad={false}
         >
           <ActivityList/>
-        </InfiniteScroll>
+        </InfiniteScroll> */}
         {/* <ActivityList/> */}
         {/* <ActivityList
         activities={activities}
@@ -146,7 +163,7 @@ const ActivitiesDashboard: React.FC<IProps> = (
             submitState={submitState}
           />
         )} */}
-        <ActivityFilters/>
+        <ActivityFilters />
       </Grid.Column>
       <Grid.Column width={10}>
         <Loader active={loadingNext} />
