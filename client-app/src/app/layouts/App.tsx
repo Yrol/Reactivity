@@ -22,6 +22,7 @@ import {ToastContainer} from 'react-toastify';
 import { LoginForm } from "../../features/user/LoginForm";
 import { RootStoreContext } from "../stores/rootStore";
 import ModalContainer from "../common/modals/ModalContainer";
+import PrivateRoute from "./PrivateRoute";
 
 
 /************ Implementation of using Hooks ****************/
@@ -181,13 +182,26 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
           <Container style={{ marginTop: "7em" }}>
             {/** the switch will ensure only one Route at a time get loaded. For instance preventing the "NotFound" route being loaded along with other routes since it does not have a path defined  */}
             <Switch>
-              <Route exact path="/activities" component={ActivitiesDashboard} />
-              <Route path="/activities/:id" component={ActivityDetails} />
+
+              {/** PrivateRoute will ensure only the logged in users  will have access to these routes */}
+              <PrivateRoute exact path="/activities" component={ActivitiesDashboard} />
+              <PrivateRoute path="/activities/:id" component={ActivityDetails} />
+
+              {/** Implementation before adding the PrivateRoute -  so protection here, and the routes will be exposed to non logged in users as well */}
+              {/* <Route exact path="/activities" component={ActivitiesDashboard} /> */}
+              {/* <Route path="/activities/:id" component={ActivityDetails} /> */}
 
               {/** Loading same component in two different routes when creating('/createActivity') or editing('/manage/:id') an activity. Passing the routes in an array  */}
-              {/** Since we're using the same component, we're also adding to key to use between edit and create activities to make decision on switching forms  */}
+              {/** Since we're using the same component, we're also adding a key to use between edit and create activities to make decision on switching forms  */}
               {/** The 'location.key' will be changed whenever navigate to "/createActivity" or "/manage/:id" - this allows the "ActivityForm" re-render since for both activities we're using the same form  */}
-              <Route
+
+              {/** Implementation before adding the PrivateRoute -  so protection here, and the routes will be exposed to non logged in users as well */}
+              {/* <Route
+                key={location.key}
+                path={["/createActivity", "/manage/:id"]}
+                component={ActivityForm}
+              /> */}
+              <PrivateRoute
                 key={location.key}
                 path={["/createActivity", "/manage/:id"]}
                 component={ActivityForm}

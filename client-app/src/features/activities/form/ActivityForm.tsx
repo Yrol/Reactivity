@@ -117,8 +117,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   //   city: ""
   // });
 
-  //
-  const [activity, setActivity] = useState(new ActivityFormValues());
+
+  const [activity, setActivity] = useState(new ActivityFormValues());  //setting the activity to an empty "ActivityFormValues" object intially. 
   const [loading, setLoading] = useState(false);
 
   //running the useEffect only in edit mode to fetch the activity data from the API
@@ -132,7 +132,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           // execute "setActivity(initialFormState)" only if an activity is available in the "initialFormState"
           //() => initialFormState && setActivity(initialFormState)
 
-          //passing the activity returning from activityStore to ActivityFormValues
+          //passing the activity returning from activityStore's loadActivity function to ActivityFormValues
           activity => setActivity(new ActivityFormValues(activity))
         )
         .finally(() => setLoading(false)); //whatever happens set the loading indicator to false
