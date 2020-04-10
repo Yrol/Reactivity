@@ -38,7 +38,8 @@ namespace Infrastructure.Security
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7), //expiry date (can be used for 7 days)
+                Expires = DateTime.Now.AddDays(7), //expiry date (can be used for 7 days). If the token is expired, the API will return a 401
+                //Expires = DateTime.Now.AddMinutes(1), //Token will be set to expire in one minute. If the token is expired, the API will return a 401
                 SigningCredentials = creds
             };
 

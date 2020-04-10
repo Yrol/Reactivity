@@ -58,7 +58,11 @@ namespace API
                 opt.AddPolicy("CorsPolicy", policy => 
                 {
                     //http://localhost:3000/ and http://localhost:3001 is the frontend React URL
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins(new string[]{"http://localhost:3000","http://localhost:3001"});
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithExposedHeaders("WWW-Authenticate")//this will expose the authentication header information in the 401 response which'll be used to capture at the frontend if an authentication related error occured. Ex:- ** headers:www-authenticate: "Bearer error="invalid_token", error_description="The token expired at '04/10/2020 12:37:47'"" **
+                        .WithOrigins(new string[]{"http://localhost:3000","http://localhost:3001"});
                 });
             });
 
@@ -111,7 +115,11 @@ namespace API
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = key,
                         ValidateAudience = false,
-                        ValidateIssuer = false
+                        ValidateIssuer = false,
+
+                        //validating the expiry of the token (If the token is expires, it'll return a 401)
+                        ValidateLifetime = true, //enable validation period defined in jwtGenerator.cs
+                        ClockSkew = TimeSpan.Zero // The above ValidateLifetime property allows extra 5 mins by default and ClockSkew will eliminate this extra 5 min
                     };
                 });
 

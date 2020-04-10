@@ -9,12 +9,13 @@ export const HomePage = () => {
   const rootStore = useContext(RootStoreContext);
   const { isLoggedIn, user } = rootStore.userStore!;
   const { openModal } = rootStore.modalStore!;
+  const token = window.localStorage.getItem('jwt');
 
   return (
     <Container style={{ marginTop: "7em" }}>
       <h1>Home page</h1>
       {/*Using the tenary operator (?) to either show activities or login links */}
-      {isLoggedIn && user ? (
+      {isLoggedIn && user && token ? (
         <Fragment>
           <Button as={Link} to="/activities" size="huge">
             Go to activities
