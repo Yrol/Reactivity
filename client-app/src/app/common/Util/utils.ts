@@ -6,15 +6,19 @@ import { IUser } from "../../../models/user";
 //function for extracting time
 export const combineDateAndTime = (date: Date, time: Date) => {
   //getting the time
-  const timeString = time.getHours() + ":" + time.getMinutes() + ":00";
+  //const timeString = time.getHours() + ":" + time.getMinutes() + ":00";
 
   //getting the date
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1; // adding '+1' since "getMonth()" starts from 0
-  const day = date.getDate();
-  const dateString = `${year}-${month}-${day}`;
+  // const year = date.getFullYear();
+  // const month = date.getMonth() + 1; // adding '+1' since "getMonth()" starts from 0
+  // const day = date.getDate();
+  // const dateString = `${year}-${month}-${day}`;
+  //return new Date(dateString + " " + timeString);
 
-  return new Date(dateString + " " + timeString);
+  //Getting the date and the time with Safari bug Fix!
+  const dateString = date.toISOString().split('T')[0];
+  const timeString = time.toISOString().split('T')[1];
+  return new Date(dateString + "T" + timeString);
 };
 
 //generic functionality being used by loadActivities() and loadactivity() in activityStore.ts

@@ -47,7 +47,7 @@ axios.interceptors.response.use(undefined, error => {
         history.push('/notfound');
     }
 
-    //handling the token expiry
+    //handling the token expiry (the API has been programmed to exposed to headers -"www-authenticate" ) error
     if (status === 401 && headers['www-authenticate'].includes('Bearer error="invalid_token", error_description="The token expired at"')) {
         window.localStorage.removeItem('jwt');//remove the token
         history.push('/');//send user to the home page

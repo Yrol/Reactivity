@@ -1,4 +1,4 @@
-import { observable, action, computed, configure, runInAction, values, keys, reaction } from "mobx";
+import { observable, action, computed, configure, runInAction, values, keys, reaction, toJS } from "mobx";
 import { IActivity } from "../../models/activity";
 import agent from "../api/agent";
 import { createContext, SyntheticEvent } from "react";
@@ -138,18 +138,20 @@ export default class ActivityStore {
   //loading an individual activity (when navigate to the details view)
   @action loadActivity = async (id: string) => {
     this.loadingInitial = true;
-    let activity = this.getActivity(id);
+    let activity = this.getActivity(id);//trying to retrive the activity from cache
     const user = this.rootStore?.userStore?.user; // getting the user
 
-    if (activity) {
+    if (activity) {//if activity is available in cache
       //"runInAction" is the strict mode to make sure state changes (to the @observable variables) happens within @action is covered after the "await" above
       // if the activity is available on the loaded list
       runInAction(() => {
         this.selectedActivity = activity;
         this.loadingInitial = false;
       });
-      return activity; //return the activity
-    } else {
+      //convert the activity to a JavaScript object (toJS) and return. 
+      //The reason to convert to a JS object because the item return from the cahce is an observable and we're changing the activity date format in "activity.ts" (in "constructor(init?: IActivityFormValues )") when initializing the activity. This cause to throw an error since we're trying to modifiy it outside the actions
+      return toJS(activity);
+    } else {//if the activity is not in cache, get it from the API
       //load activity from the API
       try {
         //this.loadingInitial = true;
@@ -163,7 +165,7 @@ export default class ActivityStore {
           // adding the activity to the observable map (activityRegister) if it loads from the server. So next time it'll load from this collection instead of making a server call
           this.activityRegistry.set(activity.id, activity);
         });
-        return activity; //return the activity
+        return activity; //return the activity as JavaScript Object (not as an observable - "const activity")
       } catch (error) {
         runInAction(() => {
           this.loadingInitial = false;
