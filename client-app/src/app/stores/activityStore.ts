@@ -149,7 +149,7 @@ export default class ActivityStore {
         this.loadingInitial = false;
       });
       //convert the activity to a JavaScript object (toJS) and return. 
-      //The reason to convert to a JS object because the item return from the cahce is an observable and we're changing the activity date format in "activity.ts" (in "constructor(init?: IActivityFormValues )") when initializing the activity. This cause to throw an error since we're trying to modifiy it outside the actions
+      //The reason to convert to a JS object because the item return from the cahce is an observable and we're manupilating/changing the activity date format in "activity.ts" (in "constructor(init?: IActivityFormValues )") when initializing the activity. This is not allowed in MobX and causes to throw an error since we're trying to modifiy it outside the actions
       return toJS(activity);
     } else {//if the activity is not in cache, get it from the API
       //load activity from the API

@@ -96,7 +96,7 @@ const ActivitiesDashboard: React.FC<IProps> = (
           <ActivityListItemPlaceholder />
         ) : (
           <InfiniteScroll
-            pageStart={0}
+            pageStart={3}
             loadMore={handleGetNext}
             hasMore={!loadingNext && page + 1 < totalPages}
             initialLoad={false}

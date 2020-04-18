@@ -6,7 +6,8 @@ import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../../models/user';
 
 //base URL
-axios.defaults.baseURL = 'http://localhost:5000/api';
+//axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL; // base url defined in the .env file
 
 //Utilizing the token send with every request using "axios request interceptors"
 axios.interceptors.request.use((config) => {
@@ -46,7 +47,6 @@ axios.interceptors.response.use(undefined, error => {
         //throw error; will be caught by the "activityStore"
         history.push('/notfound');
     }
-
     //handling the token expiry (the API has been programmed to exposed to headers -"www-authenticate" ) error
     if (status === 401 && headers['www-authenticate'].includes('Bearer error="invalid_token", error_description="The token expired at"')) {
         window.localStorage.removeItem('jwt');//remove the token
@@ -76,10 +76,17 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
 //contains all the request TYPES - GET, POST, PUT and DELETE
 //Chaining the "Currying" function defined above to mimic a delay of 1000ms
 const requests = {
-    get: (url: string) => axios.get(url).then(sleep(1000)).then(responseBody),// taking only 1 argument - url
-    post: (url: string, body: {}) => axios.post(url, body).then(sleep(1000)).then(responseBody), //taking 2 arguments - url & body
-    put: (url: string, body: {}) => axios.put(url, body).then(sleep(1000)).then(responseBody), //taking 2 arguments - url & body
-    del: (url: string) => axios.delete(url).then(sleep(1000)).then(responseBody)
+
+    //Axios methods with "sleep" to simulate / mimic the loading functionality in real web hosting - only for debugging/development purposes only
+    // get: (url: string) => axios.get(url).then(sleep(1000)).then(responseBody),// taking only 1 argument - url
+    // post: (url: string, body: {}) => axios.post(url, body).then(sleep(1000)).then(responseBody), //taking 2 arguments - url & body
+    // put: (url: string, body: {}) => axios.put(url, body).then(sleep(1000)).then(responseBody), //taking 2 arguments - url & body
+    // del: (url: string) => axios.delete(url).then(sleep(1000)).then(responseBody)
+
+    get: (url: string) => axios.get(url).then(responseBody),// taking only 1 argument - url
+    post: (url: string, body: {}) => axios.post(url, body).then(responseBody), //taking 2 arguments - url & body
+    put: (url: string, body: {}) => axios.put(url, body).then(responseBody), //taking 2 arguments - url & body
+    del: (url: string) => axios.delete(url).then(responseBody)
 }
 
 
@@ -87,7 +94,8 @@ const requests = {
 const Activities = {
     //Ver1: list: (): Promise<IActivity[]> => requests.get('/activities'), // get all activities with the return type of IActivity in a Promise.
     //Ver2: list: (limit?: number, page? : number): Promise<IActivitiesEnvelope> => requests.get(`/activities?limit=${limit}&offset=${page ? page*limit! : 0}`), //  get all activities with the return type of IActivitiesEnvelope that sets the limt and the offset
-    list: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get('/activities', {params: params}).then(sleep(1000)).then(responseBody), //use sleep to cause a delay deliberately
+    //list: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get('/activities', {params: params}).then(sleep(1000)).then(responseBody), //use sleep to mimic delay to test the loader actvitiy
+    list: (params: URLSearchParams): Promise<IActivitiesEnvelope> => axios.get('/activities', {params: params}).then(responseBody),
     details: (id: string) => requests.get(`/activities/${id}`), //accepts a string argument
     create: (activity: IActivity) => requests.post('/activities', activity), //accepts an IActivity as argument
     update: (activity: IActivity) => requests.put(`/activities/${activity.id}`, activity), //accepts an IActivity as argument
