@@ -146,6 +146,8 @@ namespace API
 
             //The following order is important
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles(); 
             app.UseRouting();
             //Enabling Cross Origin added above in ConfigureServices as a Middleware
             app.UseCors("CorsPolicy");
@@ -156,6 +158,9 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                //handling the frontend routes using the Controller Fallback (inside Controllers directory "FallbackController.cs")
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

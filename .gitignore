@@ -4,6 +4,7 @@ obj
 .vscode
 *.db
 .DS_Store
+wwwroot
 
 #dependencies
 /node_modules
