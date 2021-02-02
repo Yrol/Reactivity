@@ -7,22 +7,26 @@ interface IProps
   extends FieldRenderProps<string, HTMLInputElement>,
     FormFieldProps {}
 
-//Extending FieldRenderProps allows us to destructure values that a <Field> will support. Doc: https://final-form.org/docs/react-final-form/types/FieldRenderProps
+//Extending FieldRenderProps allows us to destructuring values that a <Field> will support. Doc: https://final-form.org/docs/react-final-form/types/FieldRenderProps
 export const TextInput: React.FC<IProps> = ({
   input,
   width,
   type,
   placeholder,
-  meta: { touched, error }
+  meta: { touched, error },
 }) => {
   return (
     //Using "<Form.Field> from semantic-ui-react"
-    //errors will be shown if the field has been touched and the error is true ("!!error" returns true/ false, otherwise it'll return the actual error value)
+    //errors will be shown if the field has been touched and the error is true ("!!error" returns true/ false, otherwise it'll return the actual error value) - the input field will be highlighted in red
     <Form.Field error={touched && !!error} type={type} width={width}>
       {/** "{...input}" will pass all the properties (such as input.value, input.onChange & etc) of the input as an array*/}
       <input {...input} placeholder={placeholder} />
-      {/**Show the Label only if the input has been touched and there is an error */}
-  {touched && error && <Label basic color="red">{error}</Label>}
+      {/**Show the Label only if the input has been touched and there is an error - this will create a new label area below the input fields as opposed to showing error by highlighting the field (as done above) */}
+      {touched && error && (
+        <Label basic color="red">
+          {error}
+        </Label>
+      )}
     </Form.Field>
   );
 };

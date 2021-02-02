@@ -25,7 +25,8 @@ import ModalContainer from "../common/modals/ModalContainer";
 import PrivateRoute from "./PrivateRoute";
 
 
-/************ Implementation of using Hooks ****************/
+/************ Implementation of using Hooks (hook is react function that allows us to hook into react features within a functional component (without having to use a class component) -  For instance useState is a hook  ) ****************/
+
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   //const activityStore = useContext(ActivityStore);
 
